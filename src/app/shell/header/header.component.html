@@ -1,0 +1,294 @@
+<header
+  class="bg-gradient-to-r from-pink-50 to-purple-50 shadow-md border-b-2 border-pink-200"
+>
+  <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
+    <div class="flex flex-col sm:flex-row sm:justify-between">
+      <div class="flex justify-between items-center h-14 sm:h-16">
+        <div class="flex-shrink-0 flex items-center">
+          <a
+            routerLink="/"
+            class="text-lg sm:text-xl font-bold text-pink-500 flex items-center"
+          >
+            <span class="mr-1">✨</span> 3Dlapiz <span class="ml-1">✨</span>
+          </a>
+        </div>
+
+        <div class="sm:hidden">
+          <button
+            type="button"
+            (click)="toggleMobileMenu()"
+            class="inline-flex items-center justify-center p-2 rounded-md text-purple-500 hover:text-pink-500 focus:outline-none"
+            aria-controls="mobile-menu"
+            [attr.aria-expanded]="showMobileMenu"
+          >
+            <span class="sr-only">Abrir menú principal</span>
+            <svg
+              *ngIf="!showMobileMenu"
+              class="block h-6 w-6"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+            <svg
+              *ngIf="showMobileMenu"
+              class="block h-6 w-6"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="hidden sm:flex items-center">
+        <nav class="flex space-x-4 sm:space-x-8">
+          <a
+            routerLink="/products"
+            routerLinkActive="text-pink-500 border-b-2 border-pink-500"
+            class="inline-flex items-center px-1 pt-1 text-purple-500 hover:text-pink-500 transition-colors duration-200"
+          >
+            <span class="mr-1">🎁</span> Productos
+          </a>
+          <a
+            routerLink="/categories"
+            routerLinkActive="text-pink-500 border-b-2 border-pink-500"
+            class="inline-flex items-center px-1 pt-1 text-purple-500 hover:text-pink-500 transition-colors duration-200"
+          >
+            <span class="mr-1">💫</span> Categorías
+          </a>
+          @if (authService.isAuthenticated() && authService.isAdmin()) {
+          <a
+            routerLink="/admin"
+            routerLinkActive="text-pink-500 border-b-2 border-pink-500"
+            class="inline-flex items-center px-1 pt-1 text-purple-500 hover:text-pink-500 transition-colors duration-200"
+          >
+            <span class="mr-1">👑</span> Panel Admin
+          </a>
+          }
+        </nav>
+
+        <div class="flex items-center ml-6">
+          <a
+            routerLink="/cart"
+            class="relative p-2 text-purple-500 hover:text-pink-500 transition-colors duration-200"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+              />
+            </svg>
+            @if (cartService.cartCount() > 0) {
+            <span
+              class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-pink-400 rounded-full shadow-sm border border-pink-200"
+            >
+              {{ cartService.cartCount() }}
+            </span>
+            }
+          </a>
+
+          @if (authService.isAuthenticated()) {
+          <div class="ml-3 relative">
+            <div>
+              <button
+                type="button"
+                (click)="toggleUserMenu()"
+                class="flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-400"
+              >
+                <span class="sr-only">Abrir menú de usuario</span>
+                <div
+                  class="h-8 w-8 rounded-full bg-gradient-to-r from-pink-400 to-purple-400 flex items-center justify-center text-white shadow-md"
+                >
+                  {{ authService.getInitial() }}
+                </div>
+              </button>
+            </div>
+
+            @if (showUserMenu) {
+            <div
+              class="origin-top-right absolute right-0 mt-2 w-48 rounded-2xl shadow-lg py-1 bg-white ring-1 ring-pink-200 focus:outline-none z-10 border border-pink-100"
+              role="menu"
+              aria-orientation="vertical"
+            >
+              <div
+                class="px-4 py-2 text-xs text-pink-500 border-b border-pink-100"
+              >
+                <span class="mr-1">✨</span> Hola,
+                {{ authService.getFullName() }} <span class="ml-1">✨</span>
+              </div>
+              <a
+                routerLink="/profile"
+                class="block px-4 py-2 text-sm text-purple-500 hover:bg-pink-50 transition-colors duration-200"
+                role="menuitem"
+                (click)="showUserMenu = false"
+              >
+                <span class="mr-1">👤</span> Mi perfil
+              </a>
+              <a
+                routerLink="/orders"
+                class="block px-4 py-2 text-sm text-purple-500 hover:bg-pink-50 transition-colors duration-200"
+                role="menuitem"
+                (click)="showUserMenu = false"
+              >
+                <span class="mr-1">📦</span> Mis pedidos
+              </a>
+              <button
+                (click)="logout()"
+                class="block w-full text-left px-4 py-2 text-sm text-purple-500 hover:bg-pink-50 transition-colors duration-200"
+                role="menuitem"
+              >
+                <span class="mr-1">🚪</span> Cerrar sesión
+              </button>
+            </div>
+            }
+          </div>
+          } @else {
+          <div class="flex items-center space-x-4 ml-4">
+            <a
+              routerLink="/login"
+              routerLinkActive="text-pink-500"
+              class="text-sm font-medium text-purple-500 hover:text-pink-500 transition-colors duration-200"
+            >
+              <span class="mr-1">💖</span> Iniciar sesión
+            </a>
+            <a
+              routerLink="/register"
+              class="text-sm font-medium text-white bg-gradient-to-r from-pink-400 to-purple-400 py-2 px-4 rounded-full hover:from-pink-500 hover:to-purple-500 transition-all duration-200 shadow-md"
+            >
+              <span class="mr-1">✨</span> Registrarse
+            </a>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    @if (showMobileMenu) {
+    <div
+      class="sm:hidden border-t border-pink-200 pt-2 pb-3 space-y-1 bg-white bg-opacity-95 rounded-b-lg shadow-md"
+      id="mobile-menu"
+    >
+      <nav class="flex flex-col space-y-2">
+        <a
+          routerLink="/products"
+          routerLinkActive="text-pink-500 bg-pink-50"
+          (click)="showMobileMenu = false"
+          class="text-purple-500 hover:text-pink-500 block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 flex items-center"
+        >
+          <span class="mr-2">🎁</span> Productos
+        </a>
+        <a
+          routerLink="/categories"
+          routerLinkActive="text-pink-500 bg-pink-50"
+          (click)="showMobileMenu = false"
+          class="text-purple-500 hover:text-pink-500 block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 flex items-center"
+        >
+          <span class="mr-2">💫</span> Categorías
+        </a>
+        @if (authService.isAuthenticated() && authService.isAdmin()) {
+        <a
+          routerLink="/admin"
+          routerLinkActive="text-pink-500 bg-pink-50"
+          (click)="showMobileMenu = false"
+          class="text-purple-500 hover:text-pink-500 block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 flex items-center"
+        >
+          <span class="mr-2">👑</span> Panel Admin
+        </a>
+        }
+        <a
+          routerLink="/cart"
+          routerLinkActive="text-pink-500 bg-pink-50"
+          (click)="showMobileMenu = false"
+          class="text-purple-500 hover:text-pink-500 block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 flex items-center"
+        >
+          <span class="mr-2">🛒</span> Carrito @if (cartService.cartCount() > 0)
+          {
+          <span
+            class="ml-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-pink-400 rounded-full shadow-sm border border-pink-200"
+          >
+            {{ cartService.cartCount() }}
+          </span>
+          }
+        </a>
+
+        @if (authService.isAuthenticated()) {
+        <div
+          class="px-3 py-2 text-sm text-pink-500 font-medium border-t border-pink-100 mt-2 pt-2"
+        >
+          <span class="mr-1">✨</span> Hola, {{ authService.getFullName() }}
+          <span class="ml-1">✨</span>
+        </div>
+        <a
+          routerLink="/profile"
+          routerLinkActive="text-pink-500 bg-pink-50"
+          (click)="showMobileMenu = false"
+          class="text-purple-500 hover:text-pink-500 block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 flex items-center"
+        >
+          <span class="mr-2">👤</span> Mi perfil
+        </a>
+        <a
+          routerLink="/orders"
+          routerLinkActive="text-pink-500 bg-pink-50"
+          (click)="showMobileMenu = false"
+          class="text-purple-500 hover:text-pink-500 block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 flex items-center"
+        >
+          <span class="mr-2">📦</span> Mis pedidos
+        </a>
+        <button
+          (click)="logout(); showMobileMenu = false"
+          class="w-full text-left text-purple-500 hover:text-pink-500 block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 flex items-center"
+        >
+          <span class="mr-2">🚪</span> Cerrar sesión
+        </button>
+        } @else {
+        <div
+          class="border-t border-pink-100 mt-2 pt-2 flex flex-col space-y-2 px-3"
+        >
+          <a
+            routerLink="/login"
+            routerLinkActive="text-pink-500 bg-pink-50"
+            (click)="showMobileMenu = false"
+            class="text-purple-500 hover:text-pink-500 py-2 rounded-lg text-base font-medium transition-colors duration-200 flex items-center"
+          >
+            <span class="mr-2">💖</span> Iniciar sesión
+          </a>
+          <a
+            routerLink="/register"
+            (click)="showMobileMenu = false"
+            class="text-white bg-gradient-to-r from-pink-400 to-purple-400 py-2 px-4 rounded-full hover:from-pink-500 hover:to-purple-500 transition-all duration-200 shadow-md text-center flex items-center justify-center"
+          >
+            <span class="mr-2">✨</span> Registrarse
+          </a>
+        </div>
+        }
+      </nav>
+    </div>
+    }
+  </div>
+</header>

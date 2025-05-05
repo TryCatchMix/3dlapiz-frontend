@@ -1,0 +1,114 @@
+<div
+  class="min-h-screen bg-pink-50 py-10"
+  style="
+    background-image: url('https://cdnjs.cloudflare.com/ajax/libs/svg-backgrounds/1.0.0/hearts.svg');
+    background-size: 200px;
+  "
+>
+  <div
+    class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl p-8 border-2 border-pink-200"
+  >
+    <div class="flex items-center mb-8">
+      <h1 class="text-3xl font-bold text-pink-600 flex items-center">
+        <span class="mr-2">✨</span> Mi Perfil <span class="ml-2">💖</span>
+      </h1>
+    </div>
+
+    <div *ngIf="loading" class="flex justify-center items-center py-10">
+      <div
+        class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-400"
+        style="filter: drop-shadow(0 0 3px rgba(244, 114, 182, 0.5))"
+      ></div>
+    </div>
+
+    <div
+      *ngIf="error"
+      class="bg-red-50 border-2 border-red-200 text-red-400 px-4 py-3 rounded-xl mb-4 flex items-center"
+    >
+      <span class="mr-2">🙈</span> {{ error }}
+    </div>
+
+    <div *ngIf="user && !loading" class="space-y-6">
+      <div
+        class="bg-pink-50 p-4 rounded-2xl border border-pink-100 hover:shadow-md transition-all duration-300"
+      >
+        <label class="block text-sm font-medium text-pink-500"
+          >Nombre completo</label
+        >
+        <p class="mt-1 text-lg text-gray-800 font-medium">
+          {{ user.first_name }} {{ user.last_name }}
+          <span class="text-pink-400">♡</span>
+        </p>
+      </div>
+
+      <div
+        class="bg-purple-50 p-4 rounded-2xl border border-purple-100 hover:shadow-md transition-all duration-300"
+      >
+        <label class="block text-sm font-medium text-purple-500"
+          >Correo electrónico</label
+        >
+        <p class="mt-1 text-lg text-gray-800 font-medium">{{ user.email }}</p>
+      </div>
+
+      <div
+        class="bg-blue-50 p-4 rounded-2xl border border-blue-100 hover:shadow-md transition-all duration-300"
+      >
+        <label class="block text-sm font-medium text-blue-500">Rol</label>
+        <p class="mt-1 text-lg">
+          <span
+            *ngIf="user.role === 'admin'"
+            class="bg-purple-200 text-purple-800 px-3 py-1 rounded-full text-sm font-medium border border-purple-300 shadow-sm"
+          >
+            👑 Administrador
+          </span>
+          <span
+            *ngIf="user.role === 'staff'"
+            class="bg-blue-200 text-blue-800 px-3 py-1 rounded-full text-sm font-medium border border-blue-300 shadow-sm"
+          >
+            ✨ Staff
+          </span>
+          <span
+            *ngIf="user.role === 'user'"
+            class="bg-pink-200 text-pink-800 px-3 py-1 rounded-full text-sm font-medium border border-pink-300 shadow-sm"
+          >
+            💫 Usuario
+          </span>
+        </p>
+      </div>
+
+      <div
+        *ngIf="user.phone_number"
+        class="bg-teal-50 p-4 rounded-2xl border border-teal-100 hover:shadow-md transition-all duration-300"
+      >
+        <label class="block text-sm font-medium text-teal-500">Teléfono</label>
+        <p class="mt-1 text-lg text-gray-800 font-medium">
+          {{ user.phone_country_code }} {{ user.phone_number }}
+        </p>
+      </div>
+
+      <div
+        *ngIf="user.street || user.city"
+        class="bg-rose-50 p-4 rounded-2xl border border-rose-100 hover:shadow-md transition-all duration-300"
+      >
+        <label class="block text-sm font-medium text-rose-500">Dirección</label>
+        <div class="mt-1 text-lg text-gray-800 font-medium">
+          <p *ngIf="user.street">{{ user.street }}</p>
+          <p *ngIf="user.city || user.state || user.postal_code">
+            {{ user.city }}, {{ user.state }} {{ user.postal_code }}
+          </p>
+          <p *ngIf="user.country_code">{{ user.country_code }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-8" *ngIf="user && !loading">
+      <button
+        (click)="editProfile()"
+        class="bg-gradient-to-r from-pink-400 to-purple-400 hover:from-pink-500 hover:to-purple-500 text-white font-bold py-3 px-6 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 transition-all duration-200 shadow-md flex items-center mx-auto"
+      >
+        <span class="mr-2">✏️</span> Editar Mi Perfil
+        <span class="ml-2">✨</span>
+      </button>
+    </div>
+  </div>
+</div>

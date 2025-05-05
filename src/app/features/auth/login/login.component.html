@@ -1,0 +1,116 @@
+<div
+  class="min-h-screen flex items-center justify-center bg-pink-50"
+  style="
+    background-image: url('https://cdnjs.cloudflare.com/ajax/libs/svg-backgrounds/1.0.0/sparkles.svg');
+    background-size: 300px;
+  "
+>
+  <div
+    class="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md border-2 border-pink-200"
+  >
+    <div class="text-center mb-6">
+      <h2
+        class="text-3xl font-bold text-pink-500 flex items-center justify-center"
+      >
+        <span class="mr-2">✨</span> Login <span class="ml-2">✨</span>
+      </h2>
+      <p class="text-purple-400 mt-2">Bienvenido de vuelta!</p>
+    </div>
+
+    <div
+      #alert
+      class="alert rounded-2xl p-3 text-center"
+      [class.show]="showAlert"
+      [class.error]="isError"
+      [ngClass]="{
+        'bg-red-100 text-red-500 border border-red-200': isError,
+        'bg-green-100 text-green-500 border border-green-200': !isError
+      }"
+    >
+      {{ alertMessage }}
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5">
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-purple-500">Email</label>
+        <div class="relative">
+          <span
+            class="absolute inset-y-0 left-0 flex items-center pl-3 text-pink-400"
+            >💌</span
+          >
+          <input
+            type="email"
+            formControlName="email"
+            class="mt-1 pl-10 p-3 w-full rounded-2xl bg-pink-50 text-gray-700 border border-pink-200 focus:ring-2 focus:ring-pink-300 focus:border-pink-300 transition-all duration-200"
+            required
+          />
+        </div>
+        <div
+          *ngIf="
+            loginForm.get('email')?.invalid && loginForm.get('email')?.touched
+          "
+          class="text-red-400 text-sm mt-1"
+        >
+          <div *ngIf="loginForm.get('email')?.errors?.['required']">
+            Email is required 💕
+          </div>
+          <div *ngIf="loginForm.get('email')?.errors?.['email']">
+            Email format is invalid 💌
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-purple-500"
+          >Password</label
+        >
+        <div class="relative">
+          <span
+            class="absolute inset-y-0 left-0 flex items-center pl-3 text-pink-400"
+            >🔐</span
+          >
+          <input
+            type="password"
+            formControlName="password"
+            class="mt-1 pl-10 p-3 w-full rounded-2xl bg-pink-50 text-gray-700 border border-pink-200 focus:ring-2 focus:ring-pink-300 focus:border-pink-300 transition-all duration-200"
+            required
+          />
+        </div>
+        <div
+          *ngIf="
+            loginForm.get('password')?.invalid &&
+            loginForm.get('password')?.touched
+          "
+          class="text-red-400 text-sm mt-1"
+        >
+          <div *ngIf="loginForm.get('password')?.errors?.['required']">
+            Password is required 💖
+          </div>
+        </div>
+        <div class="mt-2 text-right">
+          <a
+            class="text-sm text-pink-500 hover:text-pink-700 cursor-pointer"
+            (click)="onForgotPassword()"
+            >Forgot password? 💭</a
+          >
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="bg-gradient-to-r from-pink-400 to-purple-400 text-white py-3 px-4 rounded-full font-bold hover:from-pink-500 hover:to-purple-500 transition w-full shadow-md flex items-center justify-center"
+      >
+        <span class="mr-2">✨</span> Login <span class="ml-2">✨</span>
+      </button>
+    </form>
+
+    <p class="mt-6 text-sm text-purple-400 text-center">
+      Don't have an account?
+      <a
+        routerLink="/signup"
+        class="text-pink-500 hover:text-pink-700 font-medium ml-1"
+        >Sign up 💫</a
+      >
+    </p>
+  </div>
+</div>

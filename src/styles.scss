@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #fdf2f8;
+}
+
+/* Mejora para textos en móvil */
+@media (max-width: 640px) {
+  .text-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .text-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+/* Mejora el comportamiento del scroll en dispositivos móviles */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Optimización para dispositivos táctiles */
+@media (hover: none) {
+  .hover\:scale-105:hover {
+    transform: scale(1);
+  }
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card-animation {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+@media (max-width: 640px) {
+  .touch-pulse:active {
+    transform: scale(0.98);
+  }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+#mobile-menu {
+  animation: slideDown 0.3s ease-out forwards;
+}
+
+/* Estilo para los botones en dispositivos táctiles */
+@media (hover: none) {
+  button:active, a:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Ajustes para evitar desbordamientos */
+.truncate-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Mejoras para pequeños dispositivos móviles */
+@media (max-width: 360px) {
+  .text-xs-smaller {
+    font-size: 0.65rem;
+  }
+
+  .icon-xs-smaller {
+    transform: scale(0.85);
+  }
+}
+
+/* Ajustes para dispositivos móviles en modo paisaje */
+@media (max-height: 500px) and (orientation: landscape) {
+  #mobile-menu {
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+}
+
+/* Mejora para enlaces de redes sociales en footer */
+.social-icon:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s ease;
+}
+
+/* Soporte para modo oscuro del sistema */
+@media (prefers-color-scheme: dark) {
+  .system-dark-support {
+    /*TODO implementar un tema oscuro alternativo aquí*/
+  }
+}
+
+/* Mejora para la accesibilidad - aumenta áreas de toque en móvil */
+@media (max-width: 640px) {
+  .touch-target-helper {
+    position: relative;
+  }
+
+  .touch-target-helper::after {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    z-index: -1;
+  }
+}
+
+/* Animación sutil para elementos cuando entran en la vista */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.animate-on-scroll.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}

@@ -1,0 +1,120 @@
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-8 text-blue-600"></h1>
+
+  <div *ngIf="cartItems.length === 0" class="text-center py-16">
+    <div class="text-6xl mb-4">🛒</div>
+    <h2 class="text-2xl font-semibold mb-4">Tu carrito está vacío</h2>
+    <p class="text-gray-600 mb-8">
+      Parece que aún no has añadido productos a tu carrito
+    </p>
+    <button
+      (click)="continueShopping()"
+      class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg"
+    >
+      Continuar comprando
+    </button>
+  </div>
+
+  <div
+    *ngIf="cartItems.length > 0"
+    class="grid grid-cols-1 lg:grid-cols-3 gap-8"
+  >
+    <div class="lg:col-span-2">
+      <div
+        class="bg-white rounded-lg shadow-md p-6 mb-4"
+        *ngFor="let item of cartItems"
+      >
+        <div class="flex flex-col md:flex-row items-center gap-4">
+          <div class="w-full md:w-24 h-24">
+            <img
+              [src]="'http://localhost:8000/' + item.image_url"
+              [alt]="item.name"
+              class="w-full h-full object-cover rounded"
+            />
+          </div>
+          <div class="flex-1">
+            <h3 class="font-semibold text-lg">{{ item.name }}</h3>
+            <p class="text-blue-600 font-bold">${{ item.price }}</p>
+          </div>
+          <div class="flex items-center">
+            <button
+              (click)="updateQuantity(item, item.quantity - 1)"
+              class="bg-gray-200 px-3 py-1 rounded-l"
+            >
+              -
+            </button>
+            <input
+              type="number"
+              [(ngModel)]="item.quantity"
+              (change)="updateQuantity(item, item.quantity)"
+              min="1"
+              [max]="item.stock"
+              class="border text-center w-14 py-1 px-2"
+            />
+            <button
+              (click)="updateQuantity(item, item.quantity + 1)"
+              class="bg-gray-200 px-3 py-1 rounded-r"
+            >
+              +
+            </button>
+          </div>
+          <div class="text-right font-semibold">
+            ${{ item.price * item.quantity | number : "1.2-2" }}
+          </div>
+          <button
+            (click)="removeItem(item.id)"
+            class="text-red-500 hover:text-red-700"
+          >
+            <span class="text-xl">×</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="text-right mt-4">
+        <button
+          (click)="clearCart()"
+          class="text-red-500 hover:text-red-700 underline"
+        >
+          Vaciar carrito
+        </button>
+      </div>
+    </div>
+
+    <div class="lg:col-span-1">
+      <div class="bg-white rounded-lg shadow-md p-6 sticky top-4">
+        <h2 class="text-xl font-bold mb-4">Resumen de la compra</h2>
+
+        <div class="space-y-3 mb-4">
+          <div class="flex justify-between">
+            <span>Subtotal</span>
+            <span>${{ cartService.cartTotal() | number : "1.2-2" }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Envío</span>
+            <span>Calculado en el checkout</span>
+          </div>
+          <div class="border-t pt-3 mt-3">
+            <div class="flex justify-between font-bold">
+              <span>Total estimado</span>
+              <span>${{ cartService.cartTotal() | number : "1.2-2" }}</span>
+            </div>
+          </div>
+        </div>
+
+        <button
+          (click)="proceedToCheckout()"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg mb-4"
+        >
+          Proceder al pago
+        </button>
+
+        <button
+          (click)="continueShopping()"
+          class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-6 rounded-lg"
+        >
+          Seguir comprando
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

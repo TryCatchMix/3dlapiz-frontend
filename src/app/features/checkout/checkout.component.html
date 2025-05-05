@@ -1,0 +1,312 @@
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-8 text-blue-600">Finalizar Compra</h1>
+  <div class="flex justify-between mb-8">
+    <div class="flex flex-col items-center">
+      <div
+        class="w-10 h-10 flex items-center justify-center rounded-full bg-blue-600 text-white"
+      >
+        1
+      </div>
+      <span class="mt-2 text-sm">Información de Envío</span>
+    </div>
+    <div class="flex-1 border-t border-gray-300 self-center mx-4"></div>
+    <div class="flex flex-col items-center">
+      <div
+        class="w-10 h-10 flex items-center justify-center rounded-full bg-blue-100 text-blue-600"
+      >
+        2
+      </div>
+      <span class="mt-2 text-sm">Pago con Stripe</span>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="lg:col-span-2">
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-bold mb-4">Información de Envío</h2>
+
+        <form
+          [formGroup]="shippingForm"
+          (ngSubmit)="nextStep()"
+          class="space-y-4"
+        >
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label
+                for="fullName"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Nombre completo</label
+              >
+              <input
+                type="text"
+                id="fullName"
+                formControlName="fullName"
+                class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <div
+                *ngIf="
+                  shippingForm.get('fullName')?.invalid &&
+                  shippingForm.get('fullName')?.touched
+                "
+                class="text-red-500 text-sm mt-1"
+              >
+                Nombre completo es requerido
+              </div>
+            </div>
+
+            <div>
+              <label
+                for="email"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Email</label
+              >
+              <input
+                type="email"
+                id="email"
+                formControlName="email"
+                class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <div
+                *ngIf="
+                  shippingForm.get('email')?.invalid &&
+                  shippingForm.get('email')?.touched
+                "
+                class="text-red-500 text-sm mt-1"
+              >
+                Email válido es requerido
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="address"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Dirección</label
+            >
+            <input
+              type="text"
+              id="address"
+              formControlName="address"
+              class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <div
+              *ngIf="
+                shippingForm.get('address')?.invalid &&
+                shippingForm.get('address')?.touched
+              "
+              class="text-red-500 text-sm mt-1"
+            >
+              Dirección es requerida
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label
+                for="city"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Ciudad</label
+              >
+              <input
+                type="text"
+                id="city"
+                formControlName="city"
+                class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <div
+                *ngIf="
+                  shippingForm.get('city')?.invalid &&
+                  shippingForm.get('city')?.touched
+                "
+                class="text-red-500 text-sm mt-1"
+              >
+                Ciudad es requerida
+              </div>
+            </div>
+
+            <div>
+              <label
+                for="postalCode"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Código Postal</label
+              >
+              <input
+                type="text"
+                id="postalCode"
+                formControlName="postalCode"
+                class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <div
+                *ngIf="
+                  shippingForm.get('postalCode')?.invalid &&
+                  shippingForm.get('postalCode')?.touched
+                "
+                class="text-red-500 text-sm mt-1"
+              >
+                Código postal es requerido
+              </div>
+            </div>
+
+            <div>
+              <label
+                for="country"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >País</label
+              >
+              <input
+                type="text"
+                id="country"
+                formControlName="country"
+                class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <div
+                *ngIf="
+                  shippingForm.get('country')?.invalid &&
+                  shippingForm.get('country')?.touched
+                "
+                class="text-red-500 text-sm mt-1"
+              >
+                País es requerido
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="phone"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Teléfono</label
+            >
+            <input
+              type="tel"
+              id="phone"
+              formControlName="phone"
+              class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <div
+              *ngIf="
+                shippingForm.get('phone')?.invalid &&
+                shippingForm.get('phone')?.touched
+              "
+              class="text-red-500 text-sm mt-1"
+            >
+              Teléfono válido es requerido (9 dígitos)
+            </div>
+          </div>
+
+          <h3 class="text-lg font-bold mt-6 mb-3">Método de envío</h3>
+          <div class="space-y-3">
+            <div
+              *ngFor="let method of shippingMethods"
+              (click)="selectShippingMethod(method)"
+              class="border rounded-lg p-4 cursor-pointer"
+              [ngClass]="
+                selectedShippingMethod.id === method.id
+                  ? 'border-blue-600 bg-blue-50'
+                  : 'border-gray-300'
+              "
+            >
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="font-semibold">{{ method.name }}</div>
+                  <div class="text-sm text-gray-600">
+                    {{ method.estimatedDelivery }}
+                  </div>
+                </div>
+                <div class="font-semibold">${{ method.price }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end mt-6">
+            <button
+              type="submit"
+              [disabled]="shippingForm.invalid || isSubmitting"
+              class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg disabled:opacity-50"
+            >
+              <span *ngIf="isSubmitting">
+                <svg
+                  class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                Procesando...
+              </span>
+              <span *ngIf="!isSubmitting">Continuar al pago</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="lg:col-span-1">
+      <div class="bg-white rounded-lg shadow-md p-6 sticky top-4">
+        <h2 class="text-xl font-bold mb-4">Resumen del Pedido</h2>
+
+        <div class="max-h-64 overflow-y-auto mb-4">
+          <div
+            *ngFor="let item of cartItems"
+            class="flex items-center py-3 border-b"
+          >
+            <div class="w-16 h-16 mr-4">
+              <img
+                [src]="'http://localhost:8000/' + item.image_url"
+                [alt]="item.name"
+                class="w-full h-full object-cover rounded"
+              />
+            </div>
+            <div class="flex-1">
+              <h4 class="font-medium">{{ item.name }}</h4>
+              <div class="text-sm text-gray-600">
+                Cantidad: {{ item.quantity }}
+              </div>
+            </div>
+            <div class="font-semibold">
+              ${{ item.price * item.quantity | number : "1.2-2" }}
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-3 mb-4">
+          <div class="flex justify-between">
+            <span>Subtotal</span>
+            <span>${{ cartService.cartTotal() | number : "1.2-2" }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Envío</span>
+            <span>${{ selectedShippingMethod.price | number : "1.2-2" }}</span>
+          </div>
+          <div class="border-t pt-3 mt-3">
+            <div class="flex justify-between font-bold">
+              <span>Total</span>
+              <span>${{ getTotal() | number : "1.2-2" }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-sm text-gray-600 mt-4 p-3 bg-gray-50 rounded-lg">
+          <p>
+            Al continuar, serás redirigido a la plataforma segura de Stripe para
+            completar tu pago.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

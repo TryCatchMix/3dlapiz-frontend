@@ -1,0 +1,99 @@
+<div
+  class="min-h-screen bg-pink-50 py-6 sm:py-10"
+  style="
+    background-image: url('https://cdnjs.cloudflare.com/ajax/libs/svg-backgrounds/1.0.0/sparkles.svg');
+    background-size: 300px;
+  "
+>
+  <div class="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
+    <div class="text-center mb-6 sm:mb-12">
+      <h1
+        class="text-2xl sm:text-3xl font-bold text-pink-600 inline-block relative"
+      >
+        <span
+          class="hidden sm:inline absolute -left-8 top-1/2 transform -translate-y-1/2 text-2xl"
+          >✨</span
+        >
+        Nuestros Productos
+        <span
+          class="hidden sm:inline absolute -right-8 top-1/2 transform -translate-y-1/2 text-2xl"
+          >✨</span
+        >
+      </h1>
+      <div
+        class="h-1 w-20 sm:w-24 bg-gradient-to-r from-pink-300 to-purple-300 mx-auto mt-2 sm:mt-3 rounded-full"
+      ></div>
+      <p
+        class="text-purple-500 mt-2 sm:mt-4 text-sm sm:text-base max-w-lg mx-auto px-4"
+      >
+        Descubre nuestras adorables figuras 3D hechas con amor para ti
+      </p>
+    </div>
+
+    <div
+      class="mb-6 sm:mb-8 flex flex-nowrap sm:flex-wrap overflow-x-auto sm:overflow-visible justify-start sm:justify-center gap-2 sm:gap-4 px-4 pb-2 sm:pb-0 hide-scrollbar"
+    >
+      <button
+        class="flex-shrink-0 bg-white border-2 border-pink-200 text-pink-600 px-3 sm:px-4 py-1 sm:py-2 rounded-full shadow-sm hover:bg-pink-50 transition-colors duration-200 text-sm sm:text-base"
+      >
+        <span class="mr-1">🎀</span> Todos
+      </button>
+      <button
+        class="flex-shrink-0 bg-white border-2 border-pink-200 text-purple-600 px-3 sm:px-4 py-1 sm:py-2 rounded-full shadow-sm hover:bg-pink-50 transition-colors duration-200 text-sm sm:text-base"
+      >
+        <span class="mr-1">💫</span> Personajes
+      </button>
+      <button
+        class="flex-shrink-0 bg-white border-2 border-pink-200 text-purple-600 px-3 sm:px-4 py-1 sm:py-2 rounded-full shadow-sm hover:bg-pink-50 transition-colors duration-200 text-sm sm:text-base"
+      >
+        <span class="mr-1">🌟</span> Accesorios
+      </button>
+    </div>
+
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 px-3 sm:px-0"
+    >
+      <app-product-card
+        *ngFor="let product of products"
+        [product]="product"
+      ></app-product-card>
+    </div>
+
+    <div class="mt-8 sm:mt-12 flex justify-center">
+      <div class="flex space-x-1 sm:space-x-2">
+        <button
+          class="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-white border-2 border-pink-200 text-pink-600 hover:bg-pink-50 transition-colors duration-200"
+        >
+          ←
+        </button>
+        <button
+          class="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-pink-400 to-purple-400 text-white shadow-md"
+        >
+          1
+        </button>
+        <button
+          class="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-white border-2 border-pink-200 text-pink-600 hover:bg-pink-50 transition-colors duration-200"
+        >
+          2
+        </button>
+        <button
+          class="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-white border-2 border-pink-200 text-pink-600 hover:bg-pink-50 transition-colors duration-200"
+        >
+          →
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  @media (max-width: 640px) {
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+  }
+</style>
