@@ -130,7 +130,7 @@ export class CheckoutComponent implements OnInit {
         image_url: item.image_url,
       })),
       total: this.getTotal(),
-      success_url: `${window.location.origin}/checkout?session_id={CHECKOUT_SESSION_ID}`,
+     success_url: `${window.location.origin}/checkout?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${window.location.origin}/cart`,
     };
 

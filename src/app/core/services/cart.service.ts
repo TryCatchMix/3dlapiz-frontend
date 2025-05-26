@@ -9,7 +9,7 @@ import {
 } from 'rxjs';
 import { Injectable, inject, signal } from '@angular/core';
 
-import { AuthService } from './auth.service';
+import { AuthStateService } from './auth-state.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment.development';
 
@@ -50,12 +50,12 @@ export class CartService {
   public cartTotal = signal(0);
   public isSyncing = signal(false);
 
-  private authService = inject(AuthService);
+  private authStateService = inject(AuthStateService);
 
   constructor(private http: HttpClient) {
     this.loadCartFromLocalStorage();
 
-    this.authService.currentUser$.subscribe((user) => {
+    this.authStateService.currentUser$.subscribe((user) => {
       if (user) {
         this.syncWithBackend();
       }
@@ -84,7 +84,7 @@ export class CartService {
   }
 
   syncWithBackend(): Observable<CartItem[]> {
-    if (!this.authService.isAuthenticated()) {
+    if (!this.authStateService.isAuthenticated()) {
       return of(this.cartItemsSubject.value);
     }
 
@@ -288,7 +288,7 @@ export class CartService {
     this.updateCartState();
     this.saveCartToLocalStorage(updatedItems);
 
-    if (this.authService.isAuthenticated()) {
+    if (this.authStateService.isAuthenticated()) {
       this.http
         .post(`${this.apiUrl}/cart/add`, {
           product_id: product.id,
@@ -314,7 +314,7 @@ export class CartService {
     this.updateCartState();
     this.saveCartToLocalStorage(updatedItems);
 
-    if (this.authService.isAuthenticated()) {
+    if (this.authStateService.isAuthenticated()) {
       const item = updatedItems.find((item) => item.id === productId);
       if (item) {
         this.http
@@ -342,7 +342,7 @@ export class CartService {
     this.updateCartState();
     this.saveCartToLocalStorage(filteredItems);
 
-    if (this.authService.isAuthenticated()) {
+    if (this.authStateService.isAuthenticated()) {
       this.http.delete(`${this.apiUrl}/cart/item/${productId}`).subscribe({
         error: (error) => {
           console.error('Error removing item from backend cart', error);
@@ -356,7 +356,7 @@ export class CartService {
     this.updateCartState();
     localStorage.removeItem('cart');
 
-    if (this.authService.isAuthenticated()) {
+    if (this.authStateService.isAuthenticated()) {
       this.http.delete(`${this.apiUrl}/cart/clear`).subscribe({
         error: (error) => {
           console.error('Error clearing backend cart', error);
