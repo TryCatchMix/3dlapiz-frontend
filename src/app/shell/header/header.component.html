@@ -74,9 +74,9 @@
           >
             <span class="mr-1">💫</span> Categorías
           </a>
-          @if (authService.isAuthenticated() && authService.isAdmin()) {
+          @if (authStateService.isAuthenticated() && authStateService.isAdmin()) {
           <a
-            routerLink="/admin"
+            routerLink="/product-add"
             routerLinkActive="text-pink-500 border-b-2 border-pink-500"
             class="inline-flex items-center px-1 pt-1 text-purple-500 hover:text-pink-500 transition-colors duration-200"
           >
@@ -113,7 +113,7 @@
             }
           </a>
 
-          @if (authService.isAuthenticated()) {
+          @if (authStateService.isAuthenticated()) {
           <div class="ml-3 relative">
             <div>
               <button
@@ -125,7 +125,7 @@
                 <div
                   class="h-8 w-8 rounded-full bg-gradient-to-r from-pink-400 to-purple-400 flex items-center justify-center text-white shadow-md"
                 >
-                  {{ authService.getInitial() }}
+                  {{ authStateService.getInitial() }}
                 </div>
               </button>
             </div>
@@ -140,7 +140,7 @@
                 class="px-4 py-2 text-xs text-pink-500 border-b border-pink-100"
               >
                 <span class="mr-1">✨</span> Hola,
-                {{ authService.getFullName() }} <span class="ml-1">✨</span>
+                {{ authStateService.getFullName() }} <span class="ml-1">✨</span>
               </div>
               <a
                 routerLink="/profile"
@@ -211,7 +211,7 @@
         >
           <span class="mr-2">💫</span> Categorías
         </a>
-        @if (authService.isAuthenticated() && authService.isAdmin()) {
+        @if (authStateService.isAuthenticated() && authStateService.isAdmin()) {
         <a
           routerLink="/admin"
           routerLinkActive="text-pink-500 bg-pink-50"
@@ -237,11 +237,11 @@
           }
         </a>
 
-        @if (authService.isAuthenticated()) {
+        @if (authStateService.isAuthenticated()) {
         <div
           class="px-3 py-2 text-sm text-pink-500 font-medium border-t border-pink-100 mt-2 pt-2"
         >
-          <span class="mr-1">✨</span> Hola, {{ authService.getFullName() }}
+          <span class="mr-1">✨</span> Hola, {{ authStateService.getFullName() }}
           <span class="ml-1">✨</span>
         </div>
         <a

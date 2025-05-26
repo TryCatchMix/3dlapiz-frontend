@@ -1,4 +1,5 @@
 import { AuthService } from '../../core/services/auth.service';
+import { AuthStateService } from '../../core/services/auth-state.service';
 import { CartService } from '../../core/services/cart.service';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
@@ -17,7 +18,8 @@ export class HeaderComponent {
 
   constructor(
     public cartService: CartService,
-    public authService: AuthService
+    public authService: AuthService,
+    public authStateService: AuthStateService
   ) {}
 
   toggleUserMenu(): void {
