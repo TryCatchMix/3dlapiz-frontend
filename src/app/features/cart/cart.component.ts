@@ -1,7 +1,7 @@
 import { CartItem, CartService } from '../../core/services/cart.service';
 import { Component, OnInit } from '@angular/core';
 
-import { AuthService } from '../../core/services/auth.service';
+import { AuthStateService } from '../../core/services/auth-state.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -20,7 +20,7 @@ export class CartComponent implements OnInit {
   constructor(
     public cartService: CartService,
     private router: Router,
-    private authService: AuthService
+    private authStateService: AuthStateService
   ) {}
 
   ngOnInit(): void {
@@ -28,7 +28,7 @@ export class CartComponent implements OnInit {
       this.cartItems = items;
     });
 
-    if (this.authService.isAuthenticated()) {
+    if (this.authStateService.isAuthenticated()) {
       this.syncWithBackend();
     }
   }
@@ -58,7 +58,7 @@ export class CartComponent implements OnInit {
   }
 
   proceedToCheckout(): void {
-    if (!this.authService.isAuthenticated()) {
+    if (!this.authStateService.isAuthenticated()) {
       this.router.navigate(['/login']);
       return;
     }

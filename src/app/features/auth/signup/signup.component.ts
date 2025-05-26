@@ -9,6 +9,7 @@ import { Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
+import { PasswordService } from '../../../core/services/password.service';
 
 @Component({
   selector: 'app-signup',
@@ -29,6 +30,7 @@ export class SignupComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
+    private readonly pass: PasswordService,
     private router: Router
   ) {}
 
@@ -49,7 +51,7 @@ export class SignupComponent implements OnInit {
     this.signupForm.get('password')?.valueChanges.subscribe((password) => {
       if (password) {
         this.passwordStrength =
-          this.authService.checkPasswordStrength(password);
+          this.pass.checkPasswordStrength(password);
       } else {
         this.passwordStrength = 'weak';
       }

@@ -1,8 +1,9 @@
-import { AuthService, User } from '../../core/services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 
+import { AuthService } from '../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
+import { User } from '../../core/models/user.model';
 
 @Component({
   selector: 'app-account',
