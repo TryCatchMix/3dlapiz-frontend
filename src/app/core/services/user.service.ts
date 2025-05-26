@@ -1,92 +1,88 @@
-import { Observable, tap } from 'rxjs';
+import { ChangePasswordData, User, UserUpdateData } from '../models/user.model';
+import { Injectable, inject } from '@angular/core';
+import { Observable, throwError } from 'rxjs';
 
-import { BaseHttpService } from '../../shared/data-access/base-http.service';
-import { Injectable } from '@angular/core';
-
-export interface RegisterData {
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  password_confirmation: string;
-  phone_country_code: string;
-  phone_number: string;
-  street?: string;
-  city?: string;
-  state?: string;
-  postal_code?: string;
-  country_code?: string;
-}
-
-export interface LoginData {
-  email: string;
-  password: string;
-  device_name: string;
-}
-
-export interface ResetPasswordData {
-  email: string;
-  password: string;
-  password_confirmation: string;
-  token: string;
-}
+import { HttpClient } from '@angular/common/http';
+import { PasswordService } from './password.service';
+import { TokenService } from './token.service';
+import { catchError } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private readonly authPath = '';
+  private readonly apiUrl = environment.API_URL;
+  private readonly userPath = 'users';
+  private tokenService = inject(TokenService);
+  private passwordService = inject(PasswordService);
 
-  constructor(private baseHttp: BaseHttpService) {}
+  constructor(private http: HttpClient) {}
 
-  register(userData: any): Observable<any> {
-    return this.baseHttp.http.post(
-      `${this.baseHttp.apiUrl}/${this.authPath}/register`,
+  updateProfile(userData: UserUpdateData): Observable<User> {
+    return this.http.put<User>(
+      `${this.apiUrl}/${this.userPath}/profile`,
       userData
+    ).pipe(
+      catchError((err) => throwError(() => ({
+        error: err.error.message || 'Profile update failed',
+        data: err.error,
+      })))
     );
   }
 
-  login(credentials: LoginData): Observable<any> {
-    return this.baseHttp.http
-      .post(`${this.baseHttp.apiUrl}/${this.authPath}/login`, credentials)
-      .pipe(tap((response) => {}));
-  }
-
-  logout(): Observable<any> {
-    return this.baseHttp.http
-      .post(`${this.baseHttp.apiUrl}/${this.authPath}/logout`, {})
-      .pipe(
-        tap(() => {
-          localStorage.removeItem('access_token');
-        })
-      );
-  }
-
-  getUser(): Observable<any> {
-    return this.baseHttp.http.get(
-      `${this.baseHttp.apiUrl}/${this.authPath}/user`
+  changePassword(passwordData: ChangePasswordData): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}/${this.userPath}/change-password`,
+      passwordData
+    ).pipe(
+      catchError((err) => throwError(() => ({
+        error: err.error.message || 'Password change failed',
+        data: err.error,
+      })))
     );
   }
 
-  forgotPassword(email: string): Observable<any> {
-    return this.baseHttp.http.post(
-      `${this.baseHttp.apiUrl}/${this.authPath}/forgot-password`,
-      { email }
+  getUserById(userId: number): Observable<User> {
+    return this.http.get<User>(
+      `${this.apiUrl}/${this.userPath}/${userId}`
+    ).pipe(
+      catchError((err) => throwError(() => ({
+        error: err.error.message || 'Failed to get user data',
+        data: err.error,
+      })))
     );
   }
 
-  resetPassword(resetData: ResetPasswordData): Observable<any> {
-    return this.baseHttp.http.post(
-      `${this.baseHttp.apiUrl}/${this.authPath}/reset-password`,
-      resetData
+  getUsers(page: number = 1, perPage: number = 10): Observable<{users: User[], total: number}> {
+    return this.http.get<{users: User[], total: number}>(
+      `${this.apiUrl}/${this.userPath}`,
+      {
+        params: {
+          page: page.toString(),
+          per_page: perPage.toString()
+        }
+      }
+    ).pipe(
+      catchError((err) => throwError(() => ({
+        error: err.error.message || 'Failed to get users',
+        data: err.error,
+      })))
     );
   }
 
-  isAuthenticated(): boolean {
-    return !!localStorage.getItem('access_token');
+  deleteUser(userId: number): Observable<any> {
+    return this.http.delete<any>(
+      `${this.apiUrl}/${this.userPath}/${userId}`
+    ).pipe(
+      catchError((err) => throwError(() => ({
+        error: err.error.message || 'Failed to delete user',
+        data: err.error,
+      })))
+    );
   }
 
-  getAuthToken(): string | null {
-    return localStorage.getItem('access_token');
+  checkPasswordStrength(password: string): 'weak' | 'medium' | 'strong' {
+    return this.passwordService.checkPasswordStrength(password);
   }
 }
