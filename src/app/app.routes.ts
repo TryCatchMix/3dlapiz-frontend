@@ -5,6 +5,7 @@ import { OrderSuccessComponent } from './features/order/order-success/order-succ
 import { ProductDetailsComponent } from './features/products/product-details/product-details.component';
 import { Routes } from '@angular/router';
 import { TermsConditionsComponent } from './shared/legal/terms-conditions/terms-conditions.component';
+import { adminGuard } from './core/guards/admin.guard';
 import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
@@ -72,6 +73,14 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/cart/cart.component').then((m) => m.CartComponent),
     canActivate: [authGuard],
+  },
+  {
+    path: 'product-add',
+    loadComponent: () =>
+      import('./features/products/product-add/product-add.component').then(
+        (m) => m.ProductAddComponent
+      ),
+    canActivate: [adminGuard],
   },
 
   {
