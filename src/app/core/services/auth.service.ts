@@ -1,64 +1,38 @@
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
-import { Injectable, signal } from '@angular/core';
+import { AuthResponse, User } from '../models/user.model';
+import { Injectable, inject } from '@angular/core';
+import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
+import { AuthStateService } from './auth-state.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { TokenService } from './token.service';
+import { environment } from '../../../environments/environment';
 
-export interface User {
-  id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  role: 'admin' | 'staff' | 'user';
-  phone_country_code?: string;
-  phone_number?: string;
-  street?: string;
-  city?: string;
-  state?: string;
-  postal_code?: string;
-  country_code?: string;
-}
-
-export interface AuthResponse {
-  message: string;
-  token_type?: string;
-  access_token?: string;
-  user?: User;
-}
-
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUrl = 'http://localhost:8000/api';
-  private currentUserSubject = new BehaviorSubject<User | null>(null);
-  public currentUser$ = this.currentUserSubject.asObservable();
-  private tokenKey = 'auth_token';
+  private readonly apiUrl = environment.API_URL;
+  private tokenService = inject(TokenService);
+  private authStateService = inject(AuthStateService);
+  private router = inject(Router);
+  private tokenCheckInterval: any;
 
-  public isAuthenticated = signal(false);
-  public currentUser = signal<User | null>(null);
-
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient) {
     this.loadStoredUser();
+    this.tokenCheckInterval = setInterval(() => {
+      if (this.isLoggedIn()) {
+        this.verifyToken().subscribe();
+      }
+    }, 5 * 60 * 1000);
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.tokenCheckInterval);
   }
 
   private loadStoredUser(): void {
-    const token = localStorage.getItem(this.tokenKey);
-    if (token) {
-      const userData = localStorage.getItem('user_data');
-      if (userData) {
-        try {
-          const user = JSON.parse(userData);
-          this.currentUserSubject.next(user);
-          this.isAuthenticated.set(true);
-          this.currentUser.set(user);
-        } catch (e) {
-          this.logout();
-        }
-      } else {
-        this.getUserProfile().subscribe();
-      }
+    if (this.tokenService.isTokenValid()) {
+      this.getUserProfile().subscribe({ error: () => this.clearSession() });
     }
   }
 
@@ -70,68 +44,48 @@ export class AuthService {
     password_confirmation: string;
   }): Observable<AuthResponse> {
     return this.http
-      .post<AuthResponse>(`${this.apiUrl}/register`, userData)
+      .post<AuthResponse>(`${this.apiUrl}/register`, {
+        ...userData,
+        device_name: 'web',
+      })
       .pipe(
-        tap((response) => {
-          if (response.access_token && response.user) {
-            this.setSession(response);
-          }
-        }),
-        catchError((err) => {
-          return throwError(() => ({
+        tap((res) => res.access_token && this.setSession(res)),
+        catchError((err) =>
+          throwError(() => ({
             error: err.error.message || 'Registration failed',
             data: err.error,
-          }));
-        })
+          }))
+        )
       );
   }
 
-  login(
-    email: string,
-    password: string,
-    deviceName: string = 'web'
-  ): Observable<AuthResponse> {
-    const payload = {
+  login(email: string, password: string, deviceName = 'web'): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, {
       email,
       password,
       device_name: deviceName,
-    };
-
-    console.log('Sending payload:', payload);
-    console.log('To URL:', `${this.apiUrl}/login`);
-
-    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, payload).pipe(
-      tap((response) => {
-        console.log('Login response:', response);
-        if (response.access_token && response.user) {
-          this.setSession(response);
-        }
-      }),
-      catchError((err) => {
-        console.error('Login error:', err);
-        return throwError(() => ({
+    }).pipe(
+      tap((res) => res.access_token && this.setSession(res)),
+      catchError((err) =>
+        throwError(() => ({
           error: err.error.message || 'Login failed',
           data: err.error,
           status: err.status,
           statusText: err.statusText,
-        }));
-      })
+        }))
+      )
     );
   }
 
-  private setSession(authResult: AuthResponse): void {
-    if (authResult.access_token && authResult.user) {
-      localStorage.setItem(this.tokenKey, authResult.access_token);
-      localStorage.setItem('user_data', JSON.stringify(authResult.user));
-      this.currentUserSubject.next(authResult.user);
-      this.isAuthenticated.set(true);
-      this.currentUser.set(authResult.user);
+  private setSession(auth: AuthResponse): void {
+    if (auth.access_token && auth.user) {
+      this.tokenService.setToken(auth.access_token);
+      this.authStateService.setUser(auth.user);
     }
   }
 
   logout(): void {
-    this.http
-      .post<any>(`${this.apiUrl}/logout`, {})
+    this.http.post<any>(`${this.apiUrl}/logout`, {})
       .pipe(catchError(() => of(null)))
       .subscribe(() => {
         this.clearSession();
@@ -139,73 +93,50 @@ export class AuthService {
       });
   }
 
-  public clearSession(): void {
-    localStorage.removeItem(this.tokenKey);
-    localStorage.removeItem('user_data');
-    this.currentUserSubject.next(null);
-    this.isAuthenticated.set(false);
-    this.currentUser.set(null);
+  clearSession(): void {
+    this.tokenService.removeToken();
+    this.authStateService.clearUser();
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem(this.tokenKey);
+    return this.tokenService.isTokenValid();
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+    return this.tokenService.getToken();
   }
 
   getUserProfile(): Observable<User> {
     return this.http.get<{ user: User }>(`${this.apiUrl}/user`).pipe(
-      map((response) => response.user),
-      tap((user) => {
-        localStorage.setItem('user_data', JSON.stringify(user));
-        this.currentUserSubject.next(user);
-        this.isAuthenticated.set(true);
-        this.currentUser.set(user);
-        return user;
-      }),
+      map((res) => res.user),
+      tap((user) => this.authStateService.setUser(user)),
       catchError((err) => {
-        if (err.status === 401) {
-          this.clearSession();
-        }
+        if (err.status === 401) this.clearSession();
         return throwError(() => err);
       })
     );
   }
 
-  isAdmin(): boolean {
-    const user = this.currentUser();
-    return user?.role === 'admin';
+  verifyRole(requiredRole: 'admin' | 'staff' | 'user'): Observable<boolean> {
+    return this.http.get<{ allowed: boolean }>(`${this.apiUrl}/verify-role/${requiredRole}`).pipe(
+      map((res) => res.allowed),
+      catchError(() => of(false))
+    );
   }
 
-  getFullName(): string {
-    const user = this.currentUser();
-    if (user) {
-      return `${user.first_name} ${user.last_name}`;
-    }
-    return '';
-  }
-
-  getInitial(): string {
-    const user = this.currentUser();
-    if (user && user.first_name) {
-      return user.first_name.charAt(0).toUpperCase();
-    }
-    return '';
+  get currentUser() {
+    return this.authStateService.currentUser;
   }
 
   forgotPassword(email: string): Observable<AuthResponse> {
-    return this.http
-      .post<AuthResponse>(`${this.apiUrl}/forgot-password`, { email })
-      .pipe(
-        catchError((err) =>
-          throwError(() => ({
-            error: err.error.message || 'Password reset request failed',
-            data: err.error,
-          }))
-        )
-      );
+    return this.http.post<AuthResponse>(`${this.apiUrl}/forgot-password`, { email }).pipe(
+      catchError((err) =>
+        throwError(() => ({
+          error: err.error.message || 'Password reset request failed',
+          data: err.error,
+        }))
+      )
+    );
   }
 
   resetPassword(data: {
@@ -214,41 +145,20 @@ export class AuthService {
     password: string;
     password_confirmation: string;
   }): Observable<AuthResponse> {
-    return this.http
-      .post<AuthResponse>(`${this.apiUrl}/reset-password`, data)
-      .pipe(
-        catchError((err) =>
-          throwError(() => ({
-            error: err.error.message || 'Password reset failed',
-            data: err.error,
-          }))
-        )
-      );
-  }
-
-  checkPasswordStrength(password: string): 'weak' | 'medium' | 'strong' {
-    if (password.length < 8) return 'weak';
-
-    let score = 0;
-
-    if (/[a-z]/.test(password)) score++;
-
-    if (/[A-Z]/.test(password)) score++;
-
-    if (/[0-9]/.test(password)) score++;
-
-    if (/[^a-zA-Z0-9]/.test(password)) score++;
-
-    // Evaluación final
-    if (score <= 2) return 'weak';
-    if (score === 3) return 'medium';
-    return 'strong';
+    return this.http.post<AuthResponse>(`${this.apiUrl}/reset-password`, data).pipe(
+      catchError((err) =>
+        throwError(() => ({
+          error: err.error.message || 'Password reset failed',
+          data: err.error,
+        }))
+      )
+    );
   }
 
   verifyToken(): Observable<boolean> {
-    return this.http.get<any>(`${this.apiUrl}/verify-token`).pipe(
+    return this.http.get(`${this.apiUrl}/verify-token`).pipe(
       map(() => true),
-      catchError(() => {
+      catchError((err) => {
         this.clearSession();
         return of(false);
       })
