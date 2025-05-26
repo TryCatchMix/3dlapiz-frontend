@@ -7,10 +7,6 @@ import { catchError } from 'rxjs/operators';
 import { inject } from '@angular/core';
 import { throwError } from 'rxjs';
 
-/**
- * HTTP interceptor to handle authentication
- * Adds authorization header to requests and handles unauthorized responses
- */
 export const authInterceptor: HttpInterceptorFn = (
   req: HttpRequest<unknown>,
   next: HttpHandlerFn
@@ -19,7 +15,6 @@ export const authInterceptor: HttpInterceptorFn = (
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  // Excluir rutas específicas del interceptor
   if (req.url.includes('/logout') || req.url.includes('/login')) {
     return next(req);
   }
