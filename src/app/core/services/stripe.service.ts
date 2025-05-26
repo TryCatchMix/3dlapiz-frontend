@@ -3,24 +3,46 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
+declare var Stripe: any;
+
+export interface StripeSessionResponse {
+  success: boolean;
+  session_id: string;
+  order_id: string;
+  message?: string;
+  error?: string;
+}
+
+export interface PaymentConfirmationResponse {
+  success: boolean;
+  order: any;
+  message?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class StripeService {
+  private stripe: any;
   private apiUrl = environment.API_URL;
 
-  constructor(private http: HttpClient) {}
-
-  createPaymentSession(orderData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/stripe/checkout`, orderData);
+  constructor(private http: HttpClient) {
+    this.stripe = Stripe(environment.stripePublicKey);
   }
 
-  confirmPayment(sessionId: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/stripe/success?session_id=${sessionId}`);
+  createPaymentSession(orderData: any): Observable<StripeSessionResponse> {
+    return this.http.post<StripeSessionResponse>(`${this.apiUrl}/stripe/checkout`, orderData);
   }
 
-  redirectToCheckout(sessionId: string): Promise<any> {
-    window.location.href = sessionId;
-    return Promise.resolve({ success: true });
+  confirmPayment(sessionId: string): Observable<PaymentConfirmationResponse> {
+    return this.http.post<PaymentConfirmationResponse>(`${this.apiUrl}/stripe/confirm-payment`, {
+      session_id: sessionId
+    });
+  }
+
+  async redirectToCheckout(sessionId: string): Promise<any> {
+    return await this.stripe.redirectToCheckout({
+      sessionId: sessionId
+    });
   }
 }
