@@ -25,10 +25,4 @@ export class ProductService extends BaseHttpService {
   searchProducts(term: string): Observable<Product[]> {
     return this.http.get<Product[]>(`${this.apiUrl}/products/search?q=${term}`);
   }
-
-  getProductsByCategory(categoryId: number): Observable<Product[]> {
-    return this.http.get<Product[]>(
-      `${this.apiUrl}/categories/${categoryId}/products`
-    );
-  }
 }
