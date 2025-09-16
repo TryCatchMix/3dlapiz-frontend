@@ -6,14 +6,6 @@ export interface ProductImage {
   updated_at: string | null;
 }
 
-export interface Category {
-  id: number;
-  name: string;
-  description: string;
-  created_at: string | null;
-  updated_at: string | null;
-}
-
 export interface Product {
   id: number;
   name: string;
@@ -23,6 +15,5 @@ export interface Product {
   category_id: number;
   created_at: string | null;
   updated_at: string | null;
-  category: Category;
   images: ProductImage[];
 }
