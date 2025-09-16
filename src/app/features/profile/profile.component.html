@@ -1,0 +1,455 @@
+<div
+  class="min-h-screen bg-pink-50 py-10"
+  style="
+    background-image: url('https://cdnjs.cloudflare.com/ajax/libs/svg-backgrounds/1.0.0/hearts.svg');
+    background-size: 200px;
+  "
+>
+  <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl p-8 border-2 border-pink-200">
+    <div class="flex items-center justify-between mb-8">
+      <h1 class="text-3xl font-bold text-pink-600 flex items-center">
+        <span class="mr-2">✨</span> Mi Perfil <span class="ml-2">💖</span>
+      </h1>
+      <div class="flex space-x-3">
+        <!-- Información de cambios restantes -->
+        <div class="text-sm bg-blue-50 px-3 py-2 rounded-lg border border-blue-200">
+          <span class="text-blue-600">
+            📊 Cambios restantes: <strong>3</strong>/5
+          </span>
+        </div>
+
+        <button
+          class="bg-gradient-to-r from-pink-400 to-purple-400 hover:from-pink-500 hover:to-purple-500 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 transition-all duration-200 shadow-md flex items-center"
+          id="editBtn"
+          (click)="toggleEditMode()"
+        >
+          <span class="mr-2">✏️</span> Editar
+        </button>
+
+        <button
+          class="bg-gradient-to-r from-green-400 to-emerald-400 hover:from-green-500 hover:to-emerald-500 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 transition-all duration-200 shadow-md items-center hidden"
+          id="saveBtn"
+          (click)="saveProfile()"
+        >
+          <span class="mr-2">💾</span>
+          <span id="saveText">Guardar</span>
+        </button>
+
+        <button
+          class="bg-gradient-to-r from-gray-400 to-gray-500 hover:from-gray-500 hover:to-gray-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition-all duration-200 shadow-md items-center hidden"
+          id="cancelBtn"
+        >
+          <span class="mr-2">❌</span> Cancelar
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div id="loading" class="hidden justify-center items-center py-10">
+      <div
+        class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-400"
+        style="filter: drop-shadow(0 0 3px rgba(244, 114, 182, 0.5))"
+      ></div>
+    </div>
+
+    <!-- Error Message -->
+    <div
+      id="errorMessage"
+      class="bg-red-50 border-2 border-red-200 text-red-600 px-4 py-3 rounded-xl mb-4 items-center hidden"
+    >
+      <span class="mr-2">🙈</span> <span id="errorText"></span>
+    </div>
+
+    <!-- Success Message -->
+    <div
+      id="successMessage"
+      class="bg-green-50 border-2 border-green-200 text-green-600 px-4 py-3 rounded-xl mb-4 items-center hidden"
+    >
+      <span class="mr-2">✅</span> <span id="successText"></span>
+    </div>
+
+    <!-- Profile Form -->
+    <form id="profileForm" class="space-y-6" onsubmit="saveProfile(event)">
+
+      <!-- Información Personal -->
+      <div class="bg-gradient-to-r from-pink-50 to-purple-50 p-6 rounded-2xl border border-pink-200">
+        <h2 class="text-lg font-semibold text-pink-600 mb-4 flex items-center">
+          <span class="mr-2">👤</span> Información Personal
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Nombre -->
+          <div class="bg-white p-4 rounded-xl border border-pink-100 hover:shadow-md transition-all duration-300">
+            <label class="block text-sm font-medium text-pink-500 mb-2">Nombre *</label>
+            <div id="nameDisplay">
+              <p class="text-lg text-gray-800 font-medium">
+                María José
+                <span class="text-pink-400 ml-1">♡</span>
+              </p>
+            </div>
+            <div id="nameEdit" class="hidden">
+              <input
+                type="text"
+                name="first_name"
+                id="firstName"
+                value="María José"
+                class="w-full px-3 py-2 border border-pink-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent transition-all duration-200"
+                placeholder="Ingresa tu nombre"
+              />
+              <div id="firstNameError" class="text-red-500 text-xs mt-1 hidden"></div>
+            </div>
+          </div>
+
+          <!-- Apellido -->
+          <div class="bg-white p-4 rounded-xl border border-pink-100 hover:shadow-md transition-all duration-300">
+            <label class="block text-sm font-medium text-pink-500 mb-2">Apellido *</label>
+            <div id="lastNameDisplay">
+              <p class="text-lg text-gray-800 font-medium">
+                González Fernández
+                <span class="text-pink-400 ml-1">♡</span>
+              </p>
+            </div>
+            <div id="lastNameEdit" class="hidden">
+              <input
+                type="text"
+                name="last_name"
+                id="lastName"
+                value="González Fernández"
+                class="w-full px-3 py-2 border border-pink-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent transition-all duration-200"
+                placeholder="Ingresa tu apellido"
+              />
+              <div id="lastNameError" class="text-red-500 text-xs mt-1 hidden"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="mt-4 bg-white p-4 rounded-xl border border-purple-100 hover:shadow-md transition-all duration-300">
+          <label class="block text-sm font-medium text-purple-500 mb-2">Correo electrónico *</label>
+          <div id="emailDisplay">
+            <p class="text-lg text-gray-800 font-medium">maria.gonzalez&#64;example.com</p>
+          </div>
+          <div id="emailEdit" class="hidden">
+            <input
+              type="email"
+              name="email"
+              id="email"
+              value="maria.gonzalez@example.com"
+              class="w-full px-3 py-2 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-200"
+              placeholder="correo@ejemplo.com"
+            />
+            <div id="emailError" class="text-red-500 text-xs mt-1 hidden"></div>
+          </div>
+        </div>
+
+        <!-- Rol -->
+        <div class="mt-4 bg-white p-4 rounded-xl border border-blue-100 hover:shadow-md transition-all duration-300">
+          <label class="block text-sm font-medium text-blue-500 mb-2">Rol</label>
+          <p class="text-lg">
+            <span
+              class="bg-pink-200 text-pink-800 px-3 py-1 rounded-full text-sm font-medium border border-pink-300 shadow-sm"
+            >
+              💫 Usuario
+            </span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Información de Contacto -->
+      <div class="bg-gradient-to-r from-teal-50 to-cyan-50 p-6 rounded-2xl border border-teal-200">
+        <h2 class="text-lg font-semibold text-teal-600 mb-4 flex items-center">
+          <span class="mr-2">📞</span> Información de Contacto
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Código de País para Teléfono -->
+          <div class="bg-white p-4 rounded-xl border border-teal-100 hover:shadow-md transition-all duration-300 phone-country-dropdown-container relative">
+            <label class="block text-sm font-medium text-teal-500 mb-2">Código de País</label>
+            <div id="phoneCountryDisplay">
+              <p class="text-lg text-gray-800 font-medium">+34</p>
+            </div>
+            <div id="phoneCountryEdit" class="hidden">
+              <div class="relative">
+                <input
+                  type="text"
+                  name="phone_country_code"
+                  id="phoneCountryCode"
+                  value="+34"
+                  class="w-full px-3 py-2 border border-teal-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all duration-200"
+                  placeholder="Buscar por país o código..."
+                  onfocus="showPhoneCountryDropdown()"
+                  oninput="filterPhoneCountries(this.value)"
+                />
+                <!-- Dropdown de códigos telefónicos -->
+                <div id="phoneCountryDropdown" class="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto hidden">
+                  <div onclick="selectPhoneCountry('+34', 'España')" class="px-4 py-2 hover:bg-teal-50 cursor-pointer flex items-center space-x-3 border-b border-gray-100">
+                    <span class="text-sm font-mono text-teal-600 min-w-[60px]">+34</span>
+                    <span class="text-sm text-gray-700 flex-1">España</span>
+                    <span class="text-xs text-gray-400 uppercase">ES</span>
+                  </div>
+                  <div onclick="selectPhoneCountry('+1', 'Estados Unidos')" class="px-4 py-2 hover:bg-teal-50 cursor-pointer flex items-center space-x-3 border-b border-gray-100">
+                    <span class="text-sm font-mono text-teal-600 min-w-[60px]">+1</span>
+                    <span class="text-sm text-gray-700 flex-1">Estados Unidos</span>
+                    <span class="text-xs text-gray-400 uppercase">US</span>
+                  </div>
+                  <div onclick="selectPhoneCountry('+52', 'México')" class="px-4 py-2 hover:bg-teal-50 cursor-pointer flex items-center space-x-3 border-b border-gray-100">
+                    <span class="text-sm font-mono text-teal-600 min-w-[60px]">+52</span>
+                    <span class="text-sm text-gray-700 flex-1">México</span>
+                    <span class="text-xs text-gray-400 uppercase">MX</span>
+                  </div>
+                  <div onclick="selectPhoneCountry('+33', 'Francia')" class="px-4 py-2 hover:bg-teal-50 cursor-pointer flex items-center space-x-3">
+                    <span class="text-sm font-mono text-teal-600 min-w-[60px]">+33</span>
+                    <span class="text-sm text-gray-700 flex-1">Francia</span>
+                    <span class="text-xs text-gray-400 uppercase">FR</span>
+                  </div>
+                </div>
+              </div>
+              <div id="phoneCountryError" class="text-red-500 text-xs mt-1 hidden"></div>
+            </div>
+          </div>
+
+          <!-- Número de Teléfono -->
+          <div class="bg-white p-4 rounded-xl border border-teal-100 hover:shadow-md transition-all duration-300">
+            <label class="block text-sm font-medium text-teal-500 mb-2">
+              Número de Teléfono
+              <span class="text-green-500 ml-1">✓ Verificado</span>
+            </label>
+            <div id="phoneDisplay">
+              <p class="text-lg text-gray-800 font-medium">600 123 456</p>
+            </div>
+            <div id="phoneEdit" class="hidden">
+              <input
+                type="tel"
+                name="phone_number"
+                id="phoneNumber"
+                value="600 123 456"
+                class="w-full px-3 py-2 border border-teal-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all duration-200"
+                placeholder="600 123 456"
+              />
+              <div id="phoneError" class="text-red-500 text-xs mt-1 hidden"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dirección de Envío -->
+      <div class="bg-gradient-to-r from-rose-50 to-pink-50 p-6 rounded-2xl border border-rose-200">
+        <h2 class="text-lg font-semibold text-rose-600 mb-4 flex items-center">
+          <span class="mr-2">🏠</span> Dirección de Envío
+        </h2>
+
+        <div class="space-y-4">
+          <!-- Calle y Número -->
+          <div class="bg-white p-4 rounded-xl border border-rose-100 hover:shadow-md transition-all duration-300">
+            <label class="block text-sm font-medium text-rose-500 mb-2">Calle y Número</label>
+            <div id="streetDisplay">
+              <p class="text-lg text-gray-800 font-medium">Calle de Alcalá 123, 2º A</p>
+            </div>
+            <div id="streetEdit" class="hidden">
+              <input
+                type="text"
+                name="street"
+                id="street"
+                value="Calle de Alcalá 123, 2º A"
+                class="w-full px-3 py-2 border border-rose-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent transition-all duration-200"
+                placeholder="Calle Principal 123, Piso 2, Puerta A"
+              />
+              <div id="streetError" class="text-red-500 text-xs mt-1 hidden"></div>
+            </div>
+          </div>
+
+          <!-- Fila: Ciudad, Estado, Código Postal -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Ciudad -->
+            <div class="bg-white p-4 rounded-xl border border-rose-100 hover:shadow-md transition-all duration-300">
+              <label class="block text-sm font-medium text-rose-500 mb-2">Ciudad</label>
+              <div id="cityDisplay">
+                <p class="text-lg text-gray-800 font-medium">Madrid</p>
+              </div>
+              <div id="cityEdit" class="hidden">
+                <input
+                  type="text"
+                  name="city"
+                  id="city"
+                  value="Madrid"
+                  class="w-full px-3 py-2 border border-rose-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent transition-all duration-200"
+                  placeholder="Madrid"
+                />
+                <div id="cityError" class="text-red-500 text-xs mt-1 hidden"></div>
+              </div>
+            </div>
+
+            <!-- Provincia/Estado -->
+            <div class="bg-white p-4 rounded-xl border border-rose-100 hover:shadow-md transition-all duration-300">
+              <label class="block text-sm font-medium text-rose-500 mb-2">Provincia/Estado</label>
+              <div id="stateDisplay">
+                <p class="text-lg text-gray-800 font-medium">Madrid</p>
+              </div>
+              <div id="stateEdit" class="hidden">
+                <input
+                  type="text"
+                  name="state"
+                  id="state"
+                  value="Madrid"
+                  class="w-full px-3 py-2 border border-rose-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent transition-all duration-200"
+                  placeholder="Madrid"
+                />
+                <div id="stateError" class="text-red-500 text-xs mt-1 hidden"></div>
+              </div>
+            </div>
+
+            <!-- Código Postal -->
+            <div class="bg-white p-4 rounded-xl border border-rose-100 hover:shadow-md transition-all duration-300">
+              <label class="block text-sm font-medium text-rose-500 mb-2">Código Postal</label>
+              <div id="postalCodeDisplay">
+                <p class="text-lg text-gray-800 font-medium">28009</p>
+              </div>
+              <div id="postalCodeEdit" class="hidden">
+                <input
+                  type="text"
+                  name="postal_code"
+                  id="postalCode"
+                  value="28009"
+                  class="w-full px-3 py-2 border border-rose-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent transition-all duration-200"
+                  placeholder="28001"
+                />
+                <div id="postalCodeError" class="text-red-500 text-xs mt-1 hidden"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- País -->
+          <div class="bg-white p-4 rounded-xl border border-rose-100 hover:shadow-md transition-all duration-300 country-dropdown-container relative">
+            <label class="block text-sm font-medium text-rose-500 mb-2">País</label>
+            <div id="countryDisplay">
+              <p class="text-lg text-gray-800 font-medium">España</p>
+            </div>
+            <div id="countryEdit" class="hidden">
+              <div class="relative">
+                <input
+                  type="text"
+                  name="country_code"
+                  id="countryCode"
+                  value="ES"
+                  class="w-full px-3 py-2 border border-rose-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent transition-all duration-200"
+                  placeholder="Buscar país o código (ES, MX, US...)"
+                  onfocus="showCountryDropdown()"
+                  oninput="filterCountries(this.value)"
+                />
+                <!-- Dropdown de países -->
+                <div id="countryDropdown" class="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto hidden">
+                  <div onclick="selectCountry('ES', 'España')" class="px-4 py-2 hover:bg-rose-50 cursor-pointer flex items-center justify-between border-b border-gray-100">
+                    <span class="text-sm text-gray-700">España</span>
+                    <span class="text-xs text-gray-400 uppercase font-mono">ES</span>
+                  </div>
+                  <div onclick="selectCountry('US', 'Estados Unidos')" class="px-4 py-2 hover:bg-rose-50 cursor-pointer flex items-center justify-between border-b border-gray-100">
+                    <span class="text-sm text-gray-700">Estados Unidos</span>
+                    <span class="text-xs text-gray-400 uppercase font-mono">US</span>
+                  </div>
+                  <div onclick="selectCountry('MX', 'México')" class="px-4 py-2 hover:bg-rose-50 cursor-pointer flex items-center justify-between border-b border-gray-100">
+                    <span class="text-sm text-gray-700">México</span>
+                    <span class="text-xs text-gray-400 uppercase font-mono">MX</span>
+                  </div>
+                  <div onclick="selectCountry('FR', 'Francia')" class="px-4 py-2 hover:bg-rose-50 cursor-pointer flex items-center justify-between">
+                    <span class="text-sm text-gray-700">Francia</span>
+                    <span class="text-xs text-gray-400 uppercase font-mono">FR</span>
+                  </div>
+                </div>
+              </div>
+              <div id="countryError" class="text-red-500 text-xs mt-1 hidden"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seguridad -->
+      <div class="bg-gradient-to-r from-amber-50 to-orange-50 p-6 rounded-2xl border border-amber-200">
+        <h2 class="text-lg font-semibold text-amber-600 mb-4 flex items-center">
+          <span class="mr-2">🔒</span> Seguridad
+        </h2>
+        <button
+          type="button"
+          (click)="openPasswordModal()"
+          class="bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 transition-all duration-200 shadow-md flex items-center"
+        >
+          <span class="mr-2">🔑</span> Cambiar Contraseña
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal de Cambio de Contraseña -->
+<div id="passwordModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 hidden">
+  <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold text-gray-800 flex items-center">
+        <span class="mr-2">🔑</span> Cambiar Contraseña
+      </h3>
+      <button
+        (click)="closePasswordModal()"
+        class="text-gray-500 hover:text-gray-700 text-xl"
+      >
+        ×
+      </button>
+    </div>
+
+    <form id="passwordForm" onsubmit="changePassword(event)" class="space-y-4">
+      <!-- Contraseña Actual -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña Actual</label>
+        <input
+          type="password"
+          name="current_password"
+          id="currentPassword"
+          class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
+          placeholder="Ingresa tu contraseña actual"
+        />
+        <div id="currentPasswordError" class="text-red-500 text-xs mt-1 hidden"></div>
+      </div>
+
+      <!-- Nueva Contraseña -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Nueva Contraseña</label>
+        <input
+          type="password"
+          name="password"
+          id="newPassword"
+          class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
+          placeholder="Mínimo 12 caracteres"
+        />
+        <div id="newPasswordError" class="text-red-500 text-xs mt-1 hidden"></div>
+      </div>
+
+      <!-- Confirmar Nueva Contraseña -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Confirmar Nueva Contraseña</label>
+        <input
+          type="password"
+          name="password_confirmation"
+          id="confirmPassword"
+          class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
+          placeholder="Repite la nueva contraseña"
+        />
+        <div id="confirmPasswordError" class="text-red-500 text-xs mt-1 hidden"></div>
+      </div>
+
+      <!-- Botones del Modal -->
+      <div class="flex justify-end space-x-3 pt-4">
+        <button
+          type="button"
+          (click)="closePasswordModal()"
+          class="px-4 py-2 text-gray-600 bg-gray-200 rounded-lg hover:bg-gray-300 transition-all duration-200"
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all duration-200"
+        >
+          Cambiar Contraseña
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
