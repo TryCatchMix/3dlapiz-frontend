@@ -1,8 +1,8 @@
-import { AccountComponent } from './features/account/account.component';
 import { CheckoutComponent } from './features/checkout/checkout.component';
 import { HomeComponent } from './features/home/home.component';
 import { OrderSuccessComponent } from './features/order/order-success/order-success.component';
 import { ProductDetailsComponent } from './features/products/product-details/product-details.component';
+import { ProfileComponent } from './features/profile/profile.component';
 import { Routes } from '@angular/router';
 import { TermsConditionsComponent } from './shared/legal/terms-conditions/terms-conditions.component';
 import { adminGuard } from './core/guards/admin.guard';
@@ -59,7 +59,7 @@ export const routes: Routes = [
 
   {
     path: 'profile',
-    component: AccountComponent,
+    component: ProfileComponent,
     canActivate: [authGuard],
   },
   {

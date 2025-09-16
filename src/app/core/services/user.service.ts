@@ -21,7 +21,7 @@ export class UserService {
 
   updateProfile(userData: UserUpdateData): Observable<User> {
     return this.http.put<User>(
-      `${this.apiUrl}/${this.userPath}/profile`,
+      `${this.apiUrl}/profile`,
       userData
     ).pipe(
       catchError((err) => throwError(() => ({
