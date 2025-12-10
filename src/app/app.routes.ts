@@ -90,4 +90,24 @@ export const routes: Routes = [
         (m) => m.NotFoundComponent
       ),
   },
+
+ {
+    path: 'profile/orders',
+    loadComponent: () => import('./features/order/orders-list/orders-list.component')
+      .then(m => m.OrdersListComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'profile/orders/:id',
+    loadComponent: () => import('./features/order/order-detail/order-detail.component')
+      .then(m => m.OrderDetailComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'order-success',
+    loadComponent: () => import('./features/order/order-success/order-success.component')
+      .then(m => m.OrderSuccessComponent),
+    canActivate: [authGuard]
+  },
+
 ];
