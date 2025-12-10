@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class StorageService {
-  private storage: Storage = sessionStorage;
+  private storage: Storage = localStorage;
 
 
   set(key: string, value: any): void {
@@ -32,7 +32,7 @@ export class StorageService {
   }
 
 
-  clear(): void {
+   clear(): void {
     this.storage.clear();
   }
 
