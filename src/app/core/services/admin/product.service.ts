@@ -55,9 +55,4 @@ export class AdminProductService extends BaseHttpService {
   getProductStatistics(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/admin/products/${id}/statistics`);
   }
-
-  // Método para obtener categorías (necesario para el formulario)
-  getCategories(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/categories`);
-  }
 }
