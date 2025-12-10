@@ -32,7 +32,10 @@ export class AuthService {
 
   private loadStoredUser(): void {
     if (this.tokenService.isTokenValid()) {
-      this.getUserProfile().subscribe({ error: () => this.clearSession() });
+      //TODO
+      console.log('Token valid, fetching user profile...');
+      console.log('Token:', this.tokenService.getToken());
+      this.getUserProfile().subscribe({ error: () => /*this.clearSession();*/ null }); //TODO
     }
   }
 
@@ -111,7 +114,9 @@ export class AuthService {
       map((res) => res.user),
       tap((user) => this.authStateService.setUser(user)),
       catchError((err) => {
-        if (err.status === 401) this.clearSession();
+        //TODO
+        //if (err.status === 401) this.clearSession();
+        console.error('Error fetching user profile:', err);
         return throwError(() => err);
       })
     );
@@ -159,7 +164,8 @@ export class AuthService {
     return this.http.get(`${this.apiUrl}/verify-token`).pipe(
       map(() => true),
       catchError((err) => {
-        this.clearSession();
+        //TODO
+        //this.clearSession();
         return of(false);
       })
     );
