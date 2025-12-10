@@ -12,7 +12,6 @@ export const authInterceptor: HttpInterceptorFn = (
   next: HttpHandlerFn
 ) => {
   const tokenService = inject(TokenService);
-  const authService = inject(AuthService);
   const router = inject(Router);
 
   if (req.url.includes('/logout') || req.url.includes('/login')) {
@@ -29,14 +28,12 @@ export const authInterceptor: HttpInterceptorFn = (
     });
   }
 
-  return next(req).pipe(
+   return next(req).pipe(
     catchError((error) => {
       if (error.status === 401 && !req.url.includes('/logout')) {
-        authService.clearSession();
+        tokenService.removeToken(); // 👈 ya no depende de AuthService
         if (!router.url.includes('/login')) {
-          router.navigate(['/login'], {
-            queryParams: { returnUrl: router.url },
-          });
+          router.navigate(['/login'], { queryParams: { returnUrl: router.url } });
         }
       }
       return throwError(() => error);
