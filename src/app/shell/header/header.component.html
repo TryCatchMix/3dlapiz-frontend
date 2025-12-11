@@ -144,7 +144,7 @@
                 <span class="mr-1">👤</span> Mi perfil
               </a>
               <a
-                routerLink="/orders"
+                routerLink="/profile/orders"
                 class="block px-4 py-2 text-sm text-purple-500 hover:bg-pink-50 transition-colors duration-200"
                 role="menuitem"
                 (click)="showUserMenu = false"
@@ -198,7 +198,7 @@
         </a>
         @if (authStateService.isAuthenticated() && authStateService.isAdmin()) {
         <a
-          routerLink="/admin"
+          routerLink="/product-add"
           routerLinkActive="text-pink-500 bg-pink-50"
           (click)="showMobileMenu = false"
           class="text-purple-500 hover:text-pink-500 block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 flex items-center"
@@ -238,7 +238,7 @@
           <span class="mr-2">👤</span> Mi perfil
         </a>
         <a
-          routerLink="/orders"
+          routerLink="/profile/orders"
           routerLinkActive="text-pink-500 bg-pink-50"
           (click)="showMobileMenu = false"
           class="text-purple-500 hover:text-pink-500 block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 flex items-center"
