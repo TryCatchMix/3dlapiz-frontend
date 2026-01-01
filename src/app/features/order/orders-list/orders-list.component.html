@@ -77,13 +77,13 @@
             class="flex items-center space-x-4"
           >
             <img
-              [src]="item.product.image_url"
-              [alt]="item.product.name"
+              [src]="item.product?.image_url || item.product_image"
+              [alt]="item.product?.name || item.product_name"
               class="w-16 h-16 object-cover rounded"
             >
             <div class="flex-1 min-w-0">
               <p class="text-sm font-medium text-gray-900 truncate">
-                {{ item.product.name }}
+                {{ item.product?.name || item.product_name }}
               </p>
               <p class="text-sm text-gray-500">
                 Cantidad: {{ item.quantity }} × ${{ item.price | number: '1.2-2' }}

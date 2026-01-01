@@ -40,7 +40,7 @@ export class OrdersListComponent implements OnInit {
     });
   }
 
-  viewOrderDetails(orderId: number): void {
+  viewOrderDetails(orderId: string): void {
     this.router.navigate(['/profile/orders', orderId]);
   }
 
