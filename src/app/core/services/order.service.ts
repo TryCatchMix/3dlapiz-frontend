@@ -1,17 +1,19 @@
 import { Injectable, inject } from '@angular/core';
+import { Observable, map } from 'rxjs';
 
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.development';
 
 export interface OrderItem {
-  id: number;
-  order_id: number;
-  product_id: number;
+  id: string;
+  order_id: string;
+  product_id: string;
   quantity: number;
   price: number;
-  product: {
-    id: number;
+  product_name?: string;
+  product_image?: string;
+  product?: {
+    id: string;
     name: string;
     description: string;
     price: number;
@@ -21,19 +23,25 @@ export interface OrderItem {
 }
 
 export interface Order {
-  id: number;
-  user_id: number;
+  id: string;
+  user_id: string;
   status: 'pending' | 'processing' | 'paid' | 'shipped' | 'delivered' | 'cancelled';
   payment_status: 'pending' | 'paid' | 'failed' | 'cancelled';
   total: number;
   stripe_session_id?: string;
   payment_intent?: string;
   shipping_info?: any;
-  cancelled_at?: string;
-  cancellation_reason?: string;
+  shipping_method?: any;
   created_at: string;
   updated_at: string;
   items: OrderItem[];
+}
+
+interface ApiResponse<T> {
+  success: boolean;
+  orders?: T;
+  order?: Order;
+  message?: string;
 }
 
 @Injectable({
@@ -44,14 +52,18 @@ export class OrderService {
   private apiUrl = `${environment.API_URL}/orders`;
 
   getUserOrders(): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.apiUrl}/my-orders`);
+    return this.http.get<ApiResponse<Order[]>>(`${this.apiUrl}/my-orders`).pipe(
+      map(response => response.orders || [])
+    );
   }
 
-  getOrder(orderId: number): Observable<Order> {
-    return this.http.get<Order>(`${this.apiUrl}/${orderId}`);
+  getOrder(orderId: string): Observable<Order> {
+    return this.http.get<ApiResponse<Order>>(`${this.apiUrl}/${orderId}`).pipe(
+      map(response => response.order!)
+    );
   }
 
-  cancelOrder(orderId: number, reason?: string): Observable<any> {
+  cancelOrder(orderId: string, reason?: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/${orderId}/cancel`, { reason });
   }
 
