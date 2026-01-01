@@ -53,17 +53,6 @@
         </button>
       </div>
 
-      <!-- Cancellation Info -->
-      <div *ngIf="order.status === 'cancelled'" class="mt-4 bg-red-50 border border-red-200 rounded-lg p-4">
-        <p class="text-red-800 font-semibold mb-1">Pedido cancelado</p>
-        <p class="text-sm text-red-700" *ngIf="order.cancelled_at">
-          Cancelado el {{ order.cancelled_at | date: 'dd/MM/yyyy HH:mm' }}
-        </p>
-        <p class="text-sm text-red-700 mt-2" *ngIf="order.cancellation_reason">
-          <span class="font-medium">Motivo:</span> {{ order.cancellation_reason }}
-        </p>
-      </div>
-    </div>
 
     <!-- Order Items -->
     <div class="bg-white rounded-lg shadow-md p-6">
@@ -74,13 +63,13 @@
           class="flex items-center space-x-4 pb-4 border-b border-gray-200 last:border-b-0"
         >
           <img
-            [src]="item.product.image_url"
-            [alt]="item.product.name"
+            [src]="item.product?.image_url || item.product_image"
+            [alt]="item.product?.name || item.product_name"
             class="w-20 h-20 object-cover rounded"
           >
           <div class="flex-1">
-            <h3 class="font-semibold text-gray-900">{{ item.product.name }}</h3>
-            <p class="text-sm text-gray-600 mt-1">{{ item.product.description }}</p>
+            <h3 class="font-semibold text-gray-900">{{ item.product?.name || item.product_name }}</h3>
+
             <p class="text-sm text-gray-600 mt-1">
               Cantidad: {{ item.quantity }} × ${{ item.price | number: '1.2-2' }}
             </p>

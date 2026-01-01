@@ -29,7 +29,7 @@ export class OrderDetailComponent implements OnInit {
     this.loadOrderDetails(orderId);
   }
 
-  loadOrderDetails(orderId: number): void {
+  loadOrderDetails(orderId: string): void {
     this.loading = true;
     this.error = null;
 
