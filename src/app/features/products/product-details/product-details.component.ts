@@ -1,5 +1,5 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 
 import { CartService } from '../../../core/services/cart.service';
 import { CommonModule } from '@angular/common';
@@ -15,6 +15,8 @@ export class ProductDetailsComponent implements OnInit {
   product: any = null;
   currentImageIndex = 0;
   quantity = 1;
+  lightboxOpen = false;
+  lightboxIndex = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -98,5 +100,24 @@ export class ProductDetailsComponent implements OnInit {
 
     // Mostrar notificación de éxito
     //alert(`${this.product.name} (${this.quantity}) añadido al carrito`);
+  }
+
+  // Abrir modal
+openLightbox(index: number) {
+  this.lightboxIndex = index;
+  this.lightboxOpen = true;
+}
+
+// Cerrar modal
+closeLightbox() {
+  this.lightboxOpen = false;
+}
+
+// Escucha tecla Escape
+ @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (event.key === 'Escape' && this.lightboxOpen) {
+      this.closeLightbox();
+    }
   }
 }
