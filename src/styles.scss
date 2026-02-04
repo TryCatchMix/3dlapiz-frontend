@@ -10,7 +10,7 @@ html, body {
 
 body {
   font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #fdf2f8;
+  background-color: #c6dccf;
 }
 
 /* Mejora para textos en móvil */
@@ -159,4 +159,34 @@ input[type=number]::-webkit-inner-spin-button {
 
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+.rainbow-text {
+  background: linear-gradient(
+    90deg,
+    red,
+    orange,
+    yellow,
+    green,
+    blue,
+    indigo,
+    violet,
+    red
+  );
+  background-size: 400% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rainbow 5s linear infinite;
+
+   text-decoration: none;
+    border-bottom: none;
+}
+
+@keyframes rainbow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
 }
