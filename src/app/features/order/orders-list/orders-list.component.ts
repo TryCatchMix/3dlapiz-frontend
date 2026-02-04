@@ -40,9 +40,9 @@ export class OrdersListComponent implements OnInit {
     });
   }
 
-  viewOrderDetails(orderId: string): void {
-    this.router.navigate(['/profile/orders', orderId]);
-  }
+viewOrderDetails(orderId: string): void {
+  this.router.navigate(['/orders', orderId]);
+}
 
   getStatusLabel(status: string): string {
     return this.orderService.getStatusLabel(status);
