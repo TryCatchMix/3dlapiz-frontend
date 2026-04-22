@@ -106,13 +106,30 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
 
-  {
-    path: 'product-add',
-    loadComponent: () =>
-      import('./features/products/product-add/product-add.component')
-        .then(m => m.ProductAddComponent),
-    canActivate: [adminGuard],
-  },
+ {
+  path: 'admin',
+  canActivate: [adminGuard],
+  children: [
+    {
+      path: '',
+      loadComponent: () =>
+        import('./features/admin-dashboard/admin-dashboard.component')
+          .then(m => m.AdminDashboardComponent)
+    },
+    {
+      path: 'product-add',
+      loadComponent: () =>
+        import('./features/products/product-add/product-add.component')
+          .then(m => m.ProductAddComponent)
+    },
+    {
+      path: 'product-edit',
+      loadComponent: () =>
+        import('./features/products/product-edit/product-edit.component')
+          .then(m => m.ProductEditComponent)
+    }
+  ]
+},
     {
   path: 'patreon',
   loadComponent: () =>
