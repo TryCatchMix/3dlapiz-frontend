@@ -1,0 +1,48 @@
+<div class="min-h-screen bg-primaryBg p-6">
+
+  <!-- Title -->
+  <div class="text-center mb-10">
+    <h1 class="text-3xl font-bold text-primaryText">
+      Admin Panel ⚙️
+    </h1>
+
+    <p class="text-secundaryText mt-2">
+      Manage your store content
+    </p>
+  </div>
+
+  <!-- Cards Container -->
+  <div class="max-w-6xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    <!-- Add Product -->
+    <div
+      routerLink="/admin/product-add"
+      class="admin-card"
+    >
+      <div class="text-4xl mb-3">➕</div>
+      <h2>Add Product</h2>
+      <p>Create new products for your store</p>
+    </div>
+
+    <!-- Edit Product -->
+    <div
+      routerLink="/admin/product-edit"
+      class="admin-card"
+    >
+      <div class="text-4xl mb-3">✏️</div>
+      <h2>Edit Products</h2>
+      <p>Modify existing products</p>
+    </div>
+
+    <!-- Delete Product -->
+    <div
+      routerLink="/admin/product-delete"
+      class="admin-card"
+    >
+      <div class="text-4xl mb-3">🗑️</div>
+      <h2>Delete Products</h2>
+      <p>Remove products from catalog</p>
+    </div>
+
+  </div>
+</div>
