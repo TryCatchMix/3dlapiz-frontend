@@ -8,10 +8,11 @@ import { Product } from '../models/product.model';
   providedIn: 'root',
 })
 export class ProductService extends BaseHttpService {
+
+  /* PUBLIC */
+
   getProducts(): Observable<Product[]> {
-    return this.http
-      .get<Product[]>(`${this.apiUrl}/products`)
-      .pipe(tap((products) => console.log('Productos obtenidos:', products)));
+    return this.http.get<Product[]>(`${this.apiUrl}/products`);
   }
 
   getProduct(id: string | number): Observable<Product> {
@@ -25,4 +26,19 @@ export class ProductService extends BaseHttpService {
   searchProducts(term: string): Observable<Product[]> {
     return this.http.get<Product[]>(`${this.apiUrl}/products/search?q=${term}`);
   }
+
+  /* ADMIN */
+
+  createProduct(data: any): Observable<Product> {
+    return this.http.post<Product>(`${this.apiUrl}/products`, data);
+  }
+
+  updateProduct(id: number, data: any): Observable<Product> {
+    return this.http.put<Product>(`${this.apiUrl}/products/${id}`, data);
+  }
+
+  deleteProduct(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/products/${id}`);
+  }
+
 }
