@@ -50,7 +50,7 @@
 
           <a
             *ngIf="authStateService.isAuthenticated() && authStateService.isAdmin()"
-            routerLink="/product-add"
+            routerLink="/admin"
             routerLinkActive="border-b-2 border-primaryText"
             class="inline-flex items-center px-1 pt-1 text-primaryText hover:text-primaryHover transition-colors duration-200"
           >
@@ -127,7 +127,7 @@
           <span class="mr-2">🎁</span> Productos
         </a>
 
-        <a *ngIf="authStateService.isAuthenticated() && authStateService.isAdmin()" routerLink="/product-add" routerLinkActive="border-l-4 border-primaryText"
+        <a *ngIf="authStateService.isAuthenticated() && authStateService.isAdmin()" routerLink="/admin" routerLinkActive="border-l-4 border-primaryText"
           (click)="showMobileMenu = false"
           class="text-primaryText hover:text-primaryHover block px-3 py-2 rounded-lg text-base font-medium transition-colors duration-200 flex items-center">
           <span class="mr-2">👑</span> Panel Admin
