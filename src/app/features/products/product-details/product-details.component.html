@@ -67,14 +67,37 @@
         <h1 class="font-bold text-3xl mb-6 text-primaryText">{{ product.name }}</h1>
 
         <div class="flex items-center mb-6">
-          <span class="text-3xl font-bold text-primaryText">${{ product.price }}</span>
-          <span *ngIf="product.original_price" class="ml-4 text-xl line-through text-black/40">
-            ${{ product.original_price }}
-          </span>
-        </div>
+  <span class="text-3xl font-bold text-primaryText">${{ currentPrice | number:'1.2-2' }}</span>
+  <span
+    *ngIf="selectedVariant === 'unpainted' && product.price"
+    class="ml-4 text-xl line-through text-black/40"
+  >
+    ${{ product.price | number:'1.2-2' }}
+  </span>
+</div>
 
         <p class="mb-6 text-black leading-relaxed">{{ product.description }}</p>
-
+<div *ngIf="hasUnpaintedOption" class="mb-6">
+  <label class="block text-sm font-medium text-primaryText mb-2">Acabado</label>
+  <div class="inline-flex rounded-full border border-gray-300 overflow-hidden">
+    <button
+      type="button"
+      (click)="setVariant('painted')"
+      [ngClass]="selectedVariant === 'painted' ? 'bg-primaryText text-primaryWithBg' : 'bg-white text-primaryText'"
+      class="px-4 py-2 text-sm font-medium"
+    >
+      Pintada
+    </button>
+    <button
+      type="button"
+      (click)="setVariant('unpainted')"
+      [ngClass]="selectedVariant === 'unpainted' ? 'bg-primaryText text-primaryWithBg' : 'bg-white text-primaryText'"
+      class="px-4 py-2 text-sm font-medium border-l border-gray-300"
+    >
+      Sin pintar
+    </button>
+  </div>
+</div>
         <!-- Stock -->
         <div class="mb-6">
           <p class="text-sm flex items-center">
@@ -143,6 +166,22 @@
               <dd class="mt-1 text-sm text-black">{{ product.brand }}</dd>
             </div>
           </dl>
+          <div *ngIf="safeVideoUrl" class="mt-4">
+  <dt class="text-sm font-medium text-black/60 mb-2">Vídeo</dt>
+  <dd>
+    <div class="relative w-full" style="padding-bottom: 56.25%;">
+      <iframe
+        [src]="safeVideoUrl"
+        class="absolute inset-0 w-full h-full rounded-xl"
+        frameborder="0"
+        loading="lazy"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
+  </dd>
+</div>
         </div>
       </div>
     </div>
