@@ -1,3 +1,4 @@
+import { AdminShippingRatesComponent } from './features/admin-shipping-rates/admin-shipping-rates/admin-shipping-rates.component';
 import { CheckoutComponent } from './features/checkout/checkout.component';
 import { HomeComponent } from './features/home/home.component';
 import { OrderSuccessComponent } from './features/order/order-success/order-success.component';
@@ -127,7 +128,13 @@ export const routes: Routes = [
       loadComponent: () =>
         import('./features/products/product-edit/product-edit.component')
           .then(m => m.ProductEditComponent)
-    }
+    },
+    {
+  path: 'shipping-rates',
+  loadComponent: () =>
+    import('./features/admin-shipping-rates/admin-shipping-rates/admin-shipping-rates.component')
+      .then(m => m.AdminShippingRatesComponent)
+}
   ]
 },
     {
