@@ -87,7 +87,7 @@ export class OrderDetailComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/profile/orders']);
+    this.router.navigate(['/orders']);
   }
 
   getOrderItemsTotal(): number {

@@ -53,7 +53,7 @@ export class OrderSuccessComponent implements OnInit {
   }
 
   goToOrders(): void {
-    this.router.navigate(['/profile/orders']);
+    this.router.navigate(['/orders']);
   }
 
   goToHome(): void {
