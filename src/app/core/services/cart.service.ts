@@ -11,6 +11,7 @@ import { Injectable, inject, signal } from '@angular/core';
 
 import { AuthStateService } from './auth-state.service';
 import { HttpClient } from '@angular/common/http';
+import type { ProductVariant } from '../models/product.model';
 import { environment } from '../../../environments/environment.development';
 
 export interface CartItem {
@@ -20,6 +21,7 @@ export interface CartItem {
   quantity: number;
   image_url: string;
   stock: number;
+  variant: ProductVariant;
 }
 
 export interface BackendCartItem {
@@ -27,6 +29,7 @@ export interface BackendCartItem {
   cart_id: string;
   product_id: number;
   quantity: number;
+  variant: ProductVariant;
   price: number;
 }
 
@@ -117,9 +120,10 @@ export class CartService {
     }
 
     const cartItems = localItems.map((item) => ({
-      product_id: item.id,
-      quantity: item.quantity,
-    }));
+  product_id: item.id,
+  quantity: item.quantity,
+  variant: item.variant,
+}));
 
     return this.http
       .post<BackendCart>(`${this.apiUrl}/cart/sync`, { items: cartItems })
@@ -173,13 +177,17 @@ export class CartService {
       } else if (localItem) {
         mergedItems.push(localItem);
       } else if (backendItem) {
-        mergedItems.push({
-          backendItemId: backendItem.id,
-          productId: backendItem.product_id,
-          quantity: backendItem.quantity,
-          needsDetails: true,
-        });
-      }
+  mergedItems.push({
+    backendItemId: backendItem.id,
+    productId: backendItem.product_id,
+    quantity: backendItem.quantity,
+    variant: backendItem.variant ?? 'painted',
+    price: backendItem.price,
+    needsDetails: true,
+  });
+
+
+}
     });
 
     const itemsNeedingDetails = mergedItems.filter((item) => item.needsDetails);
@@ -194,11 +202,13 @@ export class CartService {
     }
 
     return this.fetchProductDetails(
-      itemsNeedingDetails.map((item) => ({
-        product_id: item.productId,
-        quantity: item.quantity,
-      }))
-    ).pipe(
+  itemsNeedingDetails.map((item: any) => ({
+    product_id: item.productId,
+    quantity: item.quantity,
+    variant: item.variant ?? 'painted',
+    price: item.price != null ? Number(item.price) : undefined,
+  }))
+).pipe(
       tap((fetchedItems) => {
         const finalItems = mergedItems
           .filter((item) => !item.needsDetails)
@@ -214,125 +224,124 @@ export class CartService {
   }
 
   private fetchProductDetails(
-    items: { product_id: number; quantity: number }[]
-  ): Observable<CartItem[]> {
-    if (items.length === 0) {
-      return of([]);
-    }
+  items: { product_id: number; quantity: number; variant?: ProductVariant; price?: number }[]
+): Observable<CartItem[]> {
+  if (items.length === 0) return of([]);
 
-    const productIds = items.map((item) => item.product_id);
+  const productIds = items.map((item) => item.product_id);
 
-    return this.http
-      .post<any[]>(`${this.apiUrl}/products/details`, { ids: productIds })
-      .pipe(
-        map((products) => {
-          return items
-            .map((item) => {
-              const productDetails = products.find(
-                (p) => p.id === item.product_id
-              );
-              if (!productDetails) {
-                return null;
-              }
+  return this.http
+    .post<any[]>(`${this.apiUrl}/products/details`, { ids: productIds })
+    .pipe(
+      map((products) => {
+        return items
+          .map((item) => {
+            const productDetails = products.find((p) => p.id === item.product_id);
+            if (!productDetails) return null;
 
-              return {
-                id: productDetails.id,
-                name: productDetails.name,
-                price: productDetails.price,
-                quantity: item.quantity,
-                image_url: productDetails.images[0]?.image_url || '',
-                stock: productDetails.stock,
-              } as CartItem;
-            })
-            .filter((item) => item !== null);
-        }),
-        catchError((error) => {
-          console.error('Error fetching product details', error);
-          return of([]);
-        })
-      );
-  }
+            const variant: ProductVariant = item.variant ?? 'painted';
+            // Si el backend mandó snapshot de precio (cart_item.price), úsalo;
+            // si no, calcúlalo desde el producto según la variante.
+            const fallbackPrice =
+              variant === 'unpainted' && productDetails.unpainted_price != null
+                ? Number(productDetails.unpainted_price)
+                : Number(productDetails.price);
+
+            return {
+              id: productDetails.id,
+              name: productDetails.name,
+              price: item.price ?? fallbackPrice,
+              quantity: item.quantity,
+              image_url: productDetails.images[0]?.image_url || '',
+              stock: productDetails.stock,
+              variant,
+            } as CartItem;
+          })
+          .filter((item): item is CartItem => item !== null);
+      }),
+      catchError((error) => {
+        console.error('Error fetching product details', error);
+        return of([]);
+      })
+    );
+}
 
   getCartItems(): CartItem[] {
     return this.cartItemsSubject.value;
   }
 
-  addToCart(product: any): void {
-    const currentItems = this.cartItemsSubject.value;
-    const existingItemIndex = currentItems.findIndex(
-      (item) => item.id === product.id
-    );
+  addToCart(product: any, variant: ProductVariant = 'painted'): void {
+  // Seguridad: el precio que mostramos viene del producto, pero el precio
+  // real se recalcula siempre en backend.
+  const variantPrice =
+    variant === 'unpainted' && product.unpainted_price != null
+      ? Number(product.unpainted_price)
+      : Number(product.price);
 
-    let updatedItems: CartItem[];
+  const currentItems = this.cartItemsSubject.value;
+  const existingItemIndex = currentItems.findIndex(
+    (item) => item.id === product.id && item.variant === variant
+  );
 
-    if (existingItemIndex > -1) {
-      updatedItems = [...currentItems];
-      if (updatedItems[existingItemIndex].quantity < product.stock) {
-        updatedItems[existingItemIndex].quantity += 1;
-      } else {
-        return;
-      }
-    } else {
-      const newItem: CartItem = {
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        quantity: 1,
-        image_url: product.images[0].image_url,
-        stock: product.stock,
+  let updatedItems: CartItem[];
+
+  if (existingItemIndex > -1) {
+    updatedItems = [...currentItems];
+    if (updatedItems[existingItemIndex].quantity < product.stock) {
+      updatedItems[existingItemIndex] = {
+        ...updatedItems[existingItemIndex],
+        quantity: updatedItems[existingItemIndex].quantity + 1,
       };
-      updatedItems = [...currentItems, newItem];
+    } else {
+      return;
     }
-
-    this.cartItemsSubject.next(updatedItems);
-    this.updateCartState();
-    this.saveCartToLocalStorage(updatedItems);
-
-    if (this.authStateService.isAuthenticated()) {
-      this.http
-        .post(`${this.apiUrl}/cart/add`, {
-          product_id: product.id,
-          quantity: 1,
-        })
-        .subscribe({
-          error: (error) => {
-            console.error('Error adding item to backend cart', error);
-          },
-        });
-    }
+  } else {
+    const newItem: CartItem = {
+      id: product.id,
+      name: product.name,
+      price: variantPrice,
+      quantity: 1,
+      image_url: product.images[0].image_url,
+      stock: product.stock,
+      variant,
+    };
+    updatedItems = [...currentItems, newItem];
   }
 
-  updateQuantity(productId: number, quantity: number): void {
-    const currentItems = this.cartItemsSubject.value;
-    const updatedItems = currentItems.map((item) =>
-      item.id === productId
-        ? { ...item, quantity: Math.min(Math.max(1, quantity), item.stock) }
-        : item
-    );
+  this.cartItemsSubject.next(updatedItems);
+  this.updateCartState();
+  this.saveCartToLocalStorage(updatedItems);
 
-    this.cartItemsSubject.next(updatedItems);
-    this.updateCartState();
-    this.saveCartToLocalStorage(updatedItems);
-
-    if (this.authStateService.isAuthenticated()) {
-      const item = updatedItems.find((item) => item.id === productId);
-      if (item) {
-        this.http
-          .put(`${this.apiUrl}/cart/update`, {
-            product_id: productId,
-            quantity: item.quantity,
-          })
-          .subscribe({
-            error: (error) => {
-              console.error(
-                'Error updating item quantity in backend cart',
-                error
-              );
-            },
-          });
-      }
-    }
+  if (this.authStateService.isAuthenticated()) {
+    this.http
+      .post(`${this.apiUrl}/cart/add`, {
+        product_id: product.id,
+        quantity: 1,
+        variant,
+      })
+      .subscribe({
+        error: (error) => console.error('Error adding item to backend cart', error),
+      });
   }
+}
+
+  updateQuantity(productId: number, variant: ProductVariant, quantity: number): void {
+  const currentItems = this.cartItemsSubject.value;
+  const updatedItems = currentItems.map((item) =>
+    item.id === productId && item.variant === variant ? { ...item, quantity } : item
+  );
+  this.cartItemsSubject.next(updatedItems);
+  this.updateCartState();
+  this.saveCartToLocalStorage(updatedItems);
+
+  if (this.authStateService.isAuthenticated()) {
+    this.http.put(`${this.apiUrl}/cart/update`, {
+      product_id: productId,
+      quantity,
+      variant,
+    }).subscribe({ error: (e) => console.error(e) });
+  }
+}
 
   removeFromCart(productId: number): void {
     const filteredItems = this.cartItemsSubject.value.filter(
@@ -364,6 +373,21 @@ export class CartService {
       });
     }
   }
+
+  removeItem(productId: number, variant: ProductVariant): void {
+  const updatedItems = this.cartItemsSubject.value.filter(
+    (item) => !(item.id === productId && item.variant === variant)
+  );
+  this.cartItemsSubject.next(updatedItems);
+  this.updateCartState();
+  this.saveCartToLocalStorage(updatedItems);
+
+  if (this.authStateService.isAuthenticated()) {
+    this.http.delete(`${this.apiUrl}/cart/remove`, {
+      body: { product_id: productId, variant },
+    }).subscribe({ error: (e) => console.error(e) });
+  }
+}
 
   checkout(orderData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/orders`, orderData).pipe(
