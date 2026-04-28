@@ -1,6 +1,7 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { CartItem, CartService } from '../../core/services/cart.service';
 import { Component, OnInit } from '@angular/core';
+import { CountryOption, getCountryOptions } from '../../shared/utils/countries.util';
 import {
   FormBuilder,
   FormGroup,
@@ -10,6 +11,7 @@ import {
 
 import { AuthService } from '../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
+import { ShippingService } from '../../core/services/shipping.service';
 import { StripeService } from '../../core/services/stripe.service';
 
 @Component({
@@ -20,6 +22,9 @@ import { StripeService } from '../../core/services/stripe.service';
   styleUrls: ['./checkout.component.scss'],
 })
 export class CheckoutComponent implements OnInit {
+  countries: CountryOption[] = getCountryOptions();
+shippingPrice = 0;
+isLoadingShipping = false;
   cartItems: CartItem[] = [];
   shippingForm!: FormGroup;
   currentStep = 1;
@@ -47,14 +52,15 @@ export class CheckoutComponent implements OnInit {
     },
   ];
 
-  constructor(
-    public cartService: CartService,
-    private authService: AuthService,
-    private stripeService: StripeService,
-    private fb: FormBuilder,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
+ constructor(
+  public cartService: CartService,
+  private authService: AuthService,
+  private stripeService: StripeService,
+  private shippingService: ShippingService,
+  private fb: FormBuilder,
+  private router: Router,
+  private route: ActivatedRoute
+) {}
 
   ngOnInit(): void {
     if (!this.authService.isLoggedIn()) {
@@ -81,32 +87,42 @@ export class CheckoutComponent implements OnInit {
   }
 
   private initShippingForm(): void {
-    const user = this.authService.currentUser();
+  const user = this.authService.currentUser();
 
-    this.shippingForm = this.fb.group({
-      fullName: [
-        user ? `${user.first_name} ${user.last_name}` : '',
-        Validators.required,
-      ],
-      email: [user?.email || '', [Validators.required, Validators.email]],
-      address: [user?.street || '', Validators.required],
-      city: [user?.city || '', Validators.required],
-      postalCode: [user?.postal_code || '', Validators.required],
-      country: [user?.country_code || 'España', Validators.required],
-      phone: [
-        user?.phone_number || '',
-        [Validators.required, Validators.pattern(/^\d{9}$/)],
-      ],
-    });
-  }
+  this.shippingForm = this.fb.group({
+    fullName: [user ? `${user.first_name} ${user.last_name}` : '', Validators.required],
+    email: [user?.email || '', [Validators.required, Validators.email]],
+    address: [user?.street || '', Validators.required],
+    city: [user?.city || '', Validators.required],
+    postalCode: [user?.postal_code || '', Validators.required],
+    country_code: [user?.country_code?.toUpperCase() || 'ES', [Validators.required, Validators.pattern(/^[A-Z]{2}$/)]],
+    phone: [user?.phone_number || '', [Validators.required, Validators.pattern(/^\d{9}$/)]],
+  });
+
+  // Calcular precio inicial y al cambiar país
+  this.recalcShipping(this.shippingForm.value.country_code);
+  this.shippingForm.get('country_code')!.valueChanges.subscribe((code) => {
+    this.recalcShipping(code);
+  });
+}
+
+private recalcShipping(code: string | null): void {
+  if (!code) { this.shippingPrice = 0; return; }
+  this.isLoadingShipping = true;
+  this.shippingService.calculate(code).subscribe((quote) => {
+    this.shippingPrice = quote.price;
+    this.isLoadingShipping = false;
+  });
+}
+
+getTotal(): number {
+  return this.cartService.cartTotal() + this.shippingPrice;
+}
 
   selectShippingMethod(method: any): void {
     this.selectedShippingMethod = method;
   }
 
-  getTotal(): number {
-    return this.cartService.cartTotal() + this.selectedShippingMethod.price;
-  }
 
   nextStep(): void {
     if (this.shippingForm.valid) {
@@ -117,43 +133,31 @@ export class CheckoutComponent implements OnInit {
   }
 
   proceedToStripeCheckout(): void {
-    this.isSubmitting = true;
+  this.isSubmitting = true;
 
-    const orderData = {
-      shipping_info: this.shippingForm.value,
-      shipping_method: this.selectedShippingMethod,
-      items: this.cartItems.map((item) => ({
-        product_id: item.id,
-        quantity: item.quantity,
-        price: item.price,
-        name: item.name,
-        image_url: item.image_url,
-      })),
-      total: this.getTotal(),
-     success_url: `${window.location.origin}/checkout?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${window.location.origin}/cart`,
-    };
+  const orderData = {
+    shipping_info: this.shippingForm.value, // contiene country_code
+    items: this.cartItems.map((item) => ({
+      product_id: item.id,
+      quantity: item.quantity,
+      variant: item.variant,
+    })),
+  };
 
-    this.stripeService.createPaymentSession(orderData).subscribe({
-      next: async (response) => {
-        this.isSubmitting = false;
-
-        if (response && response.session_id) {
-          const result = await this.stripeService.redirectToCheckout(
-            response.session_id
-          );
-          if (result && result.error) {
-            console.error('Error al redirigir a Stripe:', result.error);
-          }
-        }
-      },
-      error: (error) => {
-        this.isSubmitting = false;
-        console.error('Error al crear la sesión de pago', error);
-      },
-    });
-  }
-
+  this.stripeService.createPaymentSession(orderData).subscribe({
+    next: async (response) => {
+      this.isSubmitting = false;
+      if (response?.session_id) {
+        const result = await this.stripeService.redirectToCheckout(response.session_id);
+        if (result?.error) console.error('Error al redirigir a Stripe:', result.error);
+      }
+    },
+    error: (err) => {
+      this.isSubmitting = false;
+      console.error('Error al crear la sesión de pago', err);
+    },
+  });
+}
   private confirmPayment(sessionId: string): void {
     this.isSubmitting = true;
 
