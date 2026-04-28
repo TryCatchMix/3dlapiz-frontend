@@ -33,7 +33,15 @@
             />
           </div>
           <div class="flex-1">
-            <h3 class="font-semibold text-lg">{{ item.name }}</h3>
+            <h3 class="font-semibold text-lg">
+  {{ item.name }}
+  <span
+    class="ml-2 text-xs px-2 py-0.5 rounded-full"
+    [ngClass]="item.variant === 'unpainted' ? 'bg-gray-200 text-gray-700' : 'bg-green-100 text-green-700'"
+  >
+    {{ item.variant === 'unpainted' ? 'Sin pintar' : 'Pintada' }}
+  </span>
+</h3>
             <p class="text-blue-600 font-bold">${{ item.price }}</p>
           </div>
           <div class="flex items-center">
@@ -62,7 +70,7 @@
             ${{ item.price * item.quantity | number : "1.2-2" }}
           </div>
           <button
-            (click)="removeItem(item.id)"
+(click)="removeItem(item)"
             class="text-red-500 hover:text-red-700"
           >
             <span class="text-xl">×</span>
