@@ -116,6 +116,34 @@ import { Router } from '@angular/router';
             ></textarea>
           </div>
 
+          <div class="form-group">
+  <label class="block text-sm font-medium text-gray-700 mb-1">URL de YouTube (opcional)</label>
+  <input
+    type="url"
+    formControlName="youtube_url"
+    placeholder="https://www.youtube.com/watch?v=..."
+    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+    [ngClass]="{ 'border-red-500': isFieldInvalid('youtube_url') }"
+  />
+  @if (isFieldInvalid('youtube_url')) {
+    <p class="text-red-500 text-xs mt-1">Debe ser una URL válida de YouTube (https).</p>
+  }
+</div>
+
+<div class="form-group">
+  <label class="block text-sm font-medium text-gray-700 mb-1">
+    Precio sin pintar (opcional)
+  </label>
+  <input
+    type="number"
+    formControlName="unpainted_price"
+    min="0"
+    step="0.01"
+    placeholder="Déjalo vacío si no se ofrece sin pintar"
+    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+  />
+</div>
+
           <!-- Imágenes -->
           <div class="form-group">
             <label class="block text-sm font-medium text-gray-700 mb-1"
@@ -264,7 +292,16 @@ export class ProductAddComponent implements OnInit {
       return;
     }
 
-    this.initForm();
+    this.productForm = this.fb.group({
+  name: ['', [Validators.required]],
+  description: [''],
+  youtube_url: ['', [Validators.pattern(
+    /^https:\/\/(?:www\.|m\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)[A-Za-z0-9_-]{11}(?:[?&][\w=\-&%.]*)?$/
+  )]],
+  price: [0, [Validators.required, Validators.min(0)]],
+  unpainted_price: [null, [Validators.min(0)]],
+  stock: [0, [Validators.required, Validators.min(0)]],
+});
   }
 
   initForm(): void {
