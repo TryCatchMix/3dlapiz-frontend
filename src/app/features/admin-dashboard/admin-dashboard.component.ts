@@ -30,7 +30,13 @@ export class AdminDashboardComponent {
       description: 'Modify or update existing products',
       icon: '✏️',
       route: '/admin/product-edit'
-    }
+    },
+    {
+  title: 'Precios de envío',
+  description: 'Configura el precio del envío por país',
+  icon: '🚚',
+  route: '/admin/shipping-rates'
+}
   ];
 
 }
