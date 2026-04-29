@@ -24,12 +24,16 @@ export interface OrderItem {
 
 export interface Order {
   id: string;
+  order_number: string;
   user_id: string;
   status: 'pending' | 'processing' | 'paid' | 'shipped' | 'delivered' | 'cancelled';
   payment_status: 'pending' | 'paid' | 'failed' | 'cancelled';
   total: number;
   stripe_session_id?: string;
   payment_intent?: string;
+  tracking_number?: string | null;
+  shipping_carrier?: string | null;
+  shipped_at?: string | null;
   shipping_info?: any;
   shipping_method?: any;
   created_at: string;
