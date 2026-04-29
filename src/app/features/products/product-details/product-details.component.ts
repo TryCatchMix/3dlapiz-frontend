@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { ProductService } from '../../../core/services/product.service';
 import type { ProductVariant } from '../../../core/models/product.model';
 import { buildYoutubeEmbedUrl } from '../../../shared/utils/youtube.util';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-product-details',
@@ -164,7 +165,7 @@ export class ProductDetailsComponent implements OnInit {
   closeLightbox() { this.lightboxOpen = false; }
 
   imageSrc(image: any): string {
-    return 'http://localhost:8000/' + image.image_url;
+     return `${environment.STATIC_URL}/${image.image_url}`;
   }
 
   trackByIndex(i: number) { return i; }

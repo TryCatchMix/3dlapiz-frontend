@@ -31,7 +31,7 @@
     >
       <img
         *ngIf="product.images && product.images.length > 0; else noImage"
-        [src]="'http://localhost:8000/' + product.images[0].image_url"
+        [src]="imgUrl(product.images[0].image_url)"
         [alt]="product.name"
         class="
           h-40 sm:h-64 md:h-72 w-full
@@ -43,7 +43,7 @@
 
       <ng-template #noImage>
         <img
-          src="http://localhost:8000/images/default-placeholder.jpg"
+          [src]="imgUrl()"
           alt="Imagen no disponible"
           class="
             h-40 sm:h-64 md:h-72 w-full
