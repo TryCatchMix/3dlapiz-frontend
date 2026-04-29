@@ -5,6 +5,7 @@ import { AuthStateService } from '../../core/services/auth-state.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-cart',
@@ -71,4 +72,9 @@ removeItem(item: CartItem): void {
   continueShopping(): void {
     this.router.navigate(['/products']);
   }
+
+  imgUrl(path?: string): string {
+  if (!path) return `${environment.STATIC_URL}/images/default-placeholder.jpg`;
+  return `${environment.STATIC_URL}/${path}`;
+}
 }
