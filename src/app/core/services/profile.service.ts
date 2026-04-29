@@ -2,7 +2,7 @@ import { BehaviorSubject, Observable, map } from 'rxjs';
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 export interface Country {
   code: string;

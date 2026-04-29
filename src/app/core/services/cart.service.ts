@@ -12,7 +12,7 @@ import { Injectable, inject, signal } from '@angular/core';
 import { AuthStateService } from './auth-state.service';
 import { HttpClient } from '@angular/common/http';
 import type { ProductVariant } from '../models/product.model';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 export interface CartItem {
   id: number;
