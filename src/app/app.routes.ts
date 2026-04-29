@@ -18,8 +18,9 @@ export const routes: Routes = [
   {
     path: 'products',
     loadComponent: () =>
-      import('./features/products/product-list/product-list.component')
-        .then(m => m.ProductListComponent),
+      import('./features/products/product-list/product-list.component').then(
+        (m) => m.ProductListComponent,
+      ),
   },
 
   {
@@ -30,29 +31,33 @@ export const routes: Routes = [
   {
     path: 'login',
     loadComponent: () =>
-      import('./features/auth/login/login.component')
-        .then(m => m.LoginComponent),
+      import('./features/auth/login/login.component').then(
+        (m) => m.LoginComponent,
+      ),
   },
 
   {
     path: 'register',
     loadComponent: () =>
-      import('./features/auth/signup/signup.component')
-        .then(m => m.SignupComponent),
+      import('./features/auth/signup/signup.component').then(
+        (m) => m.SignupComponent,
+      ),
   },
 
   {
     path: 'forgot-password',
     loadComponent: () =>
-      import('./features/auth/forget_password/forget-password.component')
-        .then(m => m.ForgotPasswordComponent),
+      import('./features/auth/forget_password/forget-password.component').then(
+        (m) => m.ForgotPasswordComponent,
+      ),
   },
 
   {
     path: 'privacy-policy',
     loadComponent: () =>
-      import('./shared/legal/privacy-policy/privacy-policy.component')
-        .then(m => m.PrivacyPolicyComponent),
+      import('./shared/legal/privacy-policy/privacy-policy.component').then(
+        (m) => m.PrivacyPolicyComponent,
+      ),
   },
 
   {
@@ -75,15 +80,17 @@ export const routes: Routes = [
   {
     path: 'orders',
     loadComponent: () =>
-      import('./features/order/orders-list/orders-list.component')
-        .then(m => m.OrdersListComponent),
+      import('./features/order/orders-list/orders-list.component').then(
+        (m) => m.OrdersListComponent,
+      ),
     canActivate: [authGuard],
   },
   {
     path: 'orders/:id',
     loadComponent: () =>
-      import('./features/order/order-detail/order-detail.component')
-        .then(m => m.OrderDetailComponent),
+      import('./features/order/order-detail/order-detail.component').then(
+        (m) => m.OrderDetailComponent,
+      ),
     canActivate: [authGuard],
   },
 
@@ -102,51 +109,63 @@ export const routes: Routes = [
   {
     path: 'cart',
     loadComponent: () =>
-      import('./features/cart/cart.component')
-        .then(m => m.CartComponent),
+      import('./features/cart/cart.component').then((m) => m.CartComponent),
     canActivate: [authGuard],
   },
 
- {
-  path: 'admin',
-  canActivate: [adminGuard],
-  children: [
-    {
-      path: '',
-      loadComponent: () =>
-        import('./features/admin-dashboard/admin-dashboard.component')
-          .then(m => m.AdminDashboardComponent)
-    },
-    {
-      path: 'product-add',
-      loadComponent: () =>
-        import('./features/products/product-add/product-add.component')
-          .then(m => m.ProductAddComponent)
-    },
-    {
-      path: 'product-edit',
-      loadComponent: () =>
-        import('./features/products/product-edit/product-edit.component')
-          .then(m => m.ProductEditComponent)
-    },
-    {
-  path: 'shipping-rates',
-  loadComponent: () =>
-    import('./features/admin-shipping-rates/admin-shipping-rates/admin-shipping-rates.component')
-      .then(m => m.AdminShippingRatesComponent)
-}
-  ]
-},
-    {
-  path: 'patreon',
-  loadComponent: () =>
-    import('./features/patreon/patreon.component')
-      .then(m => m.PatreonComponent),
-},
+  {
+    path: 'admin',
+    canActivate: [adminGuard],
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./features/admin-dashboard/admin-dashboard.component').then(
+            (m) => m.AdminDashboardComponent,
+          ),
+      },
+      {
+        path: 'product-add',
+        loadComponent: () =>
+          import('./features/products/product-add/product-add.component').then(
+            (m) => m.ProductAddComponent,
+          ),
+      },
+      {
+        path: 'product-edit',
+        loadComponent: () =>
+          import('./features/products/product-edit/product-edit.component').then(
+            (m) => m.ProductEditComponent,
+          ),
+      },
+      {
+        path: 'orders',
+        loadComponent: () =>
+          import('./features/admin-orders/admin-orders.component').then(
+            (m) => m.AdminOrdersComponent,
+          ),
+      },
+      {
+        path: 'shipping-rates',
+        loadComponent: () =>
+          import('./features/admin-shipping-rates/admin-shipping-rates/admin-shipping-rates.component').then(
+            (m) => m.AdminShippingRatesComponent,
+          ),
+      },
+    ],
+  },
+  {
+    path: 'patreon',
+    loadComponent: () =>
+      import('./features/patreon/patreon.component').then(
+        (m) => m.PatreonComponent,
+      ),
+  },
   {
     path: '**',
     loadComponent: () =>
-      import('./shared/components/not-found/not-found.component')
-        .then(m => m.NotFoundComponent),
+      import('./shared/components/not-found/not-found.component').then(
+        (m) => m.NotFoundComponent,
+      ),
   },
 ];
