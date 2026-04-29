@@ -31,15 +31,17 @@
       <div class="bg-gray-50 rounded p-4 mb-4">
         <h2 class="font-bold text-lg mb-2">Resumen del pedido</h2>
         <p class="mb-1">
-          <span class="font-medium">Número de pedido:</span> #{{ order.id }}
+          <span class="font-medium">Número de pedido:</span> #{{
+            order.order_number
+          }}
         </p>
         <p class="mb-1">
           <span class="font-medium">Fecha:</span>
-          {{ order.created_at | date : "medium" }}
+          {{ order.created_at | date: "medium" }}
         </p>
         <p>
           <span class="font-medium">Total:</span> ${{
-            order.total | number : "1.2-2"
+            order.total | number: "1.2-2"
           }}
         </p>
       </div>
@@ -52,6 +54,7 @@
           {{ order.shipping_info.city }}, {{ order.shipping_info.postalCode }}
         </p>
         <p>{{ order.shipping_info.country }}</p>
+        <p *ngIf="order.shipping_info.phone">📞 {{ order.shipping_info.phone }}</p>
       </div>
     </div>
 
