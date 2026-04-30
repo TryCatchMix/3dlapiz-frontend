@@ -1,83 +1,49 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-not-found',
   standalone: true,
   imports: [CommonModule, RouterLink],
-  styles: [`
-    .not-found-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background: linear-gradient(to right, #ff758c, #ff7eb3);
-      font-family: 'Arial', sans-serif;
-      color: white;
-      text-align: center;
-    }
-
-    .emoji {
-      font-size: 8rem;
-      margin-bottom: 1rem;
-      animation: wobble 2s infinite;
-    }
-
-    .title {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    .message {
-      font-size: 1.5rem;
-      margin-bottom: 2rem;
-      max-width: 600px;
-    }
-
-    .home-button {
-      background-color: white;
-      color: #ff758c;
-      border: none;
-      border-radius: 50px;
-      padding: 12px 30px;
-      font-size: 1.2rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .home-button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-      background-color: #fff0f5;
-    }
-
-    @keyframes wobble {
-      0%, 100% { transform: rotate(0deg); }
-      25% { transform: rotate(5deg); }
-      50% { transform: rotate(-5deg); }
-      75% { transform: rotate(5deg); }
-    }
-
-    .flirty-message {
-      font-style: italic;
-      margin-top: 2rem;
-      font-size: 1.1rem;
-      opacity: 0.8;
-    }
-  `],
+  styles: [],
   template: `
-    <div class="not-found-container">
-      <div class="emoji">💋</div>
-      <h1 class="title">¡Ups, página no encontrada!</h1>
-      <p class="message">Parece que te has perdido, cariño... pero no te preocupes, siempre puedes volver a mis brazos.</p>
-      <button routerLink="/" class="home-button">Volver al inicio</button>
-      <p class="flirty-message">Esta página está jugando al escondite... ¿quieres jugar a algo más divertido?</p>
+   <div class="min-h-screen flex items-center justify-center bg-pageBg font-sans text-ink px-6">
+  <div class="text-center max-w-xl">
+
+    <!-- Código 404 -->
+    <h1 class="text-8xl font-serif text-primaryText">404</h1>
+
+    <!-- Mensaje principal -->
+    <h2 class="mt-4 text-3xl font-serif text-accentText">
+      Página no encontrada
+    </h2>
+
+    <!-- Descripción -->
+    <p class="mt-4 text-inkSoft text-lg">
+      Parece que esta figura se ha perdido en el proceso de impresión 🖨️
+      La página que buscas no existe o ha sido movida.
+    </p>
+
+    <!-- Decoración -->
+    <div class="mt-8 flex justify-center items-center gap-2">
+      <span class="w-3 h-3 bg-primaryText rounded-full animate-pulseDot"></span>
+      <span class="w-3 h-3 bg-accentText rounded-full animate-pulseDot [animation-delay:.2s]"></span>
+      <span class="w-3 h-3 bg-inkSoft rounded-full animate-pulseDot [animation-delay:.4s]"></span>
     </div>
+
+    <!-- Botón -->
+    <div class="mt-10">
+      <a
+        routerLink="/"
+        class="inline-block px-6 py-3 bg-primaryBg text-ink font-medium rounded-2xl shadow-md hover:bg-primaryHover transition"
+      >
+        Volver a la tienda
+      </a>
+    </div>
+
+  </div>
+</div>
   `
 })
 export class NotFoundComponent {
