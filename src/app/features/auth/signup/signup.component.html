@@ -1,172 +1,198 @@
-<div
-  class="min-h-screen flex items-center justify-center bg-primaryBg"
-  style="
-    background-image: url('https://cdnjs.cloudflare.com/ajax/libs/svg-backgrounds/1.0.0/hearts.svg');
-    background-size: 200px;
-  "
->
-  <div
-    class="bg-primaryWithBg p-8 rounded-3xl shadow-xl w-full max-w-md border border-primaryBg"
-  >
-    <!-- Header -->
-    <div class="text-center mb-6">
-      <h2
-        class="text-3xl font-bold text-primaryText flex items-center justify-center"
-      >
-        <span class="mr-2">💖</span> Sign Up <span class="ml-2">💖</span>
-      </h2>
-      <p class="text-secundaryText mt-2">¡Únete a nuestra comunidad!</p>
+<div class="min-h-screen flex items-center justify-center bg-pageBg relative overflow-hidden px-4 py-10">
+
+  <!-- Patrón de puntos sutil -->
+  <div class="absolute inset-0 opacity-30 pointer-events-none"
+       style="background-image: radial-gradient(circle at 1px 1px, #cba57f33 1px, transparent 0);
+              background-size: 32px 32px;"></div>
+
+  <!-- Blobs decorativos -->
+  <div class="absolute top-1/4 -right-32 w-96 h-96 rounded-full bg-accentSoft/60 blur-3xl pointer-events-none"></div>
+  <div class="absolute bottom-1/4 -left-32 w-96 h-96 rounded-full bg-primaryBg/40 blur-3xl pointer-events-none"></div>
+
+  <div class="relative w-full max-w-md">
+
+    <!-- Eyebrow -->
+    <div class="text-center mb-8">
+      <div class="text-[10px] uppercase tracking-[0.3em] text-accentText mb-3">
+        Atelier · Nueva cuenta
+      </div>
+      <h1 class="font-serif text-4xl sm:text-5xl font-medium leading-[1] -tracking-[0.025em] text-ink">
+        Únete al <span class="italic text-accentText">taller</span>
+      </h1>
+      <div class="h-[2px] w-16 bg-gradient-to-r from-primaryHover to-accentText mx-auto mt-5 rounded-full"></div>
     </div>
 
-    <!-- Alert -->
-    <div
-      #alert
-      class="alert rounded-2xl p-3 text-center"
-      [class.show]="showAlert"
-      [class.error]="isError"
-      [ngClass]="{
-        'bg-red-100 text-red-500 border border-red-200': isError,
-        'bg-green-100 text-green-500 border border-green-200': !isError
-      }"
-    >
-      {{ alertMessage }}
-    </div>
+    <!-- Card -->
+    <div class="bg-white/90 backdrop-blur rounded-3xl shadow-[0_24px_60px_-30px_rgba(160,122,82,0.25)] border border-accentMuted p-8 sm:p-10">
 
-    <!-- Form -->
-    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="space-y-4">
+      <!-- Alert -->
+      <div
+        #alert
+        *ngIf="showAlert"
+        class="rounded-2xl p-3 text-center text-sm mb-5 transition-all"
+        [ngClass]="{
+          'bg-red-50 text-red-600 border border-red-100': isError,
+          'bg-green-50 text-green-700 border border-green-100': !isError
+        }">
+        {{ alertMessage }}
+      </div>
 
-      <!-- Names -->
-      <div class="grid grid-cols-2 gap-4">
+      <!-- Form -->
+      <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="space-y-5">
 
-        <!-- First Name -->
-        <div>
-          <label class="block text-sm font-medium text-primaryText">
-            First Name
-          </label>
-
-          <div class="relative">
-            <span
-              class="absolute inset-y-0 left-0 flex items-center pl-3 text-secundaryText"
-            >
-              👑
-            </span>
-
+        <!-- Nombres -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-[11px] uppercase tracking-[0.18em] text-inkSoft mb-2">
+              Nombre
+            </label>
             <input
               type="text"
               formControlName="first_name"
-              class="mt-1 pl-10 p-3 w-full rounded-2xl bg-primaryBg/30 text-gray-700 border border-primaryBg focus:ring-2 focus:ring-primaryHover focus:border-primaryHover transition-all duration-200"
-              required
-            />
+              placeholder="Ada"
+              class="w-full px-4 py-3 rounded-2xl bg-pageBg/50 text-ink border border-accentMuted
+                     placeholder:text-inkSoft/50
+                     focus:outline-none focus:ring-2 focus:ring-accentText/30 focus:border-accentText
+                     transition-all duration-200" />
           </div>
-        </div>
 
-        <!-- Last Name -->
-        <div>
-          <label class="block text-sm font-medium text-primaryText">
-            Last Name
-          </label>
-
-          <div class="relative">
-            <span
-              class="absolute inset-y-0 left-0 flex items-center pl-3 text-secundaryText"
-            >
-              ✨
-            </span>
-
+          <div>
+            <label class="block text-[11px] uppercase tracking-[0.18em] text-inkSoft mb-2">
+              Apellido
+            </label>
             <input
               type="text"
               formControlName="last_name"
-              class="mt-1 pl-10 p-3 w-full rounded-2xl bg-primaryBg/30 text-gray-700 border border-primaryBg focus:ring-2 focus:ring-primaryHover focus:border-primaryHover transition-all duration-200"
-              required
-            />
+              placeholder="Lovelace"
+              class="w-full px-4 py-3 rounded-2xl bg-pageBg/50 text-ink border border-accentMuted
+                     placeholder:text-inkSoft/50
+                     focus:outline-none focus:ring-2 focus:ring-accentText/30 focus:border-accentText
+                     transition-all duration-200" />
           </div>
         </div>
-      </div>
 
-      <!-- Email -->
-      <div>
-        <label class="block text-sm font-medium text-primaryText">
-          Email
-        </label>
-
-        <div class="relative">
-          <span
-            class="absolute inset-y-0 left-0 flex items-center pl-3 text-secundaryText"
-          >
-            💌
-          </span>
-
+        <!-- Email -->
+        <div>
+          <label class="block text-[11px] uppercase tracking-[0.18em] text-inkSoft mb-2">
+            Email
+          </label>
           <input
             type="email"
             formControlName="email"
-            class="mt-1 pl-10 p-3 w-full rounded-2xl bg-primaryBg/30 text-gray-700 border border-primaryBg focus:ring-2 focus:ring-primaryHover focus:border-primaryHover transition-all duration-200"
-            required
-          />
+            autocomplete="email"
+            placeholder="tu@correo.com"
+            class="w-full px-4 py-3 rounded-2xl bg-pageBg/50 text-ink border border-accentMuted
+                   placeholder:text-inkSoft/50
+                   focus:outline-none focus:ring-2 focus:ring-accentText/30 focus:border-accentText
+                   transition-all duration-200" />
         </div>
-      </div>
 
-      <!-- Password -->
-      <div>
-        <label class="block text-sm font-medium text-primaryText">
-          Password
-        </label>
-
-        <div class="relative">
-          <span
-            class="absolute inset-y-0 left-0 flex items-center pl-3 text-secundaryText"
-          >
-            🔐
-          </span>
-
+        <!-- Password -->
+        <div>
+          <label class="block text-[11px] uppercase tracking-[0.18em] text-inkSoft mb-2">
+            Contraseña
+          </label>
           <input
             type="password"
             formControlName="password"
-            class="mt-1 pl-10 p-3 w-full rounded-2xl bg-primaryBg/30 text-gray-700 border border-primaryBg focus:ring-2 focus:ring-primaryHover focus:border-primaryHover transition-all duration-200"
-            required
-          />
+            autocomplete="new-password"
+            placeholder="••••••••"
+            class="w-full px-4 py-3 rounded-2xl bg-pageBg/50 text-ink border border-accentMuted
+                   placeholder:text-inkSoft/50
+                   focus:outline-none focus:ring-2 focus:ring-accentText/30 focus:border-accentText
+                   transition-all duration-200" />
+
+          <!-- Password strength bars -->
+          <div *ngIf="signupForm.get('password')?.value" class="mt-3">
+            <div class="flex gap-1.5">
+              <div class="h-1 flex-1 rounded-full transition-colors duration-300"
+                   [ngClass]="{
+                     'bg-red-300': passwordStrength === 'weak',
+                     'bg-amber-300': passwordStrength === 'medium',
+                     'bg-emerald-400': passwordStrength === 'strong'
+                   }"></div>
+              <div class="h-1 flex-1 rounded-full transition-colors duration-300"
+                   [ngClass]="{
+                     'bg-accentMuted': passwordStrength === 'weak',
+                     'bg-amber-300': passwordStrength === 'medium',
+                     'bg-emerald-400': passwordStrength === 'strong'
+                   }"></div>
+              <div class="h-1 flex-1 rounded-full transition-colors duration-300"
+                   [ngClass]="{
+                     'bg-accentMuted': passwordStrength !== 'strong',
+                     'bg-emerald-400': passwordStrength === 'strong'
+                   }"></div>
+            </div>
+            <div class="mt-2 text-[11px] uppercase tracking-[0.18em]"
+                 [ngClass]="{
+                   'text-red-500': passwordStrength === 'weak',
+                   'text-amber-600': passwordStrength === 'medium',
+                   'text-emerald-600': passwordStrength === 'strong'
+                 }">
+              Seguridad: {{ passwordStrength === 'weak' ? 'baja' : passwordStrength === 'medium' ? 'media' : 'alta' }}
+            </div>
+          </div>
         </div>
 
-        <!-- Password Strength -->
-        <div
-          [class]="
-            'password-strength mt-2 p-2 rounded-full text-center text-sm font-medium ' +
-            passwordStrength
-          "
-          [ngClass]="{
-            'bg-red-100 text-red-500 border border-red-200':
-              passwordStrength === 'weak',
-            'bg-yellow-100 text-yellow-600 border border-yellow-200':
-              passwordStrength === 'medium',
-            'bg-green-100 text-green-500 border border-green-200':
-              passwordStrength === 'strong'
-          }"
-        >
-          {{ passwordStrength | titlecase }} password
-          <span *ngIf="passwordStrength === 'weak'">😿</span>
-          <span *ngIf="passwordStrength === 'medium'">😺</span>
-          <span *ngIf="passwordStrength === 'strong'">😻</span>
+        <!-- Confirmación -->
+        <div>
+          <label class="block text-[11px] uppercase tracking-[0.18em] text-inkSoft mb-2">
+            Repetir contraseña
+          </label>
+          <input
+            type="password"
+            formControlName="password_confirmation"
+            autocomplete="new-password"
+            placeholder="••••••••"
+            class="w-full px-4 py-3 rounded-2xl bg-pageBg/50 text-ink border border-accentMuted
+                   placeholder:text-inkSoft/50
+                   focus:outline-none focus:ring-2 focus:ring-accentText/30 focus:border-accentText
+                   transition-all duration-200" />
+
+          <div *ngIf="signupForm.errors?.['passwordMismatch'] && signupForm.get('password_confirmation')?.touched"
+               class="text-red-500 text-xs mt-1.5 ml-1">
+            Las contraseñas no coinciden
+          </div>
         </div>
+
+        <!-- Submit -->
+        <button
+          type="submit"
+          class="w-full mt-2 py-3.5 rounded-full font-medium text-white bg-accentText
+                 hover:opacity-90 active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed
+                 transition-all duration-200 shadow-[0_8px_24px_-8px_rgba(160,122,82,0.5)]">
+          Crear cuenta
+        </button>
+
+        <!-- Términos -->
+        <p class="text-[11px] text-inkSoft/80 text-center leading-relaxed">
+          Al registrarte aceptas nuestros
+          <a class="text-accentText hover:underline cursor-pointer">términos</a>
+          y la
+          <a class="text-accentText hover:underline cursor-pointer">política de privacidad</a>.
+        </p>
+      </form>
+
+      <!-- Separador -->
+      <div class="my-7 flex items-center gap-4">
+        <div class="flex-1 h-px bg-accentMuted"></div>
+        <span class="text-[10px] uppercase tracking-[0.22em] text-inkSoft">o</span>
+        <div class="flex-1 h-px bg-accentMuted"></div>
       </div>
 
-      <!-- Button -->
-      <button
-        type="submit"
-        class="bg-primaryText text-white py-3 px-4 rounded-full font-bold hover:bg-primaryHover transition w-full shadow-md flex items-center justify-center mt-4"
-      >
-        <span class="mr-2">🌸</span> Create Account
-        <span class="ml-2">🌸</span>
-      </button>
-    </form>
+      <!-- Login link -->
+      <p class="text-sm text-inkSoft text-center">
+        ¿Ya tienes cuenta?
+        <a routerLink="/login"
+           class="text-accentText hover:underline font-medium ml-1 transition">
+          Iniciar sesión
+        </a>
+      </p>
+    </div>
 
-    <!-- Login Link -->
-    <p class="mt-6 text-sm text-secundaryText text-center">
-      Already have an account?
-      <a
-        routerLink="/login"
-        class="text-primaryText hover:text-primaryHover font-medium ml-1 transition"
-      >
-        Login
-      </a>
+    <!-- Footer -->
+    <p class="text-center text-[11px] uppercase tracking-[0.22em] text-inkSoft mt-8">
+      3dlapiz · Atelier de figuras
     </p>
   </div>
 </div>

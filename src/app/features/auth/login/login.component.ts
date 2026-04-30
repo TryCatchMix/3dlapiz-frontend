@@ -49,8 +49,7 @@ export class LoginComponent implements OnInit {
   onSubmit(): void {
     if (this.loginForm.invalid) {
       Object.keys(this.loginForm.controls).forEach((key) => {
-        const control = this.loginForm.get(key);
-        control?.markAsTouched();
+        this.loginForm.get(key)?.markAsTouched();
       });
       return;
     }
@@ -58,22 +57,14 @@ export class LoginComponent implements OnInit {
     const { email, password } = this.loginForm.value;
 
     this.authService.login(email, password, 'web-browser').subscribe({
-      next: (response) => {
-        this.showAlertMessage('Login successful', false);
-
-        setTimeout(() => {
-          this.router.navigate([this.returnUrl]);
-        }, 1000);
+      next: () => {
+        this.showAlertMessage('Sesión iniciada correctamente', false);
+        setTimeout(() => this.router.navigate([this.returnUrl]), 1000);
       },
       error: (err) => {
-        let errorMsg = 'Login failed. Please check your credentials.';
-
-        if (err.data && err.data.message) {
-          errorMsg = err.data.message;
-        } else if (err.error) {
-          errorMsg = err.error;
-        }
-
+        let errorMsg = 'No se pudo iniciar sesión. Comprueba tus credenciales.';
+        if (err.data?.message) errorMsg = err.data.message;
+        else if (err.error) errorMsg = err.error;
         this.showAlertMessage(errorMsg, true);
       },
     });
@@ -83,10 +74,7 @@ export class LoginComponent implements OnInit {
     this.alertMessage = message;
     this.isError = isError;
     this.showAlert = true;
-
-    setTimeout(() => {
-      this.showAlert = false;
-    }, 5000);
+    setTimeout(() => (this.showAlert = false), 5000);
   }
 
   onForgotPassword(): void {

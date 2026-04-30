@@ -13,6 +13,7 @@ import { ProductService } from '../../../core/services/product.service';
 })
 export class ProductListComponent implements OnInit {
   products: Product[] = [];
+  currentPage = 1;
 
   constructor(private productService: ProductService) {}
 

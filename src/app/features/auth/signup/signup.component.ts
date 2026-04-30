@@ -43,63 +43,46 @@ export class SignupComponent implements OnInit {
         password: ['', [Validators.required, Validators.minLength(8)]],
         password_confirmation: ['', Validators.required],
       },
-      {
-        validators: this.passwordMatchValidator,
-      }
+      { validators: this.passwordMatchValidator }
     );
 
     this.signupForm.get('password')?.valueChanges.subscribe((password) => {
-      if (password) {
-        this.passwordStrength =
-          this.pass.checkPasswordStrength(password);
-      } else {
-        this.passwordStrength = 'weak';
-      }
+      this.passwordStrength = password
+        ? this.pass.checkPasswordStrength(password)
+        : 'weak';
     });
   }
 
   passwordMatchValidator(formGroup: FormGroup) {
     const password = formGroup.get('password')?.value;
     const confirmPassword = formGroup.get('password_confirmation')?.value;
-
-    if (password === confirmPassword) {
-      return null;
-    }
-
-    return { passwordMismatch: true };
+    return password === confirmPassword ? null : { passwordMismatch: true };
   }
 
   onSubmit(): void {
     if (this.signupForm.invalid) {
       Object.keys(this.signupForm.controls).forEach((key) => {
-        const control = this.signupForm.get(key);
-        control?.markAsTouched();
+        this.signupForm.get(key)?.markAsTouched();
       });
-
-      this.showAlertMessage('Please correct errors in the form', true);
+      this.showAlertMessage('Revisa los campos del formulario', true);
       return;
     }
 
     this.authService.register(this.signupForm.value).subscribe({
       next: (response) => {
         this.showAlertMessage(
-          response.message || 'Registration successful!',
+          response.message || '¡Registro completado! Te llevamos al login.',
           false
         );
-
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 2000);
+        setTimeout(() => this.router.navigate(['/login']), 2000);
       },
       error: (err) => {
-        let errorMsg = 'Registration failed. Please try again.';
+        let errorMsg = 'No se pudo completar el registro. Inténtalo de nuevo.';
 
         if (err.data && typeof err.data === 'object') {
           if (err.data.errors) {
             const errors = Object.values(err.data.errors).flat();
-            if (errors.length > 0) {
-              errorMsg = errors.join('. ');
-            }
+            if (errors.length > 0) errorMsg = errors.join('. ');
           } else if (err.data.message) {
             errorMsg = err.data.message;
           }
@@ -116,9 +99,6 @@ export class SignupComponent implements OnInit {
     this.alertMessage = message;
     this.isError = isError;
     this.showAlert = true;
-
-    setTimeout(() => {
-      this.showAlert = false;
-    }, 5000);
+    setTimeout(() => (this.showAlert = false), 5000);
   }
 }
