@@ -1,0 +1,226 @@
+{
+  "COMMON": {
+    "LANGUAGE": "Language",
+    "LOADING": "Loading...",
+    "ERROR": "An error has occurred",
+    "RETRY": "Retry",
+    "CANCEL": "Cancel",
+    "SAVE": "Save",
+    "CLOSE": "Close",
+    "BACK": "Back",
+    "CONTINUE": "Continue",
+    "OPTIONAL": "Optional",
+    "REQUIRED": "Required",
+    "YES": "Yes",
+    "NO": "No",
+    "TAX_INCLUDED": "VAT included"
+  },
+
+  "HEADER": {
+    "BRAND": "3Dlapiz",
+    "OPEN_MENU": "Open main menu",
+    "PATREON": "Patreon",
+    "PRODUCTS": "Products",
+    "CART": "Cart",
+    "PROFILE": "My profile",
+    "ORDERS": "My orders",
+    "LOGOUT": "Log out",
+    "LOGIN": "Log in",
+    "REGISTER": "Sign up",
+    "GREETING": "Hi, {{ name }}"
+  },
+
+  "FOOTER": {
+    "ABOUT_TITLE": "About Us",
+    "ABOUT_TEXT": "Creating your favourite characters in 3D",
+    "LINKS_TITLE": "Links",
+    "TERMS": "Terms & Conditions",
+    "PRIVACY": "Privacy Policy",
+    "CONTACT_TITLE": "Contact",
+    "RIGHTS": "© {{ year }} 3Dlapiz. All rights reserved."
+  },
+
+  "HOME": {
+    "TITLE": "Our products",
+    "SUBTITLE": "Discover our 3D printed figures"
+  },
+
+  "PRODUCTS": {
+    "LIST_TITLE": "Our Products",
+    "LIST_SUBTITLE": "Discover our adorable 3D figures, made with love just for you",
+    "STOCK_LABEL": "Stock: {{ count }}",
+    "ADD_TO_CART": "Add to cart",
+    "ADD_TO_CART_WITH_TOTAL": "Add to cart · €{{ total }}",
+    "OUT_OF_STOCK": "Out of stock",
+    "IN_STOCK_REMAINING": "In stock — {{ count }} units left",
+    "BRAND": "Brand",
+    "FINISH": "Finish",
+    "VARIANT_PAINTED": "Hand-painted",
+    "VARIANT_UNPAINTED": "Unpainted",
+    "TECHNICAL_SHEET": "Technical specifications",
+    "SKU": "SKU",
+    "VIDEO": "Video",
+    "PREV_IMAGE": "Previous image",
+    "NEXT_IMAGE": "Next image",
+    "INCREASE_QUANTITY": "Increase quantity",
+    "DECREASE_QUANTITY": "Decrease quantity"
+  },
+
+  "CART": {
+    "TITLE": "Your cart",
+    "EMPTY_TITLE": "Your cart is empty",
+    "EMPTY_TEXT": "Looks like you haven't added any products to your cart yet",
+    "CONTINUE_SHOPPING": "Continue shopping",
+    "VARIANT_PAINTED": "Painted",
+    "VARIANT_UNPAINTED": "Unpainted",
+    "REMOVE_ITEM": "Remove item",
+    "CLEAR_CART": "Clear cart",
+    "SUMMARY_TITLE": "Order summary",
+    "SUBTOTAL": "Subtotal",
+    "SHIPPING": "Shipping",
+    "SHIPPING_AT_CHECKOUT": "Calculated at checkout",
+    "ESTIMATED_TOTAL": "Estimated total",
+    "PROCEED_TO_CHECKOUT": "Proceed to checkout"
+  },
+
+  "CHECKOUT": {
+    "TITLE": "Checkout",
+    "STEP_SHIPPING": "Shipping information",
+    "STEP_PAYMENT": "Pay with Stripe",
+    "SHIPPING_TITLE": "Shipping information",
+    "FIELD_FULL_NAME": "Full name",
+    "FIELD_EMAIL": "Email",
+    "FIELD_ADDRESS": "Address",
+    "FIELD_CITY": "City",
+    "FIELD_POSTAL_CODE": "Postal code",
+    "FIELD_COUNTRY": "Country",
+    "FIELD_COUNTRY_PLACEHOLDER": "Select a country",
+    "FIELD_PHONE": "Phone",
+    "ERROR_FULL_NAME_REQUIRED": "Full name is required",
+    "ERROR_EMAIL_REQUIRED": "A valid email is required",
+    "ERROR_ADDRESS_REQUIRED": "Address is required",
+    "ERROR_CITY_REQUIRED": "City is required",
+    "ERROR_POSTAL_CODE_REQUIRED": "Postal code is required",
+    "ERROR_COUNTRY_REQUIRED": "Please select a country",
+    "ERROR_PHONE_REQUIRED": "Phone is required (9 digits)",
+    "ORDER_SUMMARY": "Order summary",
+    "QUANTITY_SHORT": "Quantity: {{ count }}",
+    "TOTAL": "Total",
+    "SHIPPING_CALCULATING": "Calculating…",
+    "STRIPE_NOTICE": "By continuing, you'll be redirected to Stripe's secure platform to complete your payment.",
+    "SUBMIT": "Continue to payment",
+    "SUBMITTING": "Processing…"
+  },
+
+  "ORDERS": {
+    "MY_ORDERS_TITLE": "My orders",
+    "EMPTY_TITLE": "You don't have any orders yet",
+    "EMPTY_TEXT": "When you place your first order, it will appear here.",
+    "GO_TO_SHOP": "Go to shop",
+    "ERROR_LOADING": "Error loading your orders. Please try again.",
+    "ORDER_NUMBER": "Order #{{ number }}",
+    "PRODUCT_LINE": "Quantity: {{ count }} × {{ price }}",
+    "MORE_PRODUCTS": "+ {{ count }} more product(s)",
+    "PRODUCTS_COUNT": "{{ count }} product(s)",
+    "VIEW_DETAILS": "View details",
+
+    "STATUS": {
+      "PENDING": "Pending",
+      "PROCESSING": "Processing",
+      "PAID": "Paid",
+      "SHIPPED": "Shipped",
+      "DELIVERED": "Delivered",
+      "CANCELLED": "Cancelled",
+      "FAILED": "Failed"
+    },
+
+    "DETAIL": {
+      "BACK_TO_LIST": "Back to my orders",
+      "PLACED_ON": "Placed on {{ date }}",
+      "TRACKING_TITLE": "Order shipped",
+      "TRACKING_CARRIER": "Carrier",
+      "TRACKING_NUMBER": "Tracking number",
+      "PRODUCTS_TITLE": "Products",
+      "SUBTOTAL": "Subtotal:",
+      "TOTAL": "Total:",
+      "SHIPPING_INFO_TITLE": "Shipping information",
+      "PAYMENT_INFO_TITLE": "Payment information",
+      "PAYMENT_STATUS": "Payment status:",
+      "TRANSACTION_ID": "Transaction ID:",
+      "SHIPPING_NAME": "Name:",
+      "SHIPPING_ADDRESS": "Address:",
+      "SHIPPING_CITY": "City:",
+      "SHIPPING_POSTAL_CODE": "Postal code:",
+      "SHIPPING_COUNTRY": "Country:",
+      "SHIPPING_PHONE": "Phone:",
+      "CANCEL_BUTTON": "Cancel order",
+      "CANCEL_MODAL_TITLE": "Cancel order",
+      "CANCEL_MODAL_TEXT": "Are you sure you want to cancel this order? This action cannot be undone.",
+      "CANCEL_REASON_LABEL": "Cancellation reason (optional)",
+      "CANCEL_REASON_PLACEHOLDER": "Write the reason...",
+      "CANCEL_KEEP": "No, keep order",
+      "CANCEL_CONFIRM": "Yes, cancel order",
+      "CANCELLING": "Cancelling..."
+    },
+
+    "SUCCESS": {
+      "TITLE": "Order completed successfully!",
+      "INTRO": "Thank you for your purchase. We've received your order and we're processing it.",
+      "SUMMARY_TITLE": "Order summary",
+      "ORDER_NUMBER_LABEL": "Order number:",
+      "DATE_LABEL": "Date:",
+      "TOTAL_LABEL": "Total:",
+      "SHIPPING_INFO_TITLE": "Shipping information",
+      "EMAIL_NOTICE": "We'll send you an email with the order details and tracking information when your order ships.",
+      "GO_TO_ORDERS": "View my orders",
+      "GO_TO_HOME": "Back to the shop"
+    }
+  },
+
+  "AUTH": {
+    "LOGIN_TITLE": "Log in",
+    "LOGIN_WELCOME": "Welcome back!",
+    "LOGIN_SUBMIT": "Log in",
+    "LOGIN_NO_ACCOUNT": "Don't have an account?",
+    "LOGIN_TO_SIGNUP": "Sign up",
+
+    "SIGNUP_TITLE": "Create account",
+    "SIGNUP_SUBMIT": "Create account",
+    "SIGNUP_HAS_ACCOUNT": "Already have an account?",
+    "SIGNUP_TO_LOGIN": "Log in",
+
+    "FIELD_FIRST_NAME": "First name",
+    "FIELD_LAST_NAME": "Last name",
+    "FIELD_EMAIL": "Email",
+    "FIELD_PASSWORD": "Password",
+    "FIELD_PASSWORD_CONFIRMATION": "Confirm password",
+
+    "ERROR_EMAIL_REQUIRED": "Email is required",
+    "ERROR_EMAIL_INVALID": "Email format is invalid",
+    "ERROR_PASSWORD_REQUIRED": "Password is required",
+    "ERROR_PASSWORD_MIN": "Password must be at least 8 characters",
+    "ERROR_PASSWORDS_DONT_MATCH": "Passwords don't match",
+    "ERROR_FORM_INVALID": "Please correct the errors in the form",
+
+    "PASSWORD_STRENGTH_WEAK": "Weak password",
+    "PASSWORD_STRENGTH_MEDIUM": "Medium password",
+    "PASSWORD_STRENGTH_STRONG": "Strong password",
+
+    "FORGOT_PASSWORD_LINK": "Forgot password?",
+    "FORGOT_PASSWORD_TITLE": "Reset password",
+    "FORGOT_PASSWORD_SUBMIT": "Send reset link",
+    "FORGOT_PASSWORD_SUBMITTING": "Sending...",
+    "FORGOT_PASSWORD_BACK": "Back to login",
+    "FORGOT_PASSWORD_SENT": "We've sent you a password reset link to your email",
+    "FORGOT_PASSWORD_ERROR": "Could not send the reset link. Please try again.",
+
+    "REGISTRATION_SUCCESS": "Registration successful!",
+    "REGISTRATION_ERROR": "Registration failed. Please try again."
+  },
+
+  "NOT_FOUND": {
+    "TITLE": "Oops, page not found!",
+    "MESSAGE": "Looks like you got lost... but don't worry, you can always go back home.",
+    "BUTTON": "Back to home"
+  }
+}

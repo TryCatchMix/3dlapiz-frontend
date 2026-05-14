@@ -1,0 +1,226 @@
+{
+  "COMMON": {
+    "LANGUAGE": "Idioma",
+    "LOADING": "Cargando...",
+    "ERROR": "Ha ocurrido un error",
+    "RETRY": "Reintentar",
+    "CANCEL": "Cancelar",
+    "SAVE": "Guardar",
+    "CLOSE": "Cerrar",
+    "BACK": "Volver",
+    "CONTINUE": "Continuar",
+    "OPTIONAL": "Opcional",
+    "REQUIRED": "Obligatorio",
+    "YES": "Sí",
+    "NO": "No",
+    "TAX_INCLUDED": "IVA incluido"
+  },
+
+  "HEADER": {
+    "BRAND": "3Dlapiz",
+    "OPEN_MENU": "Abrir menú principal",
+    "PATREON": "Patreon",
+    "PRODUCTS": "Productos",
+    "CART": "Carrito",
+    "PROFILE": "Mi perfil",
+    "ORDERS": "Mis pedidos",
+    "LOGOUT": "Cerrar sesión",
+    "LOGIN": "Iniciar sesión",
+    "REGISTER": "Registrarse",
+    "GREETING": "Hola, {{ name }}"
+  },
+
+  "FOOTER": {
+    "ABOUT_TITLE": "Sobre Nosotros",
+    "ABOUT_TEXT": "Creando en 3D tus personajes favoritos",
+    "LINKS_TITLE": "Enlaces",
+    "TERMS": "Términos y condiciones",
+    "PRIVACY": "Política de privacidad",
+    "CONTACT_TITLE": "Contacto",
+    "RIGHTS": "© {{ year }} 3Dlapiz. Todos los derechos reservados."
+  },
+
+  "HOME": {
+    "TITLE": "Nuestros productos",
+    "SUBTITLE": "Descubre nuestras figuras impresas en 3D"
+  },
+
+  "PRODUCTS": {
+    "LIST_TITLE": "Nuestros Productos",
+    "LIST_SUBTITLE": "Descubre nuestras adorables figuras 3D hechas con amor para ti",
+    "STOCK_LABEL": "Stock: {{ count }}",
+    "ADD_TO_CART": "Añadir al carrito",
+    "ADD_TO_CART_WITH_TOTAL": "Añadir al carrito · {{ total }} €",
+    "OUT_OF_STOCK": "Agotado",
+    "IN_STOCK_REMAINING": "En stock — quedan {{ count }} unidades",
+    "BRAND": "Marca",
+    "FINISH": "Acabado",
+    "VARIANT_PAINTED": "Pintada a mano",
+    "VARIANT_UNPAINTED": "Sin pintar",
+    "TECHNICAL_SHEET": "Ficha técnica",
+    "SKU": "SKU",
+    "VIDEO": "Vídeo",
+    "PREV_IMAGE": "Imagen anterior",
+    "NEXT_IMAGE": "Imagen siguiente",
+    "INCREASE_QUANTITY": "Aumentar cantidad",
+    "DECREASE_QUANTITY": "Disminuir cantidad"
+  },
+
+  "CART": {
+    "TITLE": "Tu carrito",
+    "EMPTY_TITLE": "Tu carrito está vacío",
+    "EMPTY_TEXT": "Parece que aún no has añadido productos a tu carrito",
+    "CONTINUE_SHOPPING": "Continuar comprando",
+    "VARIANT_PAINTED": "Pintada",
+    "VARIANT_UNPAINTED": "Sin pintar",
+    "REMOVE_ITEM": "Eliminar producto",
+    "CLEAR_CART": "Vaciar carrito",
+    "SUMMARY_TITLE": "Resumen de la compra",
+    "SUBTOTAL": "Subtotal",
+    "SHIPPING": "Envío",
+    "SHIPPING_AT_CHECKOUT": "Calculado en el checkout",
+    "ESTIMATED_TOTAL": "Total estimado",
+    "PROCEED_TO_CHECKOUT": "Proceder al pago"
+  },
+
+  "CHECKOUT": {
+    "TITLE": "Finalizar compra",
+    "STEP_SHIPPING": "Información de envío",
+    "STEP_PAYMENT": "Pago con Stripe",
+    "SHIPPING_TITLE": "Información de envío",
+    "FIELD_FULL_NAME": "Nombre completo",
+    "FIELD_EMAIL": "Email",
+    "FIELD_ADDRESS": "Dirección",
+    "FIELD_CITY": "Ciudad",
+    "FIELD_POSTAL_CODE": "Código postal",
+    "FIELD_COUNTRY": "País",
+    "FIELD_COUNTRY_PLACEHOLDER": "Selecciona un país",
+    "FIELD_PHONE": "Teléfono",
+    "ERROR_FULL_NAME_REQUIRED": "El nombre completo es obligatorio",
+    "ERROR_EMAIL_REQUIRED": "Se requiere un email válido",
+    "ERROR_ADDRESS_REQUIRED": "La dirección es obligatoria",
+    "ERROR_CITY_REQUIRED": "La ciudad es obligatoria",
+    "ERROR_POSTAL_CODE_REQUIRED": "El código postal es obligatorio",
+    "ERROR_COUNTRY_REQUIRED": "Selecciona un país",
+    "ERROR_PHONE_REQUIRED": "El teléfono es obligatorio (9 dígitos)",
+    "ORDER_SUMMARY": "Resumen del pedido",
+    "QUANTITY_SHORT": "Cantidad: {{ count }}",
+    "TOTAL": "Total",
+    "SHIPPING_CALCULATING": "Calculando…",
+    "STRIPE_NOTICE": "Al continuar, serás redirigido a la plataforma segura de Stripe para completar tu pago.",
+    "SUBMIT": "Continuar al pago",
+    "SUBMITTING": "Procesando…"
+  },
+
+  "ORDERS": {
+    "MY_ORDERS_TITLE": "Mis pedidos",
+    "EMPTY_TITLE": "No tienes pedidos aún",
+    "EMPTY_TEXT": "Cuando realices tu primera compra, aparecerá aquí.",
+    "GO_TO_SHOP": "Ir a la tienda",
+    "ERROR_LOADING": "Error al cargar los pedidos. Por favor, intenta de nuevo.",
+    "ORDER_NUMBER": "Pedido #{{ number }}",
+    "PRODUCT_LINE": "Cantidad: {{ count }} × {{ price }}",
+    "MORE_PRODUCTS": "+ {{ count }} producto(s) más",
+    "PRODUCTS_COUNT": "{{ count }} producto(s)",
+    "VIEW_DETAILS": "Ver detalles",
+
+    "STATUS": {
+      "PENDING": "Pendiente",
+      "PROCESSING": "Procesando",
+      "PAID": "Pagado",
+      "SHIPPED": "Enviado",
+      "DELIVERED": "Entregado",
+      "CANCELLED": "Cancelado",
+      "FAILED": "Fallido"
+    },
+
+    "DETAIL": {
+      "BACK_TO_LIST": "Volver a mis pedidos",
+      "PLACED_ON": "Realizado el {{ date }}",
+      "TRACKING_TITLE": "Pedido enviado",
+      "TRACKING_CARRIER": "Transportista",
+      "TRACKING_NUMBER": "Nº de seguimiento",
+      "PRODUCTS_TITLE": "Productos",
+      "SUBTOTAL": "Subtotal:",
+      "TOTAL": "Total:",
+      "SHIPPING_INFO_TITLE": "Información de envío",
+      "PAYMENT_INFO_TITLE": "Información de pago",
+      "PAYMENT_STATUS": "Estado del pago:",
+      "TRANSACTION_ID": "ID de transacción:",
+      "SHIPPING_NAME": "Nombre:",
+      "SHIPPING_ADDRESS": "Dirección:",
+      "SHIPPING_CITY": "Ciudad:",
+      "SHIPPING_POSTAL_CODE": "Código postal:",
+      "SHIPPING_COUNTRY": "País:",
+      "SHIPPING_PHONE": "Teléfono:",
+      "CANCEL_BUTTON": "Cancelar pedido",
+      "CANCEL_MODAL_TITLE": "Cancelar pedido",
+      "CANCEL_MODAL_TEXT": "¿Estás seguro de que deseas cancelar este pedido? Esta acción no se puede deshacer.",
+      "CANCEL_REASON_LABEL": "Motivo de cancelación (opcional)",
+      "CANCEL_REASON_PLACEHOLDER": "Escribe el motivo...",
+      "CANCEL_KEEP": "No, mantener pedido",
+      "CANCEL_CONFIRM": "Sí, cancelar pedido",
+      "CANCELLING": "Cancelando..."
+    },
+
+    "SUCCESS": {
+      "TITLE": "¡Pedido completado con éxito!",
+      "INTRO": "Gracias por tu compra. Hemos recibido tu pedido y estamos procesándolo.",
+      "SUMMARY_TITLE": "Resumen del pedido",
+      "ORDER_NUMBER_LABEL": "Número de pedido:",
+      "DATE_LABEL": "Fecha:",
+      "TOTAL_LABEL": "Total:",
+      "SHIPPING_INFO_TITLE": "Información de envío",
+      "EMAIL_NOTICE": "Te enviaremos un correo electrónico con los detalles de tu pedido y la información de seguimiento cuando tu pedido sea enviado.",
+      "GO_TO_ORDERS": "Ver mis pedidos",
+      "GO_TO_HOME": "Volver a la tienda"
+    }
+  },
+
+  "AUTH": {
+    "LOGIN_TITLE": "Iniciar sesión",
+    "LOGIN_WELCOME": "¡Bienvenido de vuelta!",
+    "LOGIN_SUBMIT": "Entrar",
+    "LOGIN_NO_ACCOUNT": "¿No tienes cuenta?",
+    "LOGIN_TO_SIGNUP": "Regístrate",
+
+    "SIGNUP_TITLE": "Crear cuenta",
+    "SIGNUP_SUBMIT": "Crear cuenta",
+    "SIGNUP_HAS_ACCOUNT": "¿Ya tienes cuenta?",
+    "SIGNUP_TO_LOGIN": "Inicia sesión",
+
+    "FIELD_FIRST_NAME": "Nombre",
+    "FIELD_LAST_NAME": "Apellido",
+    "FIELD_EMAIL": "Email",
+    "FIELD_PASSWORD": "Contraseña",
+    "FIELD_PASSWORD_CONFIRMATION": "Confirmar contraseña",
+
+    "ERROR_EMAIL_REQUIRED": "El email es obligatorio",
+    "ERROR_EMAIL_INVALID": "El formato del email no es válido",
+    "ERROR_PASSWORD_REQUIRED": "La contraseña es obligatoria",
+    "ERROR_PASSWORD_MIN": "La contraseña debe tener al menos 8 caracteres",
+    "ERROR_PASSWORDS_DONT_MATCH": "Las contraseñas no coinciden",
+    "ERROR_FORM_INVALID": "Por favor, corrige los errores del formulario",
+
+    "PASSWORD_STRENGTH_WEAK": "Contraseña débil",
+    "PASSWORD_STRENGTH_MEDIUM": "Contraseña media",
+    "PASSWORD_STRENGTH_STRONG": "Contraseña fuerte",
+
+    "FORGOT_PASSWORD_LINK": "¿Olvidaste tu contraseña?",
+    "FORGOT_PASSWORD_TITLE": "Recuperar contraseña",
+    "FORGOT_PASSWORD_SUBMIT": "Enviar enlace",
+    "FORGOT_PASSWORD_SUBMITTING": "Enviando...",
+    "FORGOT_PASSWORD_BACK": "Volver al login",
+    "FORGOT_PASSWORD_SENT": "Te hemos enviado un enlace para restablecer tu contraseña a tu correo electrónico",
+    "FORGOT_PASSWORD_ERROR": "No se pudo enviar el enlace. Inténtalo de nuevo.",
+
+    "REGISTRATION_SUCCESS": "¡Registro completado con éxito!",
+    "REGISTRATION_ERROR": "El registro ha fallado. Inténtalo de nuevo."
+  },
+
+  "NOT_FOUND": {
+    "TITLE": "¡Ups, página no encontrada!",
+    "MESSAGE": "Parece que te has perdido... pero no te preocupes, siempre puedes volver al inicio.",
+    "BUTTON": "Volver al inicio"
+  }
+}
