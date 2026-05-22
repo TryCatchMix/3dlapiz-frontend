@@ -3,8 +3,8 @@
   class="
     rounded-xl sm:rounded-2xl overflow-hidden
     shadow-md sm:shadow-lg
-    border-2 border-primaryBg     <!-- COLOR BORDE -->
-    bg-primaryWithBg                  <!-- COLOR FONDO TARJETA -->
+    border-2 border-primaryBg
+    bg-primaryWithBg
     transition-all hover:scale-105 hover:shadow-xl
     cursor-pointer h-full flex flex-col
   "
@@ -13,8 +13,8 @@
     <div
       class="
         absolute top-2 left-2
-        bg-primaryWithBg               <!-- FONDO BADGE -->
-        text-primaryText           <!-- TEXTO BADGE -->
+        bg-primaryWithBg
+        text-primaryText
         text-xs px-2 sm:px-3 py-0.5 sm:py-1
         rounded-full shadow-sm z-10
       "
@@ -26,7 +26,7 @@
       class="
         flex space-x-2 overflow-x-auto
         p-2 sm:p-4
-        bg-primaryWithBg              <!-- FONDO IMÁGENES -->
+        bg-primaryWithBg
       "
     >
       <img
@@ -60,7 +60,7 @@
       class="
         font-bold text-lg sm:text-xl
         mb-1 sm:mb-2
-        text-primaryText            <!-- TEXTO NOMBRE -->
+        text-primaryText
         flex items-center
       "
     >
@@ -70,10 +70,11 @@
 
     <p
       class="
-        text-primaryText            <!-- TEXTO DESCRIPCIÓN -->
+        text-primaryText
         text-sm sm:text-base
         mb-1 sm:mb-2
         line-clamp-2
+        whitespace-pre-line
       "
     >
       {{ product.description }}
@@ -82,7 +83,7 @@
     <p
       class="
         text-lg sm:text-xl font-bold
-        text-primaryText            <!-- TEXTO PRECIO -->
+        text-primaryText
         flex items-center
       "
     >
@@ -93,7 +94,7 @@
     <div
       class="
         mt-1 sm:mt-2
-        bg-primaryWithBg              <!-- FONDO STOCK -->
+        bg-primaryWithBg
         px-2 sm:px-3 py-0.5 sm:py-1
         rounded-full inline-block
       "
@@ -101,7 +102,7 @@
       <p
         class="
           text-xs sm:text-sm
-          text-primaryText          <!-- TEXTO STOCK -->
+          text-primaryText
           flex items-center
         "
       >
@@ -113,9 +114,9 @@
       (click)="addToCart(product); $event.stopPropagation()"
       class="
         mt-3 sm:mt-4 w-full
-        bg-primaryBg               <!-- FONDO BOTÓN -->
-        hover:bg-primaryHover      <!-- HOVER BOTÓN -->
-        text-black                 <!-- TEXTO BOTÓN -->
+        bg-primaryBg
+        hover:bg-primaryHover
+        text-black
         font-bold
         py-2 sm:py-3 px-4 sm:px-6
         rounded-full shadow-md
@@ -131,7 +132,7 @@
   <div
     class="
       h-1 sm:h-2
-      bg-primaryBg                <!-- BARRA INFERIOR -->
+      bg-primaryBg
       rounded-b-xl sm:rounded-b-2xl
     "
   ></div>

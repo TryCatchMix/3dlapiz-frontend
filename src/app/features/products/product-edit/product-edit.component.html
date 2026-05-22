@@ -54,7 +54,7 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <div *ngFor="let product of products" class="cursor-pointer border p-4 rounded hover:shadow-md transition" (click)="selectProduct(product)">
           <h2 class="font-bold text-lg">{{ product.name }}</h2>
-          <p class="text-sm mt-1">{{ product.description }}</p>
+          <p class="text-sm mt-1 whitespace-pre-line">{{ product.description }}</p>
           <p class="text-sm mt-2 font-semibold">Price: €{{ product.price }}</p>
           <p class="text-sm">Stock: {{ product.stock }}</p>
         </div>
