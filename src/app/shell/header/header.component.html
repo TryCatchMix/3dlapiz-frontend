@@ -1,30 +1,46 @@
-<header class="border-b border-accentMuted/60 bg-white/80 backdrop-blur sticky top-0 z-40">
+<header
+  class="border-b border-accentMuted/60 bg-white/80 backdrop-blur sticky top-0 z-40"
+>
   <div class="max-w-[1320px] mx-auto px-4 sm:px-8 py-4 sm:py-5">
     <div class="flex items-center justify-between">
-
       <!-- Logo + nav desktop -->
       <div class="flex items-center gap-6 sm:gap-10">
         <a routerLink="/" class="flex items-baseline gap-2">
-          <span class="font-serif text-2xl sm:text-[28px] font-semibold text-accentText -tracking-[0.01em]">
+          <img
+            src="assets/logo.png"
+            alt="Logo 3dlapiz"
+            class="w-8 h-8 object-contain"
+          />
+          <span
+            class="font-serif text-2xl sm:text-[28px] font-semibold text-accentText -tracking-[0.01em]"
+          >
             3dlapiz
           </span>
         </a>
 
         <nav class="hidden sm:flex gap-7 text-sm text-inkSoft">
-          <a routerLink="/patreon"
-             routerLinkActive="text-accentText font-medium"
-             class="hover:text-accentText transition-colors">
+          <a
+            routerLink="/patreon"
+            routerLinkActive="text-accentText font-medium"
+            class="hover:text-accentText transition-colors"
+          >
             Patreon
           </a>
-          <a routerLink="/products"
-             routerLinkActive="text-accentText font-medium"
-             class="hover:text-accentText transition-colors">
+          <a
+            routerLink="/products"
+            routerLinkActive="text-accentText font-medium"
+            class="hover:text-accentText transition-colors"
+          >
             Catálogo
           </a>
-          <a *ngIf="authStateService.isAuthenticated() && authStateService.isAdmin()"
-             routerLink="/admin"
-             routerLinkActive="text-accentText font-medium"
-             class="hover:text-accentText transition-colors flex items-center gap-1">
+          <a
+            *ngIf="
+              authStateService.isAuthenticated() && authStateService.isAdmin()
+            "
+            routerLink="/admin"
+            routerLinkActive="text-accentText font-medium"
+            class="hover:text-accentText transition-colors flex items-center gap-1"
+          >
             <span>👑</span> Panel Admin
           </a>
         </nav>
@@ -32,59 +48,86 @@
 
       <!-- Acciones desktop -->
       <div class="hidden sm:flex items-center gap-5 text-sm">
-
         <!-- Carrito -->
-        <a routerLink="/cart"
-           class="relative px-4 py-2 rounded-full bg-accentSoft text-accentText font-medium hover:bg-accentMuted transition">
+        <a
+          routerLink="/cart"
+          class="relative px-4 py-2 rounded-full bg-accentSoft text-accentText font-medium hover:bg-accentMuted transition"
+        >
           Carrito
-          <span *ngIf="cartService.cartCount() > 0"
-                class="ml-1.5 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-[11px] font-bold rounded-full bg-accentText text-white">
+          <span
+            *ngIf="cartService.cartCount() > 0"
+            class="ml-1.5 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-[11px] font-bold rounded-full bg-accentText text-white"
+          >
             {{ cartService.cartCount() }}
           </span>
         </a>
 
         <!-- Menú usuario autenticado -->
         <div *ngIf="authStateService.isAuthenticated()" class="relative">
-          <button type="button"
-                  (click)="toggleUserMenu()"
-                  class="flex rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accentText/40">
+          <button
+            type="button"
+            (click)="toggleUserMenu()"
+            class="flex rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accentText/40"
+          >
             <span class="sr-only">Abrir menú de usuario</span>
-            <div class="h-9 w-9 rounded-full bg-accentText flex items-center justify-center text-white font-medium shadow-sm">
+            <div
+              class="h-9 w-9 rounded-full bg-accentText flex items-center justify-center text-white font-medium shadow-sm"
+            >
               {{ authStateService.getInitial() }}
             </div>
           </button>
 
           <!-- Dropdown -->
-          <div *ngIf="showUserMenu"
-               class="origin-top-right absolute right-0 mt-3 w-56 rounded-2xl py-2 bg-white border border-accentMuted shadow-xl focus:outline-none z-10 overflow-hidden">
-            <div class="px-4 py-3 text-xs text-inkSoft border-b border-accentMuted/60">
-              Hola, <span class="text-ink font-medium">{{ authStateService.getFullName() }}</span>
+          <div
+            *ngIf="showUserMenu"
+            class="origin-top-right absolute right-0 mt-3 w-56 rounded-2xl py-2 bg-white border border-accentMuted shadow-xl focus:outline-none z-10 overflow-hidden"
+          >
+            <div
+              class="px-4 py-3 text-xs text-inkSoft border-b border-accentMuted/60"
+            >
+              Hola,
+              <span class="text-ink font-medium">{{
+                authStateService.getFullName()
+              }}</span>
             </div>
-            <a routerLink="/profile"
-               (click)="showUserMenu = false"
-               class="block px-4 py-2.5 text-sm text-inkSoft hover:bg-accentSoft hover:text-accentText transition-colors">
+            <a
+              routerLink="/profile"
+              (click)="showUserMenu = false"
+              class="block px-4 py-2.5 text-sm text-inkSoft hover:bg-accentSoft hover:text-accentText transition-colors"
+            >
               Mi perfil
             </a>
-            <a routerLink="/orders"
-               (click)="showUserMenu = false"
-               class="block px-4 py-2.5 text-sm text-inkSoft hover:bg-accentSoft hover:text-accentText transition-colors">
+            <a
+              routerLink="/orders"
+              (click)="showUserMenu = false"
+              class="block px-4 py-2.5 text-sm text-inkSoft hover:bg-accentSoft hover:text-accentText transition-colors"
+            >
               Mis pedidos
             </a>
-            <button (click)="logout()"
-                    class="block w-full text-left px-4 py-2.5 text-sm text-inkSoft hover:bg-accentSoft hover:text-accentText transition-colors border-t border-accentMuted/60">
+            <button
+              (click)="logout()"
+              class="block w-full text-left px-4 py-2.5 text-sm text-inkSoft hover:bg-accentSoft hover:text-accentText transition-colors border-t border-accentMuted/60"
+            >
               Cerrar sesión
             </button>
           </div>
         </div>
 
         <!-- Botones login/registro -->
-        <div *ngIf="!authStateService.isAuthenticated()" class="flex items-center gap-3">
-          <a routerLink="/login"
-             class="text-inkSoft hover:text-accentText transition-colors">
+        <div
+          *ngIf="!authStateService.isAuthenticated()"
+          class="flex items-center gap-3"
+        >
+          <a
+            routerLink="/login"
+            class="text-inkSoft hover:text-accentText transition-colors"
+          >
             Iniciar sesión
           </a>
-          <a routerLink="/register"
-             class="px-4 py-2 rounded-full bg-accentText text-white font-medium hover:opacity-90 transition shadow-sm">
+          <a
+            routerLink="/register"
+            class="px-4 py-2 rounded-full bg-accentText text-white font-medium hover:opacity-90 transition shadow-sm"
+          >
             Registrarse
           </a>
         </div>
@@ -93,82 +136,149 @@
       <!-- Mobile menu button -->
       <div class="sm:hidden flex items-center gap-3">
         <a routerLink="/cart" class="relative p-2 text-accentText">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.8"
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+            />
           </svg>
-          <span *ngIf="cartService.cartCount() > 0"
-                class="absolute top-0 right-0 inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-bold text-white bg-accentText rounded-full transform translate-x-1/4 -translate-y-1/4">
+          <span
+            *ngIf="cartService.cartCount() > 0"
+            class="absolute top-0 right-0 inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-bold text-white bg-accentText rounded-full transform translate-x-1/4 -translate-y-1/4"
+          >
             {{ cartService.cartCount() }}
           </span>
         </a>
 
-        <button type="button"
-                (click)="toggleMobileMenu()"
-                class="p-2 rounded-md text-accentText hover:bg-accentSoft focus:outline-none transition"
-                aria-controls="mobile-menu"
-                [attr.aria-expanded]="showMobileMenu">
+        <button
+          type="button"
+          (click)="toggleMobileMenu()"
+          class="p-2 rounded-md text-accentText hover:bg-accentSoft focus:outline-none transition"
+          aria-controls="mobile-menu"
+          [attr.aria-expanded]="showMobileMenu"
+        >
           <span class="sr-only">Abrir menú</span>
-          <svg *ngIf="!showMobileMenu" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6h16M4 12h16M4 18h16"/>
+          <svg
+            *ngIf="!showMobileMenu"
+            class="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.8"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
           </svg>
-          <svg *ngIf="showMobileMenu" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12"/>
+          <svg
+            *ngIf="showMobileMenu"
+            class="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.8"
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         </button>
       </div>
     </div>
 
     <!-- Mobile menu -->
-    <div *ngIf="showMobileMenu"
-         class="sm:hidden border-t border-accentMuted/60 mt-4 pt-4 pb-3 space-y-1">
+    <div
+      *ngIf="showMobileMenu"
+      class="sm:hidden border-t border-accentMuted/60 mt-4 pt-4 pb-3 space-y-1"
+    >
       <nav class="flex flex-col">
-        <a routerLink="/patreon"
-           routerLinkActive="text-accentText"
-           (click)="showMobileMenu = false"
-           class="block px-3 py-2.5 text-sm text-inkSoft hover:text-accentText hover:bg-accentSoft rounded-lg transition">
+        <a
+          routerLink="/patreon"
+          routerLinkActive="text-accentText"
+          (click)="showMobileMenu = false"
+          class="block px-3 py-2.5 text-sm text-inkSoft hover:text-accentText hover:bg-accentSoft rounded-lg transition"
+        >
           Patreon
         </a>
-        <a routerLink="/products"
-           routerLinkActive="text-accentText"
-           (click)="showMobileMenu = false"
-           class="block px-3 py-2.5 text-sm text-inkSoft hover:text-accentText hover:bg-accentSoft rounded-lg transition">
+        <a
+          routerLink="/products"
+          routerLinkActive="text-accentText"
+          (click)="showMobileMenu = false"
+          class="block px-3 py-2.5 text-sm text-inkSoft hover:text-accentText hover:bg-accentSoft rounded-lg transition"
+        >
           Catálogo
         </a>
-        <a *ngIf="authStateService.isAuthenticated() && authStateService.isAdmin()"
-           routerLink="/admin"
-           routerLinkActive="text-accentText"
-           (click)="showMobileMenu = false"
-           class="block px-3 py-2.5 text-sm text-inkSoft hover:text-accentText hover:bg-accentSoft rounded-lg transition">
+        <a
+          *ngIf="
+            authStateService.isAuthenticated() && authStateService.isAdmin()
+          "
+          routerLink="/admin"
+          routerLinkActive="text-accentText"
+          (click)="showMobileMenu = false"
+          class="block px-3 py-2.5 text-sm text-inkSoft hover:text-accentText hover:bg-accentSoft rounded-lg transition"
+        >
           👑 Panel Admin
         </a>
 
         <ng-container *ngIf="authStateService.isAuthenticated()">
-          <div class="px-3 py-3 mt-2 text-xs text-inkSoft border-t border-accentMuted/60">
-            Hola, <span class="text-ink font-medium">{{ authStateService.getFullName() }}</span>
+          <div
+            class="px-3 py-3 mt-2 text-xs text-inkSoft border-t border-accentMuted/60"
+          >
+            Hola,
+            <span class="text-ink font-medium">{{
+              authStateService.getFullName()
+            }}</span>
           </div>
-          <a routerLink="/profile" (click)="showMobileMenu = false"
-             class="block px-3 py-2.5 text-sm text-inkSoft hover:text-accentText hover:bg-accentSoft rounded-lg transition">
+          <a
+            routerLink="/profile"
+            (click)="showMobileMenu = false"
+            class="block px-3 py-2.5 text-sm text-inkSoft hover:text-accentText hover:bg-accentSoft rounded-lg transition"
+          >
             Mi perfil
           </a>
-          <a routerLink="/orders" (click)="showMobileMenu = false"
-             class="block px-3 py-2.5 text-sm text-inkSoft hover:text-accentText hover:bg-accentSoft rounded-lg transition">
+          <a
+            routerLink="/orders"
+            (click)="showMobileMenu = false"
+            class="block px-3 py-2.5 text-sm text-inkSoft hover:text-accentText hover:bg-accentSoft rounded-lg transition"
+          >
             Mis pedidos
           </a>
-          <button (click)="logout(); showMobileMenu = false"
-                  class="w-full text-left px-3 py-2.5 text-sm text-inkSoft hover:text-accentText hover:bg-accentSoft rounded-lg transition">
+          <button
+            (click)="logout(); showMobileMenu = false"
+            class="w-full text-left px-3 py-2.5 text-sm text-inkSoft hover:text-accentText hover:bg-accentSoft rounded-lg transition"
+          >
             Cerrar sesión
           </button>
         </ng-container>
 
         <ng-container *ngIf="!authStateService.isAuthenticated()">
-          <div class="border-t border-accentMuted/60 mt-2 pt-3 flex flex-col gap-2">
-            <a routerLink="/login" (click)="showMobileMenu = false"
-               class="block px-3 py-2.5 text-sm text-inkSoft hover:text-accentText rounded-lg transition">
+          <div
+            class="border-t border-accentMuted/60 mt-2 pt-3 flex flex-col gap-2"
+          >
+            <a
+              routerLink="/login"
+              (click)="showMobileMenu = false"
+              class="block px-3 py-2.5 text-sm text-inkSoft hover:text-accentText rounded-lg transition"
+            >
               Iniciar sesión
             </a>
-            <a routerLink="/register" (click)="showMobileMenu = false"
-               class="block px-3 py-2.5 text-sm text-center font-medium bg-accentText text-white rounded-full hover:opacity-90 transition shadow-sm">
+            <a
+              routerLink="/register"
+              (click)="showMobileMenu = false"
+              class="block px-3 py-2.5 text-sm text-center font-medium bg-accentText text-white rounded-full hover:opacity-90 transition shadow-sm"
+            >
               Registrarse
             </a>
           </div>
