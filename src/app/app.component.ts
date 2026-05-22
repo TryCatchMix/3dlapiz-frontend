@@ -11,5 +11,5 @@ import { RouterOutlet } from '@angular/router';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = '3dlapiz-frontend';
+  title = '3dlapiz';
 }
