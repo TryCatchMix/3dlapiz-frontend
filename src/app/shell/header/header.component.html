@@ -5,7 +5,10 @@
     <div class="flex items-center justify-between">
       <!-- Logo + nav desktop -->
       <div class="flex items-center gap-6 sm:gap-10">
-        <a routerLink="/" class="relative flex items-center text-lg sm:text-xl font-bold text-primaryText">
+        <a
+          routerLink="/"
+          class="relative flex items-center text-lg sm:text-xl font-bold text-primaryText"
+        >
           <img
             src="/images/logo_simple.png"
             alt="Logo 3dlapiz"
@@ -31,7 +34,7 @@
             routerLinkActive="text-accentText font-medium"
             class="hover:text-accentText transition-colors"
           >
-            Catálogo
+              {{ 'HEADER.CATALOG' | translate }}
           </a>
           <a
             *ngIf="
@@ -53,7 +56,7 @@
           routerLink="/cart"
           class="relative px-4 py-2 rounded-full bg-accentSoft text-accentText font-medium hover:bg-accentMuted transition"
         >
-          Carrito
+          {{ 'HEADER.CART' | translate }}
           <span
             *ngIf="cartService.cartCount() > 0"
             class="ml-1.5 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-[11px] font-bold rounded-full bg-accentText text-white"
@@ -61,6 +64,28 @@
             {{ cartService.cartCount() }}
           </span>
         </a>
+
+        <select
+          [value]="currencyService.activeCurrency().code"
+          (change)="onCurrencyChange($event)"
+          class="bg-transparent border border-primaryHover text-primaryText rounded-full px-2 py-1 text-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-primaryHover"
+          title="Cambiar moneda"
+        >
+          <option *ngFor="let c of currencies" [value]="c.code">
+            {{ c.symbol }} {{ c.code }}
+          </option>
+        </select>
+
+        <select
+          [value]="languageService.activeLang()"
+          (change)="onLanguageChange($event)"
+          class="bg-transparent border border-primaryHover text-primaryText rounded-full px-2 py-1 text-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-primaryHover"
+          title="Change language"
+        >
+          <option *ngFor="let lang of languages" [value]="lang">
+            {{ lang.toUpperCase() }}
+          </option>
+        </select>
 
         <!-- Menú usuario autenticado -->
         <div *ngIf="authStateService.isAuthenticated()" class="relative">
@@ -95,20 +120,20 @@
               (click)="showUserMenu = false"
               class="block px-4 py-2.5 text-sm text-inkSoft hover:bg-accentSoft hover:text-accentText transition-colors"
             >
-              Mi perfil
+              {{ 'HEADER.PROFILE' | translate }}
             </a>
             <a
               routerLink="/orders"
               (click)="showUserMenu = false"
               class="block px-4 py-2.5 text-sm text-inkSoft hover:bg-accentSoft hover:text-accentText transition-colors"
             >
-              Mis pedidos
+              {{ 'HEADER.ORDERS' | translate }}
             </a>
             <button
               (click)="logout()"
               class="block w-full text-left px-4 py-2.5 text-sm text-inkSoft hover:bg-accentSoft hover:text-accentText transition-colors border-t border-accentMuted/60"
             >
-              Cerrar sesión
+              {{ 'HEADER.LOGOUT' | translate }}
             </button>
           </div>
         </div>
@@ -122,13 +147,13 @@
             routerLink="/login"
             class="text-inkSoft hover:text-accentText transition-colors"
           >
-            Iniciar sesión
+            {{ 'HEADER.LOGIN' | translate }}
           </a>
           <a
             routerLink="/register"
             class="px-4 py-2 rounded-full bg-accentText text-white font-medium hover:opacity-90 transition shadow-sm"
           >
-            Registrarse
+            {{ 'HEADER.REGISTER' | translate }}
           </a>
         </div>
       </div>
@@ -165,7 +190,7 @@
           aria-controls="mobile-menu"
           [attr.aria-expanded]="showMobileMenu"
         >
-          <span class="sr-only">Abrir menú</span>
+          <span class="sr-only">{{ 'HEADER.OPEN_MENU' | translate }}</span>
           <svg
             *ngIf="!showMobileMenu"
             class="h-6 w-6"
@@ -210,7 +235,7 @@
           (click)="showMobileMenu = false"
           class="block px-3 py-2.5 text-sm text-inkSoft hover:text-accentText hover:bg-accentSoft rounded-lg transition"
         >
-          Patreon
+          {{ 'HEADER.PATREON' | translate }}
         </a>
         <a
           routerLink="/products"
@@ -218,7 +243,7 @@
           (click)="showMobileMenu = false"
           class="block px-3 py-2.5 text-sm text-inkSoft hover:text-accentText hover:bg-accentSoft rounded-lg transition"
         >
-          Catálogo
+          {{ 'HEADER.CATALOG' | translate }}
         </a>
         <a
           *ngIf="
@@ -229,14 +254,14 @@
           (click)="showMobileMenu = false"
           class="block px-3 py-2.5 text-sm text-inkSoft hover:text-accentText hover:bg-accentSoft rounded-lg transition"
         >
-          👑 Panel Admin
+          👑 {{ 'HEADER.ADMIN_PANEL' | translate }}
         </a>
 
         <ng-container *ngIf="authStateService.isAuthenticated()">
           <div
             class="px-3 py-3 mt-2 text-xs text-inkSoft border-t border-accentMuted/60"
           >
-            Hola,
+            {{ 'HEADER.GREETING' | translate }}
             <span class="text-ink font-medium">{{
               authStateService.getFullName()
             }}</span>
@@ -246,20 +271,20 @@
             (click)="showMobileMenu = false"
             class="block px-3 py-2.5 text-sm text-inkSoft hover:text-accentText hover:bg-accentSoft rounded-lg transition"
           >
-            Mi perfil
+            {{ 'HEADER.PROFILE' | translate }}
           </a>
           <a
             routerLink="/orders"
             (click)="showMobileMenu = false"
             class="block px-3 py-2.5 text-sm text-inkSoft hover:text-accentText hover:bg-accentSoft rounded-lg transition"
           >
-            Mis pedidos
+            {{ 'HEADER.ORDERS' | translate }}
           </a>
           <button
             (click)="logout(); showMobileMenu = false"
             class="w-full text-left px-3 py-2.5 text-sm text-inkSoft hover:text-accentText hover:bg-accentSoft rounded-lg transition"
           >
-            Cerrar sesión
+            {{ 'HEADER.LOGOUT' | translate }}
           </button>
         </ng-container>
 
@@ -272,14 +297,14 @@
               (click)="showMobileMenu = false"
               class="block px-3 py-2.5 text-sm text-inkSoft hover:text-accentText rounded-lg transition"
             >
-              Iniciar sesión
+              {{ 'HEADER.LOGIN' | translate }}
             </a>
             <a
               routerLink="/register"
               (click)="showMobileMenu = false"
               class="block px-3 py-2.5 text-sm text-center font-medium bg-accentText text-white rounded-full hover:opacity-90 transition shadow-sm"
             >
-              Registrarse
+              {{ 'HEADER.REGISTER' | translate }}
             </a>
           </div>
         </ng-container>

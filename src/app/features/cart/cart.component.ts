@@ -4,13 +4,14 @@ import { Component, OnInit } from '@angular/core';
 import { AuthStateService } from '../../core/services/auth-state.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { PriceEurPipe } from '../../shared/pipes/price-eur.pipe';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PriceEurPipe],
   templateUrl: './cart.component.html',
   styleUrls: [],
 })

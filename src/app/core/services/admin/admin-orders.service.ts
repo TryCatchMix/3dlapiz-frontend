@@ -16,4 +16,12 @@ export class AdminOrdersService {
   setTracking(id: string, tracking_number: string, shipping_carrier: string): Observable<any> {
     return this.http.patch(`${this.apiUrl}/admin/orders/${id}/tracking`, { tracking_number, shipping_carrier });
   }
+
+  get(id: string): Observable<any> {
+  return this.http.get(`${this.apiUrl}/admin/orders/${id}`);
+}
+
+updateStatus(id: string, status: string): Observable<any> {
+  return this.http.patch(`${this.apiUrl}/admin/orders/${id}/status`, { status });
+}
 }

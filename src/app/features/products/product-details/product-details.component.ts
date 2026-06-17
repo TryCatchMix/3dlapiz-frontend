@@ -4,6 +4,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 import { CartService } from '../../../core/services/cart.service';
 import { CommonModule } from '@angular/common';
+import { PriceEurPipe } from '../../../shared/pipes/price-eur.pipe';
 import { ProductService } from '../../../core/services/product.service';
 import type { ProductVariant } from '../../../core/models/product.model';
 import { buildYoutubeEmbedUrl } from '../../../shared/utils/youtube.util';
@@ -12,7 +13,7 @@ import { environment } from '../../../../environments/environment';
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, PriceEurPipe],
   templateUrl: './product-details.component.html',
 })
 export class ProductDetailsComponent implements OnInit {

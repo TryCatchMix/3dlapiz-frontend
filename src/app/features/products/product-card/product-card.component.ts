@@ -2,13 +2,14 @@ import { Component, Input } from '@angular/core';
 
 import { CartService } from '../../../core/services/cart.service';
 import { CommonModule } from '@angular/common';
+import { PriceEurPipe } from '../../../shared/pipes/price-eur.pipe';
 import { Product } from '../../../core/models/product.model';
 import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-product-card',
-  imports: [CommonModule],
+  imports: [CommonModule, PriceEurPipe],
   templateUrl: './product-card.component.html',
   styles: [],
 })
