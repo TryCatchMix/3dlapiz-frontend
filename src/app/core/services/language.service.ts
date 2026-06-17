@@ -1,5 +1,10 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { LANGUAGE_LABELS, SUPPORTED_LANGUAGES, SupportedLanguage, resolveSupportedLanguage } from '../i18n/supported-languages';
+import {
+  LANGUAGE_LABELS,
+  SUPPORTED_LANGUAGES,
+  SupportedLanguage,
+  resolveSupportedLanguage,
+} from '../i18n/supported-languages';
 
 import { TranslateService } from '@ngx-translate/core';
 
@@ -19,7 +24,7 @@ export class LanguageService {
     const lang = resolveSupportedLanguage(stored ?? browser);
 
     this.translate.addLangs([...SUPPORTED_LANGUAGES]);
-    this.translate.setFallbackLang('es');
+    this.translate.setDefaultLang('es');
     this.translate.use(lang);
     this.activeLang.set(lang);
   }
