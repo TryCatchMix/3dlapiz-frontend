@@ -1,401 +1,191 @@
-<div
-  class="min-h-screen bg-secundaryBg py-10"
-  style="background-image: url('https://cdnjs.cloudflare.com/ajax/libs/svg-backgrounds/1.0.0/hearts.svg'); background-size: 200px;"
->
-  <div class="max-w-4xl mx-auto bg-primaryWithBg rounded-3xl shadow-xl p-8 border-2 border-primaryHover">
+<div class="max-w-4xl mx-auto p-4 md:p-6 min-h-screen bg-primaryBg">
 
-     <div class="flex items-center justify-between mb-8">
-      <h1 class="text-3xl font-bold text-primaryText flex items-center">
-        <span class="mr-2">✨</span> Mi Perfil <span class="ml-2">💖</span>
-      </h1>
-      <div class="flex space-x-3">
-        <!-- Información de cambios restantes -->
-        <div class="text-sm bg-primaryWithBg px-3 py-2 rounded-lg border border-primaryHover">
-          <span class="text-primaryText">📊 Cambios restantes: <strong>3</strong>/5</span>
-        </div>
+  <!-- Loading -->
+  <div *ngIf="loading()" class="text-center py-20 text-primaryText">
+    Cargando perfil…
+  </div>
 
-        <button
-          class="bg-primaryText text-primaryWithBg font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-primaryHover focus:ring-offset-2 transition-all duration-200 shadow-md flex items-center"
-          id="editBtn" (click)="toggleEditMode()"
-        >
-          <span class="mr-2">✏️</span> Editar
-        </button>
+  <ng-container *ngIf="!loading() && user() as u">
 
-        <button
-          class="bg-primaryHover text-primaryWithBg font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-primaryHover focus:ring-offset-2 transition-all duration-200 shadow-md items-center hidden"
-          id="saveBtn" (click)="saveProfile()"
-        >
-          <span class="mr-2">💾</span> <span id="saveText">Guardar</span>
-        </button>
-
-        <button
-          class="bg-secundaryText text-primaryWithBg font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-primaryHover focus:ring-offset-2 transition-all duration-200 shadow-md items-center hidden"
-          id="cancelBtn"
-        >
-          <span class="mr-2">❌</span> Cancelar
-        </button>
+    <!-- Cabecera -->
+    <div class="bg-white rounded-2xl shadow p-6 mb-6 flex items-center gap-4">
+      <div class="w-16 h-16 rounded-full bg-primaryHover/30 flex items-center justify-center text-2xl font-bold text-primaryText">
+        {{ u.first_name[0] }}{{ u.last_name[0] }}
+      </div>
+      <div class="flex-1 min-w-0">
+        <h1 class="text-2xl font-bold text-primaryText truncate">
+          {{ u.first_name }} {{ u.last_name }}
+        </h1>
+        <p class="text-sm text-secundaryText truncate">{{ u.email }}</p>
       </div>
     </div>
 
-    <!-- Loading -->
-   <div id="loading" class="hidden justify-center items-center py-10">
-      <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primaryHover" style="filter: drop-shadow(0 0 3px rgba(0,0,0,0.2))"></div>
+    <!-- Mensajes -->
+    <div *ngIf="success()" class="mb-4 bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded-lg">
+      ✅ {{ success() }}
+    </div>
+    <div *ngIf="error()" class="mb-4 bg-red-100 border border-red-300 text-red-800 px-4 py-3 rounded-lg">
+      ⚠️ {{ error() }}
     </div>
 
-    <!-- Error Message -->
-   <div id="errorMessage" class="bg-primaryWithBg border-2 border-primaryHover text-red-600 px-4 py-3 rounded-xl mb-4 items-center hidden">
-      <span class="mr-2">🙈</span> <span id="errorText"></span>
-    </div>
+    <!-- Datos personales (solo lectura) -->
+    <div class="bg-white rounded-2xl shadow p-6 mb-6">
+      <h2 class="text-lg font-semibold text-primaryText mb-4">Datos personales</h2>
 
-    <!-- Success Message -->
-     <div id="successMessage" class="bg-primaryWithBg border-2 border-primaryHover text-primaryHover px-4 py-3 rounded-xl mb-4 items-center hidden">
-      <span class="mr-2">✅</span> <span id="successText"></span>
-    </div>
-
-    <!-- Profile Form -->
-    <form id="profileForm" class="space-y-6" onsubmit="saveProfile(event)">
-
-      <!-- Información Personal -->
-      <div class="bg-primaryBg p-6 rounded-2xl border border-primaryHover">
-        <h2 class="text-lg font-semibold text-primaryText mb-4 flex items-center">
-          <span class="mr-2">👤</span> Información Personal
-        </h2>
-
-       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- Nombre -->
-          <div class="bg-primaryWithBg p-4 rounded-xl border border-primaryHover hover:shadow-md transition-all duration-300">
-            <label class="block text-sm font-medium text-primaryText mb-2">Nombre *</label>
-            <div id="nameDisplay">
-              <p class="text-lg font-medium text-primaryText">María José <span class="text-primaryHover ml-1">♡</span></p>
-            </div>
-            <div id="nameEdit" class="hidden">
-              <input type="text" name="first_name" id="firstName" value="María José"
-                     class="w-full px-3 py-2 border border-primaryHover rounded-lg focus:outline-none focus:ring-2 focus:ring-primaryHover focus:border-transparent transition-all duration-200"
-                     placeholder="Ingresa tu nombre" />
-              <div id="firstNameError" class="text-red-500 text-xs mt-1 hidden"></div>
-            </div>
-          </div>
-
-          <!-- Apellido -->
-            <div class="bg-primaryWithBg p-4 rounded-xl border border-primaryHover hover:shadow-md transition-all duration-300">
-            <label class="block text-sm font-medium text-primaryText mb-2">Apellido *</label>
-            <div id="lastNameDisplay">
-              <p class="text-lg font-medium text-primaryText">González Fernández <span class="text-primaryHover ml-1">♡</span></p>
-            </div>
-            <div id="lastNameEdit" class="hidden">
-              <input type="text" name="last_name" id="lastName" value="González Fernández"
-                     class="w-full px-3 py-2 border border-primaryHover rounded-lg focus:outline-none focus:ring-2 focus:ring-primaryHover focus:border-transparent transition-all duration-200"
-                     placeholder="Ingresa tu apellido" />
-              <div id="lastNameError" class="text-red-500 text-xs mt-1 hidden"></div>
-            </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        <div>
+          <div class="text-secundaryText text-xs mb-1">Nombre</div>
+          <div class="font-medium">{{ u.first_name }}</div>
+        </div>
+        <div>
+          <div class="text-secundaryText text-xs mb-1">Apellidos</div>
+          <div class="font-medium">{{ u.last_name }}</div>
+        </div>
+        <div>
+          <div class="text-secundaryText text-xs mb-1">Email</div>
+          <div class="font-medium">{{ u.email }}</div>
+        </div>
+        <div>
+          <div class="text-secundaryText text-xs mb-1">Teléfono</div>
+          <div class="font-medium">
+            <ng-container *ngIf="u.phone_number">
+              {{ u.phone_country_code }} {{ u.phone_number }}
+            </ng-container>
+            <span *ngIf="!u.phone_number" class="text-gray-400">—</span>
           </div>
         </div>
+      </div>
 
-        <!-- Email -->
-        <div class="mt-4 bg-white p-4 rounded-xl border border-purple-100 hover:shadow-md transition-all duration-300">
-          <label class="block text-sm font-medium text-purple-500 mb-2">Correo electrónico *</label>
-          <div id="emailDisplay">
-            <p class="text-lg text-gray-800 font-medium">maria.gonzalez&#64;example.com</p>
-          </div>
-          <div id="emailEdit" class="hidden">
-            <input
-              type="email"
-              name="email"
-              id="email"
-              value="maria.gonzalez@example.com"
-              class="w-full px-3 py-2 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-200"
-              placeholder="correo@ejemplo.com"
-            />
-            <div id="emailError" class="text-red-500 text-xs mt-1 hidden"></div>
-          </div>
+      <p class="text-xs text-secundaryText mt-4">
+        Para cambiar tus datos personales, contacta con soporte.
+      </p>
+    </div>
+
+    <!-- Dirección de envío (editable) -->
+    <form [formGroup]="addressForm" (ngSubmit)="saveAddress()" class="bg-white rounded-2xl shadow p-6 mb-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-semibold text-primaryText">Dirección de envío</h2>
+
+        <div class="flex items-center gap-3">
+          <button
+            *ngIf="!editingAddress()"
+            type="button"
+            (click)="toggleEditAddress()"
+            class="px-4 py-2 rounded-lg bg-primaryText text-primaryWithBg font-medium text-sm"
+          >
+            ✏️ Editar
+          </button>
+
+          <ng-container *ngIf="editingAddress()">
+            <button
+              type="button"
+              (click)="toggleEditAddress()"
+              class="px-4 py-2 rounded-lg border border-gray-300 text-primaryText text-sm"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              [disabled]="savingAddress()"
+              class="px-4 py-2 rounded-lg bg-green-600 text-white font-medium text-sm disabled:opacity-50"
+            >
+              {{ savingAddress() ? 'Guardando…' : 'Guardar' }}
+            </button>
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- Modo lectura -->
+      <div *ngIf="!editingAddress()" class="text-sm">
+        <div *ngIf="u.street; else noAddress">
+          <p class="font-medium">{{ u.street }}</p>
+          <p class="font-medium">{{ u.postal_code }} {{ u.city }}<span *ngIf="u.state">, {{ u.state }}</span></p>
+          <p class="font-medium">{{ countryNameOf(u.country_code) }}</p>
+        </div>
+        <ng-template #noAddress>
+          <p class="text-gray-400">No hay dirección guardada. Pulsa "Editar" para añadirla.</p>
+        </ng-template>
+      </div>
+
+      <!-- Modo edición -->
+      <div *ngIf="editingAddress()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium mb-1">Calle y número</label>
+          <input formControlName="street" class="w-full border rounded-lg p-2" />
         </div>
 
-        <!-- Rol -->
-        <div class="mt-4 bg-primaryWithBg p-4 rounded-xl border border-primaryHover hover:shadow-md transition-all duration-300">
-          <label class="block text-sm font-medium text-primaryText mb-2">Rol</label>
-          <p class="text-lg">
-            <span class="bg-primaryHover text-primaryWithBg px-3 py-1 rounded-full text-sm font-medium border border-primaryHover shadow-sm">💫 Usuario</span>
+        <div>
+          <label class="block text-sm font-medium mb-1">Ciudad</label>
+          <input formControlName="city" class="w-full border rounded-lg p-2" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1">Código postal</label>
+          <input formControlName="postal_code" class="w-full border rounded-lg p-2" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1">Provincia / Estado</label>
+          <input formControlName="state" class="w-full border rounded-lg p-2" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1">País</label>
+          <select formControlName="country_code" class="w-full border rounded-lg p-2">
+            <option value="">— selecciona —</option>
+            <option *ngFor="let c of countries" [value]="c.code">{{ c.name }}</option>
+          </select>
+          <p *ngIf="hasError('country_code', 'pattern')" class="text-red-500 text-xs mt-1">
+            Selecciona un país válido
           </p>
         </div>
       </div>
+    </form>
 
-      <!-- Información de Contacto -->
-     <div class="bg-primaryBg p-6 rounded-2xl border border-primaryHover">
-        <h2 class="text-lg font-semibold text-primaryText mb-4 flex items-center">
-          <span class="mr-2">📞</span> Información de Contacto
-        </h2>
+    <!-- Seguridad -->
+    <div class="bg-white rounded-2xl shadow p-6 mb-6">
+      <h2 class="text-lg font-semibold text-primaryText mb-4">Seguridad</h2>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- Código de País para Teléfono -->
-          <div class="bg-white p-4 rounded-xl border border-teal-100 hover:shadow-md transition-all duration-300 phone-country-dropdown-container relative">
-            <label class="block text-sm font-medium text-teal-500 mb-2">Código de País</label>
-            <div id="phoneCountryDisplay">
-              <p class="text-lg text-gray-800 font-medium">+34</p>
-            </div>
-            <div id="phoneCountryEdit" class="hidden">
-              <div class="relative">
-                <input
-                  type="text"
-                  name="phone_country_code"
-                  id="phoneCountryCode"
-                  value="+34"
-                  class="w-full px-3 py-2 border border-teal-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all duration-200"
-                  placeholder="Buscar por país o código..."
-                  onfocus="showPhoneCountryDropdown()"
-                  oninput="filterPhoneCountries(this.value)"
-                />
-                <!-- Dropdown de códigos telefónicos -->
-                <div id="phoneCountryDropdown" class="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto hidden">
-                  <div onclick="selectPhoneCountry('+34', 'España')" class="px-4 py-2 hover:bg-teal-50 cursor-pointer flex items-center space-x-3 border-b border-gray-100">
-                    <span class="text-sm font-mono text-teal-600 min-w-[60px]">+34</span>
-                    <span class="text-sm text-gray-700 flex-1">España</span>
-                    <span class="text-xs text-gray-400 uppercase">ES</span>
-                  </div>
-                  <div onclick="selectPhoneCountry('+1', 'Estados Unidos')" class="px-4 py-2 hover:bg-teal-50 cursor-pointer flex items-center space-x-3 border-b border-gray-100">
-                    <span class="text-sm font-mono text-teal-600 min-w-[60px]">+1</span>
-                    <span class="text-sm text-gray-700 flex-1">Estados Unidos</span>
-                    <span class="text-xs text-gray-400 uppercase">US</span>
-                  </div>
-                  <div onclick="selectPhoneCountry('+52', 'México')" class="px-4 py-2 hover:bg-teal-50 cursor-pointer flex items-center space-x-3 border-b border-gray-100">
-                    <span class="text-sm font-mono text-teal-600 min-w-[60px]">+52</span>
-                    <span class="text-sm text-gray-700 flex-1">México</span>
-                    <span class="text-xs text-gray-400 uppercase">MX</span>
-                  </div>
-                  <div onclick="selectPhoneCountry('+33', 'Francia')" class="px-4 py-2 hover:bg-teal-50 cursor-pointer flex items-center space-x-3">
-                    <span class="text-sm font-mono text-teal-600 min-w-[60px]">+33</span>
-                    <span class="text-sm text-gray-700 flex-1">Francia</span>
-                    <span class="text-xs text-gray-400 uppercase">FR</span>
-                  </div>
-                </div>
-              </div>
-              <div id="phoneCountryError" class="text-red-500 text-xs mt-1 hidden"></div>
-            </div>
-          </div>
-
-          <!-- Número de Teléfono -->
-          <div class="bg-primaryWithBg p-4 rounded-xl border border-primaryHover hover:shadow-md">
-            <label class="block text-sm font-medium text-primaryText mb-2">
-              Número de Teléfono
-            </label>
-            <div id="phoneDisplay">
-              <p class="text-lg font-medium text-primaryText">600 123 456</p>
-            </div>
-            <div id="phoneEdit" class="hidden">
-              <input type="tel" name="phone_number" id="phoneNumber" value="600 123 456"
-                     class="w-full px-3 py-2 border border-primaryHover rounded-lg focus:outline-none focus:ring-2 focus:ring-primaryHover focus:border-transparent transition-all duration-200"
-                     placeholder="600 123 456" />
-            </div>
-          </div>
+      <div class="flex items-start justify-between gap-4">
+        <div class="flex-1">
+          <p class="font-medium">Cambiar contraseña</p>
+          <p class="text-sm text-secundaryText mt-1">
+            Te enviaremos un correo a <strong>{{ u.email }}</strong> con un enlace seguro
+            para que puedas establecer una nueva contraseña.
+          </p>
         </div>
-      </div>
-
-      <!-- Dirección de Envío -->
-  <div class="bg-primaryBg p-6 rounded-2xl border border-primaryHover">
-        <h2 class="text-lg font-semibold text-primaryText mb-4 flex items-center">
-          <span class="mr-2">🏠</span> Dirección de Envío
-        </h2>
-
-        <div class="space-y-4">
-          <!-- Calle y Número -->
-           <div class="bg-primaryWithBg p-4 rounded-xl border border-primaryHover hover:shadow-md transition-all duration-300">
-            <label class="block text-sm font-medium text-primaryText mb-2">Calle y Número</label>
-            <div id="streetDisplay">
-              <p class="text-lg text-primaryText font-medium">Calle de Alcalá 123, 2º A</p>
-            </div>
-          </div>
-
-          <!-- Fila: Ciudad, Estado, Código Postal -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <!-- Ciudad -->
-            <div class="bg-white p-4 rounded-xl border border-rose-100 hover:shadow-md transition-all duration-300">
-              <label class="block text-sm font-medium text-rose-500 mb-2">Ciudad</label>
-              <div id="cityDisplay">
-                <p class="text-lg text-gray-800 font-medium">Madrid</p>
-              </div>
-              <div id="cityEdit" class="hidden">
-                <input
-                  type="text"
-                  name="city"
-                  id="city"
-                  value="Madrid"
-                  class="w-full px-3 py-2 border border-rose-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent transition-all duration-200"
-                  placeholder="Madrid"
-                />
-                <div id="cityError" class="text-red-500 text-xs mt-1 hidden"></div>
-              </div>
-            </div>
-
-            <!-- Provincia/Estado -->
-            <div class="bg-white p-4 rounded-xl border border-rose-100 hover:shadow-md transition-all duration-300">
-              <label class="block text-sm font-medium text-rose-500 mb-2">Provincia/Estado</label>
-              <div id="stateDisplay">
-                <p class="text-lg text-gray-800 font-medium">Madrid</p>
-              </div>
-              <div id="stateEdit" class="hidden">
-                <input
-                  type="text"
-                  name="state"
-                  id="state"
-                  value="Madrid"
-                  class="w-full px-3 py-2 border border-rose-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent transition-all duration-200"
-                  placeholder="Madrid"
-                />
-                <div id="stateError" class="text-red-500 text-xs mt-1 hidden"></div>
-              </div>
-            </div>
-
-            <!-- Código Postal -->
-            <div class="bg-white p-4 rounded-xl border border-rose-100 hover:shadow-md transition-all duration-300">
-              <label class="block text-sm font-medium text-rose-500 mb-2">Código Postal</label>
-              <div id="postalCodeDisplay">
-                <p class="text-lg text-gray-800 font-medium">28009</p>
-              </div>
-              <div id="postalCodeEdit" class="hidden">
-                <input
-                  type="text"
-                  name="postal_code"
-                  id="postalCode"
-                  value="28009"
-                  class="w-full px-3 py-2 border border-rose-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent transition-all duration-200"
-                  placeholder="28001"
-                />
-                <div id="postalCodeError" class="text-red-500 text-xs mt-1 hidden"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- País -->
-          <div class="bg-white p-4 rounded-xl border border-rose-100 hover:shadow-md transition-all duration-300 country-dropdown-container relative">
-            <label class="block text-sm font-medium text-rose-500 mb-2">País</label>
-            <div id="countryDisplay">
-              <p class="text-lg text-gray-800 font-medium">España</p>
-            </div>
-            <div id="countryEdit" class="hidden">
-              <div class="relative">
-                <input
-                  type="text"
-                  name="country_code"
-                  id="countryCode"
-                  value="ES"
-                  class="w-full px-3 py-2 border border-rose-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent transition-all duration-200"
-                  placeholder="Buscar país o código (ES, MX, US...)"
-                  onfocus="showCountryDropdown()"
-                  oninput="filterCountries(this.value)"
-                />
-                <!-- Dropdown de países -->
-                <div id="countryDropdown" class="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto hidden">
-                  <div onclick="selectCountry('ES', 'España')" class="px-4 py-2 hover:bg-rose-50 cursor-pointer flex items-center justify-between border-b border-gray-100">
-                    <span class="text-sm text-gray-700">España</span>
-                    <span class="text-xs text-gray-400 uppercase font-mono">ES</span>
-                  </div>
-                  <div onclick="selectCountry('US', 'Estados Unidos')" class="px-4 py-2 hover:bg-rose-50 cursor-pointer flex items-center justify-between border-b border-gray-100">
-                    <span class="text-sm text-gray-700">Estados Unidos</span>
-                    <span class="text-xs text-gray-400 uppercase font-mono">US</span>
-                  </div>
-                  <div onclick="selectCountry('MX', 'México')" class="px-4 py-2 hover:bg-rose-50 cursor-pointer flex items-center justify-between border-b border-gray-100">
-                    <span class="text-sm text-gray-700">México</span>
-                    <span class="text-xs text-gray-400 uppercase font-mono">MX</span>
-                  </div>
-                  <div onclick="selectCountry('FR', 'Francia')" class="px-4 py-2 hover:bg-rose-50 cursor-pointer flex items-center justify-between">
-                    <span class="text-sm text-gray-700">Francia</span>
-                    <span class="text-xs text-gray-400 uppercase font-mono">FR</span>
-                  </div>
-                </div>
-              </div>
-              <div id="countryError" class="text-red-500 text-xs mt-1 hidden"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Seguridad -->
-      <div class="bg-primaryBg p-6 rounded-2xl border border-primaryHover">
-        <h2 class="text-lg font-semibold text-primaryText mb-4 flex items-center">
-          <span class="mr-2">🔒</span> Seguridad
-        </h2>
         <button
           type="button"
-          (click)="openPasswordModal()"
-          class="bg-primaryText text-primaryWithBg font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-primaryHover focus:ring-offset-2 transition-all duration-200 shadow-md flex items-center"
+          (click)="sendPasswordResetEmail()"
+          [disabled]="sendingResetEmail()"
+          class="px-4 py-2 rounded-lg bg-primaryText text-primaryWithBg font-medium text-sm whitespace-nowrap disabled:opacity-50"
         >
-          <span class="mr-2">🔑</span> Cambiar Contraseña
+          {{ sendingResetEmail() ? 'Enviando…' : 'Enviar correo' }}
         </button>
       </div>
-    </form>
-  </div>
-</div>
+    </div>
 
-<!-- Modal de Cambio de Contraseña -->
-<div id="passwordModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 hidden">
-  <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl">
-    <div class="flex items-center justify-between mb-4">
-      <h3 class="text-lg font-semibold text-gray-800 flex items-center">
-        <span class="mr-2">🔑</span> Cambiar Contraseña
-      </h3>
-      <button
-        (click)="closePasswordModal()"
-        class="text-gray-500 hover:text-gray-700 text-xl"
-      >
-        ×
+    <!-- Acciones -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+      <button (click)="goToOrders()" class="bg-white rounded-xl shadow hover:shadow-md transition p-4 text-left">
+        <div class="text-2xl mb-1">📦</div>
+        <div class="font-semibold text-primaryText">Mis pedidos</div>
+        <div class="text-xs text-secundaryText">Consulta el estado de tus compras</div>
+      </button>
+
+      <button *ngIf="isAdmin()" (click)="goToAdmin()" class="bg-white rounded-xl shadow hover:shadow-md transition p-4 text-left">
+        <div class="text-2xl mb-1">⚙️</div>
+        <div class="font-semibold text-primaryText">Panel admin</div>
+        <div class="text-xs text-secundaryText">Gestionar la tienda</div>
+      </button>
+
+      <button (click)="logout()" class="bg-white rounded-xl shadow hover:shadow-md transition p-4 text-left">
+        <div class="text-2xl mb-1">🚪</div>
+        <div class="font-semibold text-primaryText">Cerrar sesión</div>
+        <div class="text-xs text-secundaryText">Salir de tu cuenta</div>
       </button>
     </div>
 
-    <form id="passwordForm" onsubmit="changePassword(event)" class="space-y-4">
-      <!-- Contraseña Actual -->
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña Actual</label>
-        <input
-          type="password"
-          name="current_password"
-          id="currentPassword"
-          class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
-          placeholder="Ingresa tu contraseña actual"
-        />
-        <div id="currentPasswordError" class="text-red-500 text-xs mt-1 hidden"></div>
-      </div>
-
-      <!-- Nueva Contraseña -->
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Nueva Contraseña</label>
-        <input
-          type="password"
-          name="password"
-          id="newPassword"
-          class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
-          placeholder="Mínimo 12 caracteres"
-        />
-        <div id="newPasswordError" class="text-red-500 text-xs mt-1 hidden"></div>
-      </div>
-
-      <!-- Confirmar Nueva Contraseña -->
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Confirmar Nueva Contraseña</label>
-        <input
-          type="password"
-          name="password_confirmation"
-          id="confirmPassword"
-          class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
-          placeholder="Repite la nueva contraseña"
-        />
-        <div id="confirmPasswordError" class="text-red-500 text-xs mt-1 hidden"></div>
-      </div>
-
-      <!-- Botones del Modal -->
-      <div class="flex justify-end space-x-3 pt-4">
-        <button
-          type="button"
-          (click)="closePasswordModal()"
-          class="px-4 py-2 text-gray-600 bg-gray-200 rounded-lg hover:bg-gray-300 transition-all duration-200"
-        >
-          Cancelar
-        </button>
-        <button
-          type="submit"
-          class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all duration-200"
-        >
-          Cambiar Contraseña
-        </button>
-      </div>
-    </form>
-  </div>
+  </ng-container>
 </div>

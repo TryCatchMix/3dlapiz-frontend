@@ -1,459 +1,171 @@
-import { Component, OnDestroy, OnInit, computed, signal } from '@angular/core';
-import { Country, ProfileLimits, ProfileService, User } from '../../core/services/profile.service';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Subject, catchError, debounceTime, distinctUntilChanged, of, switchMap, takeUntil } from 'rxjs';
+import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
+import { CountryOption, getCountryName, getCountryOptions } from '../../shared/utils/countries.util';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ProfileService, User } from '../../core/services/profile.service';
+import { Router, RouterModule } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 
+import { AuthService } from '../../core/services/auth.service';
+import { AuthStateService } from '../../core/services/auth-state.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './profile.component.html',
-  styleUrls: []
 })
 export class ProfileComponent implements OnInit, OnDestroy {
+  private fb = inject(FormBuilder);
+  private profileService = inject(ProfileService);
+  private authService = inject(AuthService);
+  private authState = inject(AuthStateService);
+  private router = inject(Router);
+
   private destroy$ = new Subject<void>();
 
-  // Signals para el estado de la aplicación
   user = signal<User | null>(null);
-  countries = signal<Country[]>([]);
-  filteredCountries = signal<Country[]>([]);
-  profileLimits = signal<ProfileLimits | null>(null);
+  countries: CountryOption[] = getCountryOptions();
 
-  editMode = signal(false);
-  loading = signal(false);
-  saving = signal(false);
-  error = signal<string>('');
-  successMessage = signal<string>('');
+  loading = signal(true);
+  savingAddress = signal(false);
+  editingAddress = signal(false);
+  sendingResetEmail = signal(false);
+  error = signal('');
+  success = signal('');
 
-  // Estados para desplegables
-  showCountryDropdown = signal(false);
-  showPhoneCountryDropdown = signal(false);
-  countrySearchTerm = signal('');
-  phoneCountrySearchTerm = signal('');
+  isAdmin = computed(() => this.authState.isAdmin());
 
-  // Formularios reactivos
-  profileForm: FormGroup;
-  passwordForm: FormGroup;
-  showPasswordModal = signal(false);
-
-  // Computed properties
-  remainingChanges = computed(() => this.user()?.remaining_changes ?? 0);
-  canChangeProfile = computed(() => this.user()?.can_change_profile ?? false);
-  isAdmin = computed(() => this.user()?.role === 'admin');
-
-  constructor(
-    private profileService: ProfileService,
-    private fb: FormBuilder
-  ) {
-    this.profileForm = this.createProfileForm();
-    this.passwordForm = this.createPasswordForm();
-  }
+  addressForm: FormGroup = this.fb.group({
+    street: ['', [Validators.maxLength(255)]],
+    city: ['', [Validators.maxLength(100)]],
+    state: ['', [Validators.maxLength(100)]],
+    postal_code: ['', [Validators.maxLength(20)]],
+    country_code: ['', [Validators.pattern(/^[A-Z]{2}$/)]],
+  });
 
   ngOnInit(): void {
     this.loadProfile();
-    this.loadCountries();
-    this.loadProfileLimits();
-    this.setupFormWatchers();
   }
 
-  private createProfileForm(): FormGroup {
-    return this.fb.group({
-      first_name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
-      last_name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
-      email: ['', [Validators.required, Validators.email]],
-      phone_country_code: [''],
-      phone_number: ['', [Validators.pattern(/^[0-9\s\-\(\)]+$/)]],
-      street: ['', [Validators.maxLength(255)]],
-      city: ['', [Validators.maxLength(100)]],
-      state: ['', [Validators.maxLength(100)]],
-      postal_code: ['', [Validators.maxLength(20)]],
-      country_code: ['', [Validators.pattern(/^[A-Z]{2}$/)]]
-    });
-  }
-
-  private createPasswordForm(): FormGroup {
-    return this.fb.group({
-      current_password: ['', [Validators.required]],
-      password: ['', [Validators.required, Validators.minLength(12)]],
-      password_confirmation: ['', [Validators.required]]
-    }, { validators: this.passwordMatchValidator });
-  }
-
-  private passwordMatchValidator(form: FormGroup) {
-    const password = form.get('password');
-    const confirmPassword = form.get('password_confirmation');
-
-    if (password && confirmPassword && password.value !== confirmPassword.value) {
-      confirmPassword.setErrors({ passwordMismatch: true });
-      return { passwordMismatch: true };
-    }
-
-    if (confirmPassword?.errors?.['passwordMismatch']) {
-      delete confirmPassword.errors['passwordMismatch'];
-      if (Object.keys(confirmPassword.errors).length === 0) {
-        confirmPassword.setErrors(null);
-      }
-    }
-
-    return null;
-  }
-
-  private setupFormWatchers(): void {
-    // Watcher para búsqueda de países (dirección)
-    this.profileForm.get('country_code')?.valueChanges
-      .pipe(
-        takeUntil(this.destroy$),
-        debounceTime(300),
-        distinctUntilChanged()
-      )
-      .subscribe(value => {
-        this.countrySearchTerm.set(value || '');
-        this.filterCountries(value || '');
-      });
-
-    // Watcher para búsqueda de códigos telefónicos
-    this.profileForm.get('phone_country_code')?.valueChanges
-      .pipe(
-        takeUntil(this.destroy$),
-        debounceTime(300),
-        distinctUntilChanged()
-      )
-      .subscribe(value => {
-        this.phoneCountrySearchTerm.set(value || '');
-        this.filterPhoneCountries(value || '');
-      });
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private loadProfile(): void {
     this.loading.set(true);
-    this.error.set('');
-
-    this.profileService.getProfile()
+    this.profileService
+      .getProfile()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (user) => {
           this.user.set(user);
-          this.populateForm(user);
+          this.populateAddress(user);
           this.loading.set(false);
         },
-        error: (error) => {
-          this.error.set(error.message || 'Error al cargar el perfil');
+        error: (err) => {
+          this.error.set(err.message ?? 'Error al cargar el perfil');
           this.loading.set(false);
-        }
-      });
-  }
-
-  private loadCountries(): void {
-    this.profileService.getCountries()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (countries) => {
-          this.countries.set(countries);
-          this.filteredCountries.set(countries);
         },
-        error: (error) => {
-          console.error('Error loading countries:', error);
-        }
       });
   }
 
-  private loadProfileLimits(): void {
-    this.profileService.getProfileLimits()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (limits) => {
-          this.profileLimits.set(limits);
-        },
-        error: (error) => {
-          console.error('Error loading profile limits:', error);
-        }
-      });
-  }
-
-  private populateForm(user: User): void {
-    this.profileForm.patchValue({
-      first_name: user.first_name || '',
-      last_name: user.last_name || '',
-      email: user.email || '',
-      phone_country_code: user.phone_country_code || '',
-      phone_number: user.phone_number || '',
-      street: user.street || '',
-      city: user.city || '',
-      state: user.state || '',
-      postal_code: user.postal_code || '',
-      country_code: user.country_code || ''
+  private populateAddress(user: User): void {
+    this.addressForm.patchValue({
+      street: user.street ?? '',
+      city: user.city ?? '',
+      state: user.state ?? '',
+      postal_code: user.postal_code ?? '',
+      country_code: (user.country_code ?? '').toUpperCase(),
     });
   }
 
-  toggleEditMode(): void {
-    if (!this.canChangeProfile() && !this.isAdmin()) {
-      this.error.set('Has alcanzado el límite de cambios de perfil este mes.');
-      return;
+  toggleEditAddress(): void {
+    if (this.editingAddress()) {
+      // Cancelar: restaurar valores originales
+      const u = this.user();
+      if (u) this.populateAddress(u);
     }
-
-    this.editMode.set(!this.editMode());
+    this.editingAddress.set(!this.editingAddress());
     this.error.set('');
-    this.successMessage.set('');
-
-    if (!this.editMode()) {
-      // Cancelar edición: restaurar valores originales
-      const currentUser = this.user();
-      if (currentUser) {
-        this.populateForm(currentUser);
-      }
-    }
+    this.success.set('');
   }
 
-  saveProfile(): void {
-    if (this.profileForm.invalid) {
-      this.markFormGroupTouched(this.profileForm);
-      this.error.set('Por favor, corrige los errores en el formulario.');
+  saveAddress(): void {
+    if (this.addressForm.invalid) {
+      this.addressForm.markAllAsTouched();
+      this.error.set('Revisa los campos marcados.');
       return;
     }
 
-    if (!this.canChangeProfile() && !this.isAdmin()) {
-      this.error.set('Has alcanzado el límite de cambios de perfil este mes.');
-      return;
-    }
-
-    this.saving.set(true);
+    this.savingAddress.set(true);
     this.error.set('');
 
-    const formData = this.profileForm.value;
-
-    // Limpiar campos vacíos
-    Object.keys(formData).forEach(key => {
-      if (formData[key] === '') {
-        formData[key] = null;
-      }
+    const data = { ...this.addressForm.value };
+    Object.keys(data).forEach((k) => {
+      if (data[k] === '' || data[k] === null) data[k] = null;
     });
 
-    this.profileService.updateProfile(formData)
+    this.profileService
+      .updateAddress(data)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (user) => {
           this.user.set(user);
-          this.editMode.set(false);
-          this.saving.set(false);
-          this.successMessage.set('Perfil actualizado correctamente');
-          this.loadProfileLimits(); // Recargar límites
-
-          // Limpiar mensaje después de 5 segundos
-          setTimeout(() => this.successMessage.set(''), 5000);
+          this.populateAddress(user);
+          this.editingAddress.set(false);
+          this.savingAddress.set(false);
+          this.success.set('Dirección actualizada correctamente.');
+          setTimeout(() => this.success.set(''), 4000);
         },
-        error: (error) => {
-          this.saving.set(false);
-          if (error.status === 422 && error.error?.errors) {
-            // Errores de validación
-            this.handleValidationErrors(error.error.errors);
-          } else {
-            this.error.set(error.message || 'Error al actualizar el perfil');
-          }
-        }
+        error: (err) => {
+          this.savingAddress.set(false);
+          this.error.set(err.error?.message ?? err.message ?? 'Error al guardar la dirección.');
+        },
       });
   }
 
-  private handleValidationErrors(errors: any): void {
-    Object.keys(errors).forEach(field => {
-      const formControl = this.profileForm.get(field);
-      if (formControl) {
-        formControl.setErrors({ server: errors[field][0] });
-      }
-    });
+  sendPasswordResetEmail(): void {
+    const user = this.user();
+    if (!user) return;
 
-    this.error.set('Por favor, corrige los errores en el formulario.');
-  }
+    this.sendingResetEmail.set(true);
+    this.error.set('');
 
-  private markFormGroupTouched(formGroup: FormGroup): void {
-    Object.keys(formGroup.controls).forEach(key => {
-      const control = formGroup.get(key);
-      control?.markAsTouched();
-    });
-  }
-
-  // Manejo de desplegables de países
-  filterCountries(searchTerm: string): void {
-    if (!searchTerm) {
-      this.filteredCountries.set(this.countries());
-      return;
-    }
-
-    const filtered = this.countries().filter(country =>
-      country.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      country.code.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    this.filteredCountries.set(filtered);
-  }
-
-  selectCountry(country: Country): void {
-    this.profileForm.patchValue({ country_code: country.code });
-    this.showCountryDropdown.set(false);
-  }
-
-  // Manejo de desplegables de códigos telefónicos
-  filterPhoneCountries(searchTerm: string): void {
-    if (!searchTerm) {
-      this.filteredCountries.set(this.countries());
-      return;
-    }
-
-    const filtered = this.countries().filter(country =>
-      country.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      country.phone_code.includes(searchTerm) ||
-      country.code.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    this.filteredCountries.set(filtered);
-  }
-
-  selectPhoneCountry(country: Country): void {
-    this.profileForm.patchValue({ phone_country_code: country.phone_code });
-    this.showPhoneCountryDropdown.set(false);
-  }
-
-  // Manejo de cambio de contraseña
-  openPasswordModal(): void {
-    this.showPasswordModal.set(true);
-    this.passwordForm.reset();
-  }
-
-  closePasswordModal(): void {
-    this.showPasswordModal.set(false);
-    this.passwordForm.reset();
-  }
-
-  changePassword(): void {
-    if (this.passwordForm.invalid) {
-      this.markFormGroupTouched(this.passwordForm);
-      return;
-    }
-
-    const passwordData = this.passwordForm.value;
-
-    this.profileService.changePassword(passwordData)
+    this.profileService
+      .requestPasswordReset(user.email)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
-          this.closePasswordModal();
-          this.successMessage.set('Contraseña cambiada correctamente');
-          setTimeout(() => this.successMessage.set(''), 5000);
+          this.sendingResetEmail.set(false);
+          this.success.set(`Te hemos enviado un correo a ${user.email} con instrucciones para cambiar tu contraseña.`);
         },
-        error: (error) => {
-          if (error.status === 422 && error.error?.errors) {
-            this.handlePasswordValidationErrors(error.error.errors);
-          } else {
-            this.error.set(error.message || 'Error al cambiar la contraseña');
-          }
-        }
+        error: () => {
+          this.sendingResetEmail.set(false);
+          // Por seguridad, no revelamos si el email existe; mostramos el mismo mensaje
+          this.success.set(`Si tu correo está registrado, recibirás instrucciones en breve.`);
+        },
       });
   }
 
-  private handlePasswordValidationErrors(errors: any): void {
-    Object.keys(errors).forEach(field => {
-      const formControl = this.passwordForm.get(field);
-      if (formControl) {
-        formControl.setErrors({ server: errors[field][0] });
-      }
-    });
+  goToOrders(): void {
+    this.router.navigate(['/orders']);
   }
 
-  // Utilidades para el template
-  getFieldError(fieldName: string): string {
-    const control = this.profileForm.get(fieldName);
-    if (control && control.touched && control.errors) {
-      if (control.errors['required']) {
-        return `${this.getFieldLabel(fieldName)} es requerido`;
-      }
-      if (control.errors['email']) {
-        return 'Ingresa un email válido';
-      }
-      if (control.errors['minlength']) {
-        return `Mínimo ${control.errors['minlength'].requiredLength} caracteres`;
-      }
-      if (control.errors['maxlength']) {
-        return `Máximo ${control.errors['maxlength'].requiredLength} caracteres`;
-      }
-      if (control.errors['pattern']) {
-        return `Formato inválido para ${this.getFieldLabel(fieldName)}`;
-      }
-      if (control.errors['server']) {
-        return control.errors['server'];
-      }
-    }
-    return '';
+  goToAdmin(): void {
+    this.router.navigate(['/admin']);
   }
 
-  getPasswordFieldError(fieldName: string): string {
-    const control = this.passwordForm.get(fieldName);
-    if (control && control.touched && control.errors) {
-      if (control.errors['required']) {
-        return 'Este campo es requerido';
-      }
-      if (control.errors['minlength']) {
-        return 'La contraseña debe tener al menos 12 caracteres';
-      }
-      if (control.errors['passwordMismatch']) {
-        return 'Las contraseñas no coinciden';
-      }
-      if (control.errors['server']) {
-        return control.errors['server'];
-      }
-    }
-    return '';
+  logout(): void {
+  this.authService.logout();
+}
+  countryNameOf(code: string | null | undefined): string {
+    return code ? getCountryName(code) : '—';
   }
 
-  private getFieldLabel(fieldName: string): string {
-    const labels: { [key: string]: string } = {
-      'first_name': 'Nombre',
-      'last_name': 'Apellido',
-      'email': 'Email',
-      'phone_country_code': 'Código de país',
-      'phone_number': 'Teléfono',
-      'street': 'Dirección',
-      'city': 'Ciudad',
-      'state': 'Provincia/Estado',
-      'postal_code': 'Código postal',
-      'country_code': 'País'
-    };
-    return labels[fieldName] || fieldName;
-  }
-
-  isFieldInvalid(fieldName: string): boolean {
-    const control = this.profileForm.get(fieldName);
-    return !!(control && control.touched && control.errors);
-  }
-
-  isPasswordFieldInvalid(fieldName: string): boolean {
-    const control = this.passwordForm.get(fieldName);
-    return !!(control && control.touched && control.errors);
-  }
-
-  // Eventos de clicks fuera para cerrar dropdowns
-  onDocumentClick(event: Event): void {
-    const target = event.target as HTMLElement;
-
-    // Cerrar dropdown de países si se hace click fuera
-    if (!target.closest('.country-dropdown-container')) {
-      this.showCountryDropdown.set(false);
-    }
-
-    // Cerrar dropdown de códigos telefónicos si se hace click fuera
-    if (!target.closest('.phone-country-dropdown-container')) {
-      this.showPhoneCountryDropdown.set(false);
-    }
-  }
-
-  ngAfterViewInit(): void {
-    // Agregar listener para clicks fuera de los dropdowns
-    document.addEventListener('click', this.onDocumentClick.bind(this));
-  }
-
-  ngOnDestroy(): void {
-    document.removeEventListener('click', this.onDocumentClick.bind(this));
-    this.destroy$.next();
-    this.destroy$.complete();
+  hasError(field: string, error: string): boolean {
+    const c = this.addressForm.get(field);
+    return !!c && c.touched && c.hasError(error);
   }
 }
