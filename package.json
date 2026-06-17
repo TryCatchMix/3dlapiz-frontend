@@ -19,7 +19,7 @@
     "@angular/platform-browser": "^19.0.0",
     "@angular/platform-browser-dynamic": "^19.0.0",
     "@angular/router": "^19.0.0",
-    "@ngx-translate/core": "^18.0.0",
+    "@ngx-translate/core": "^16.0.4",
     "@stripe/stripe-js": "^6.1.0",
     "crypto-js": "^4.2.0",
     "i18n-iso-countries": "^7.14.0",

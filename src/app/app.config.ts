@@ -1,5 +1,14 @@
-import { ApplicationConfig, inject, provideAppInitializer, provideZoneChangeDetection } from '@angular/core';
-import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
+import {
+  ApplicationConfig,
+  inject,
+  provideAppInitializer,
+  provideZoneChangeDetection,
+} from '@angular/core';
+import {
+  HttpClient,
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
 import { TranslateLoader, provideTranslateService } from '@ngx-translate/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 
@@ -20,11 +29,11 @@ export const appConfig: ApplicationConfig = {
     provideTranslateService({
       loader: {
         provide: TranslateLoader,
-        useFactory: (http: HttpClient) => new SafeTranslateLoader(http, '/i18n/', '.json'),
+        useFactory: (http: HttpClient) =>
+          new SafeTranslateLoader(http, '/i18n/', '.json'),
         deps: [HttpClient],
       },
-      fallbackLang: 'es',
-      lang: 'es',
+      defaultLanguage: 'es',
     }),
 
     provideAppInitializer(() => {
