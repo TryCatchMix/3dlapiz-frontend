@@ -42,7 +42,7 @@
     {{ item.variant === 'unpainted' ? 'Sin pintar' : 'Pintada' }}
   </span>
 </h3>
-            <p class="text-blue-600 font-bold">${{ item.price }}</p>
+            <p class="text-blue-600 font-bold">{{ item.price | priceEur }}</p>
           </div>
           <div class="flex items-center">
             <button

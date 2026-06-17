@@ -87,9 +87,10 @@
         flex items-center
       "
     >
-      <span class="mr-1 sm:mr-2 text-sm sm:text-base">💖</span>
-      ${{ product.price }}
-    </p>
+      <p class="text-lg sm:text-xl font-bold text-primaryText flex items-center">
+  <span class="mr-1 sm:mr-2 text-sm sm:text-base">💖</span>
+  {{ product.price | priceEur }}
+</p>
 
     <div
       class="
