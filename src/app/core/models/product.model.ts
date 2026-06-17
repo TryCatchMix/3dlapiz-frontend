@@ -1,6 +1,6 @@
 export interface ProductImage {
-  id: number;
-  product_id: number;
+  id: string;
+  product_id: string;
   image_url: string;
   created_at: string | null;
   updated_at: string | null;
@@ -9,7 +9,7 @@ export interface ProductImage {
 export type ProductVariant = 'painted' | 'unpainted';
 
 export interface Product {
-  id: number;
+  id: string;
   name: string;
   description: string;
   youtube_url: string | null;

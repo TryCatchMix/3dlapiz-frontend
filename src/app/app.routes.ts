@@ -125,6 +125,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'orders/:id',
+        loadComponent: () =>
+          import('./features/admin-order-detail/admin-order-detail.component').then(
+            (m) => m.AdminOrderDetailComponent,
+          ),
+      },
+      {
         path: 'product-add',
         loadComponent: () =>
           import('./features/products/product-add/product-add.component').then(
