@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 
@@ -25,6 +25,7 @@ export class ProductEditComponent implements OnInit {
 
   products: Product[] = [];
   selectedProduct: Product | null = null;
+  deleting = signal(false);
 
   form = this.fb.group({
     name: ['', Validators.required],
@@ -110,6 +111,30 @@ export class ProductEditComponent implements OnInit {
         },
       });
   }
+
+  deleteProduct(): void {
+  if (!this.selectedProduct) return;
+
+  const name = this.selectedProduct.name;
+  const ok = confirm(
+    `¿Eliminar "${name}"?\n\nEl producto dejará de aparecer en la tienda. Los pedidos pasados seguirán funcionando.`
+  );
+  if (!ok) return;
+
+  this.deleting.set(true);
+  this.adminProductService.deleteProduct(this.selectedProduct.id).subscribe({
+    next: () => {
+      this.deleting.set(false);
+      this.selectedProduct = null;
+      this.loadProducts();
+    },
+    error: (err) => {
+      this.deleting.set(false);
+      console.error(err);
+      alert('Error al eliminar el producto');
+    },
+  });
+}
 
   cancelEdit() {
     this.selectedProduct = null;
