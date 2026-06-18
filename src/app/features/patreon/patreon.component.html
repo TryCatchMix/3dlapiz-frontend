@@ -1,6 +1,6 @@
 <section class="bg-neutral-900 text-white py-16 px-6">
   <h2 class="text-3xl font-bold text-center mb-12">
-    Elige tu suscripción
+    {{ 'PRICING.TITLE' | translate }}
   </h2>
 
   <div class="grid gap-8 md:grid-cols-3 max-w-6xl mx-auto">
@@ -12,7 +12,7 @@
     >
       <div *ngIf="plan.recommended"
            class="text-xs font-semibold text-center mb-3 text-green-400">
-        RECOMENDADO POR EL CREADOR
+        {{ 'PRICING.CREATOR_RECOMMENDED' | translate }}
       </div>
 
       <h3 class="text-xl font-bold mb-2">{{ plan.name }}</h3>
@@ -24,7 +24,7 @@
         rel="noopener"
         class="mb-6 text-center rounded-xl bg-green-300 text-black font-semibold py-3 hover:bg-green-400 transition"
       >
-        Súmate
+        {{ 'PRICING.JOIN_BUTTON' | translate }}
       </a>
 
       <ul class="space-y-2 text-sm text-neutral-300">
@@ -41,7 +41,7 @@
       target="_blank"
       class="text-green-400 hover:underline font-semibold"
     >
-      Ver Patreon →
+      {{ 'PRICING.VIEW_PATREON' | translate }} →
     </a>
   </div>
 </section>

@@ -6,12 +6,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PriceEurPipe } from '../../shared/pipes/price-eur.pipe';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule, FormsModule, PriceEurPipe],
+  imports: [CommonModule, FormsModule, PriceEurPipe, TranslateModule],
   templateUrl: './cart.component.html',
   styleUrls: [],
 })

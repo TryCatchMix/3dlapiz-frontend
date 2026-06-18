@@ -5,11 +5,12 @@ import { CommonModule } from '@angular/common';
 import { PriceEurPipe } from '../../../shared/pipes/price-eur.pipe';
 import { Product } from '../../../core/models/product.model';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-product-card',
-  imports: [CommonModule, PriceEurPipe],
+  imports: [CommonModule, PriceEurPipe, TranslateModule],
   templateUrl: './product-card.component.html',
   styles: [],
 })

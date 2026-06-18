@@ -1,13 +1,11 @@
 <div class="max-w-4xl mx-auto p-4 md:p-6 min-h-screen bg-primaryBg">
 
-  <!-- Loading -->
   <div *ngIf="loading()" class="text-center py-20 text-primaryText">
-    Cargando perfil…
+    {{ 'PROFILE.LOADING' | translate }}
   </div>
 
   <ng-container *ngIf="!loading() && user() as u">
 
-    <!-- Cabecera -->
     <div class="bg-white rounded-2xl shadow p-6 mb-6 flex items-center gap-4">
       <div class="w-16 h-16 rounded-full bg-primaryHover/30 flex items-center justify-center text-2xl font-bold text-primaryText">
         {{ u.first_name[0] }}{{ u.last_name[0] }}
@@ -20,7 +18,6 @@
       </div>
     </div>
 
-    <!-- Mensajes -->
     <div *ngIf="success()" class="mb-4 bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded-lg">
       ✅ {{ success() }}
     </div>
@@ -28,25 +25,24 @@
       ⚠️ {{ error() }}
     </div>
 
-    <!-- Datos personales (solo lectura) -->
     <div class="bg-white rounded-2xl shadow p-6 mb-6">
-      <h2 class="text-lg font-semibold text-primaryText mb-4">Datos personales</h2>
+      <h2 class="text-lg font-semibold text-primaryText mb-4">{{ 'PROFILE.PERSONAL_DATA' | translate }}</h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
         <div>
-          <div class="text-secundaryText text-xs mb-1">Nombre</div>
+          <div class="text-secundaryText text-xs mb-1">{{ 'PROFILE.FIELD_FIRST_NAME' | translate }}</div>
           <div class="font-medium">{{ u.first_name }}</div>
         </div>
         <div>
-          <div class="text-secundaryText text-xs mb-1">Apellidos</div>
+          <div class="text-secundaryText text-xs mb-1">{{ 'PROFILE.FIELD_LAST_NAME' | translate }}</div>
           <div class="font-medium">{{ u.last_name }}</div>
         </div>
         <div>
-          <div class="text-secundaryText text-xs mb-1">Email</div>
+          <div class="text-secundaryText text-xs mb-1">{{ 'PROFILE.FIELD_EMAIL' | translate }}</div>
           <div class="font-medium">{{ u.email }}</div>
         </div>
         <div>
-          <div class="text-secundaryText text-xs mb-1">Teléfono</div>
+          <div class="text-secundaryText text-xs mb-1">{{ 'PROFILE.FIELD_PHONE' | translate }}</div>
           <div class="font-medium">
             <ng-container *ngIf="u.phone_number">
               {{ u.phone_country_code }} {{ u.phone_number }}
@@ -57,14 +53,13 @@
       </div>
 
       <p class="text-xs text-secundaryText mt-4">
-        Para cambiar tus datos personales, contacta con soporte.
+        {{ 'PROFILE.SUPPORT_NOTICE' | translate }}
       </p>
     </div>
 
-    <!-- Dirección de envío (editable) -->
     <form [formGroup]="addressForm" (ngSubmit)="saveAddress()" class="bg-white rounded-2xl shadow p-6 mb-6">
       <div class="flex items-center justify-between mb-4">
-        <h2 class="text-lg font-semibold text-primaryText">Dirección de envío</h2>
+        <h2 class="text-lg font-semibold text-primaryText">{{ 'PROFILE.SHIPPING_ADDRESS' | translate }}</h2>
 
         <div class="flex items-center gap-3">
           <button
@@ -73,7 +68,7 @@
             (click)="toggleEditAddress()"
             class="px-4 py-2 rounded-lg bg-primaryText text-primaryWithBg font-medium text-sm"
           >
-            ✏️ Editar
+            ✏️ {{ 'PROFILE.BTN_EDIT' | translate }}
           </button>
 
           <ng-container *ngIf="editingAddress()">
@@ -82,20 +77,19 @@
               (click)="toggleEditAddress()"
               class="px-4 py-2 rounded-lg border border-gray-300 text-primaryText text-sm"
             >
-              Cancelar
+              {{ 'PROFILE.BTN_CANCEL' | translate }}
             </button>
             <button
               type="submit"
               [disabled]="savingAddress()"
               class="px-4 py-2 rounded-lg bg-green-600 text-white font-medium text-sm disabled:opacity-50"
             >
-              {{ savingAddress() ? 'Guardando…' : 'Guardar' }}
+              {{ (savingAddress() ? 'PROFILE.BTN_SAVING' : 'PROFILE.BTN_SAVE') | translate }}
             </button>
           </ng-container>
         </div>
       </div>
 
-      <!-- Modo lectura -->
       <div *ngIf="!editingAddress()" class="text-sm">
         <div *ngIf="u.street; else noAddress">
           <p class="font-medium">{{ u.street }}</p>
@@ -103,56 +97,53 @@
           <p class="font-medium">{{ countryNameOf(u.country_code) }}</p>
         </div>
         <ng-template #noAddress>
-          <p class="text-gray-400">No hay dirección guardada. Pulsa "Editar" para añadirla.</p>
+          <p class="text-gray-400">{{ 'PROFILE.NO_ADDRESS' | translate }}</p>
         </ng-template>
       </div>
 
-      <!-- Modo edición -->
       <div *ngIf="editingAddress()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
         <div class="md:col-span-2">
-          <label class="block text-sm font-medium mb-1">Calle y número</label>
+          <label class="block text-sm font-medium mb-1">{{ 'PROFILE.LABEL_STREET' | translate }}</label>
           <input formControlName="street" class="w-full border rounded-lg p-2" />
         </div>
 
         <div>
-          <label class="block text-sm font-medium mb-1">Ciudad</label>
+          <label class="block text-sm font-medium mb-1">{{ 'PROFILE.LABEL_CITY' | translate }}</label>
           <input formControlName="city" class="w-full border rounded-lg p-2" />
         </div>
 
         <div>
-          <label class="block text-sm font-medium mb-1">Código postal</label>
+          <label class="block text-sm font-medium mb-1">{{ 'PROFILE.LABEL_POSTAL_CODE' | translate }}</label>
           <input formControlName="postal_code" class="w-full border rounded-lg p-2" />
         </div>
 
         <div>
-          <label class="block text-sm font-medium mb-1">Provincia / Estado</label>
+          <label class="block text-sm font-medium mb-1">{{ 'PROFILE.LABEL_STATE' | translate }}</label>
           <input formControlName="state" class="w-full border rounded-lg p-2" />
         </div>
 
         <div>
-          <label class="block text-sm font-medium mb-1">País</label>
+          <label class="block text-sm font-medium mb-1">{{ 'PROFILE.LABEL_COUNTRY' | translate }}</label>
           <select formControlName="country_code" class="w-full border rounded-lg p-2">
-            <option value="">— selecciona —</option>
+            <option value="">— {{ 'PROFILE.SELECT_COUNTRY_PLACEHOLDER' | translate }} —</option>
             <option *ngFor="let c of countries" [value]="c.code">{{ c.name }}</option>
           </select>
           <p *ngIf="hasError('country_code', 'pattern')" class="text-red-500 text-xs mt-1">
-            Selecciona un país válido
+            {{ 'PROFILE.ERROR_INVALID_COUNTRY' | translate }}
           </p>
         </div>
       </div>
     </form>
 
-    <!-- Seguridad -->
     <div class="bg-white rounded-2xl shadow p-6 mb-6">
-      <h2 class="text-lg font-semibold text-primaryText mb-4">Seguridad</h2>
+      <h2 class="text-lg font-semibold text-primaryText mb-4">{{ 'PROFILE.SECURITY' | translate }}</h2>
 
       <div class="flex items-start justify-between gap-4">
         <div class="flex-1">
-          <p class="font-medium">Cambiar contraseña</p>
+          <p class="font-medium">{{ 'PROFILE.CHANGE_PASSWORD' | translate }}</p>
           <p class="text-sm text-secundaryText mt-1">
-            Te enviaremos un correo a <strong>{{ u.email }}</strong> con un enlace seguro
-            para que puedas establecer una nueva contraseña.
+            {{ 'PROFILE.PASSWORD_NOTICE' | translate:{ email: u.email } }}
           </p>
         </div>
         <button
@@ -161,29 +152,28 @@
           [disabled]="sendingResetEmail()"
           class="px-4 py-2 rounded-lg bg-primaryText text-primaryWithBg font-medium text-sm whitespace-nowrap disabled:opacity-50"
         >
-          {{ sendingResetEmail() ? 'Enviando…' : 'Enviar correo' }}
+          {{ (sendingResetEmail() ? 'PROFILE.BTN_SENDING' : 'PROFILE.BTN_SEND_EMAIL') | translate }}
         </button>
       </div>
     </div>
 
-    <!-- Acciones -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
       <button (click)="goToOrders()" class="bg-white rounded-xl shadow hover:shadow-md transition p-4 text-left">
         <div class="text-2xl mb-1">📦</div>
-        <div class="font-semibold text-primaryText">Mis pedidos</div>
-        <div class="text-xs text-secundaryText">Consulta el estado de tus compras</div>
+        <div class="font-semibold text-primaryText">{{ 'PROFILE.CARD_ORDERS_TITLE' | translate }}</div>
+        <div class="text-xs text-secundaryText">{{ 'PROFILE.CARD_ORDERS_TEXT' | translate }}</div>
       </button>
 
       <button *ngIf="isAdmin()" (click)="goToAdmin()" class="bg-white rounded-xl shadow hover:shadow-md transition p-4 text-left">
         <div class="text-2xl mb-1">⚙️</div>
-        <div class="font-semibold text-primaryText">Panel admin</div>
-        <div class="text-xs text-secundaryText">Gestionar la tienda</div>
+        <div class="font-semibold text-primaryText">{{ 'PROFILE.CARD_ADMIN_TITLE' | translate }}</div>
+        <div class="text-xs text-secundaryText">{{ 'PROFILE.CARD_ADMIN_TEXT' | translate }}</div>
       </button>
 
       <button (click)="logout()" class="bg-white rounded-xl shadow hover:shadow-md transition p-4 text-left">
         <div class="text-2xl mb-1">🚪</div>
-        <div class="font-semibold text-primaryText">Cerrar sesión</div>
-        <div class="text-xs text-secundaryText">Salir de tu cuenta</div>
+        <div class="font-semibold text-primaryText">{{ 'PROFILE.CARD_LOGOUT_TITLE' | translate }}</div>
+        <div class="text-xs text-secundaryText">{{ 'PROFILE.CARD_LOGOUT_TEXT' | translate }}</div>
       </button>
     </div>
 
