@@ -14,10 +14,10 @@
     <!-- Eyebrow -->
     <div class="text-center mb-8">
       <div class="text-[10px] uppercase tracking-[0.3em] text-accentText mb-3">
-        3Dlapiz · Nueva cuenta
+        3Dlapiz · {{ 'AUTH.SIGNUP_NEW_ACCOUNT' | translate }}
       </div>
       <h1 class="font-serif text-4xl sm:text-5xl font-medium leading-[1] -tracking-[0.025em] text-ink">
-        Únete al <span class="italic text-accentText">taller</span>
+        {{ 'AUTH.JOIN_TO' | translate }} <span class="italic text-accentText">{{ 'AUTH.WORKSHOP' | translate }}</span>
       </h1>
       <div class="h-[2px] w-16 bg-gradient-to-r from-primaryHover to-accentText mx-auto mt-5 rounded-full"></div>
     </div>
@@ -44,7 +44,7 @@
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="block text-[11px] uppercase tracking-[0.18em] text-inkSoft mb-2">
-              Nombre
+              {{ 'AUTH.FIELD_FIRST_NAME' | translate }}
             </label>
             <input
               type="text"
@@ -58,7 +58,7 @@
 
           <div>
             <label class="block text-[11px] uppercase tracking-[0.18em] text-inkSoft mb-2">
-              Apellido
+              {{ 'AUTH.FIELD_LAST_NAME' | translate }}
             </label>
             <input
               type="text"
@@ -74,7 +74,7 @@
         <!-- Email -->
         <div>
           <label class="block text-[11px] uppercase tracking-[0.18em] text-inkSoft mb-2">
-            Email
+            {{ 'AUTH.FIELD_EMAIL' | translate }}
           </label>
           <input
             type="email"
@@ -90,7 +90,7 @@
         <!-- Password -->
         <div>
           <label class="block text-[11px] uppercase tracking-[0.18em] text-inkSoft mb-2">
-            Contraseña
+            {{ 'AUTH.FIELD_PASSWORD' | translate }}
           </label>
           <input
             type="password"
@@ -129,7 +129,7 @@
                    'text-amber-600': passwordStrength === 'medium',
                    'text-emerald-600': passwordStrength === 'strong'
                  }">
-              Seguridad: {{ passwordStrength === 'weak' ? 'baja' : passwordStrength === 'medium' ? 'media' : 'alta' }}
+              {{ 'AUTH.SECURITY' | translate }} {{ passwordStrength === 'weak' ? 'baja' : passwordStrength === 'medium' ? 'media' : 'alta' }}
             </div>
           </div>
         </div>
@@ -137,7 +137,7 @@
         <!-- Confirmación -->
         <div>
           <label class="block text-[11px] uppercase tracking-[0.18em] text-inkSoft mb-2">
-            Repetir contraseña
+            {{ 'AUTH.FIELD_PASSWORD_CONFIRMATION' | translate }}
           </label>
           <input
             type="password"
@@ -151,7 +151,7 @@
 
           <div *ngIf="signupForm.errors?.['passwordMismatch'] && signupForm.get('password_confirmation')?.touched"
                class="text-red-500 text-xs mt-1.5 ml-1">
-            Las contraseñas no coinciden
+            {{ 'AUTH.ERROR_PASSWORD_MISMATCH' | translate }}
           </div>
         </div>
 
@@ -161,15 +161,15 @@
           class="w-full mt-2 py-3.5 rounded-full font-medium text-white bg-accentText
                  hover:opacity-90 active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed
                  transition-all duration-200 shadow-[0_8px_24px_-8px_rgba(160,122,82,0.5)]">
-          Crear cuenta
+          {{ 'AUTH.SIGNUP_SUBMIT' | translate }}
         </button>
 
         <!-- Términos -->
         <p class="text-[11px] text-inkSoft/80 text-center leading-relaxed">
-          Al registrarte aceptas nuestros
-          <a class="text-accentText hover:underline cursor-pointer">términos</a>
-          y la
-          <a class="text-accentText hover:underline cursor-pointer">política de privacidad</a>.
+          {{ 'AUTH.TERMS_AND_PRIVACY' | translate }}
+          <a class="text-accentText hover:underline cursor-pointer">{{ 'AUTH.TERMS' | translate }}</a>
+          {{ 'AUTH.AND' | translate }}
+          <a class="text-accentText hover:underline cursor-pointer">{{ 'AUTH.PRIVACY_POLICY' | translate }}</a>.
         </p>
       </form>
 
@@ -182,10 +182,10 @@
 
       <!-- Login link -->
       <p class="text-sm text-inkSoft text-center">
-        ¿Ya tienes cuenta?
+        {{ 'AUTH.SIGNUP_HAS_ACCOUNT' | translate }}
         <a routerLink="/login"
            class="text-accentText hover:underline font-medium ml-1 transition">
-          Iniciar sesión
+          {{ 'AUTH.SIGNUP_TO_LOGIN' | translate }}
         </a>
       </p>
     </div>

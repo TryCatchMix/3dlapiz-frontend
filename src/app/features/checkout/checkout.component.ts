@@ -13,12 +13,13 @@ import { AuthService } from '../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { ShippingService } from '../../core/services/shipping.service';
 import { StripeService } from '../../core/services/stripe.service';
+import { TranslateModule } from '@ngx-translate/core';
 import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss'],
 })

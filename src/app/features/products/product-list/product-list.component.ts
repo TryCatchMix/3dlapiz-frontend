@@ -4,10 +4,11 @@ import { CommonModule } from '@angular/common';
 import { Product } from '../../../core/models/product.model';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { ProductService } from '../../../core/services/product.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-product-list',
-  imports: [CommonModule, ProductCardComponent],
+  imports: [CommonModule, ProductCardComponent, TranslateModule],
   templateUrl: './product-list.component.html',
   styles: [],
 })

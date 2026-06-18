@@ -3,15 +3,15 @@
 
   <div *ngIf="cartItems.length === 0" class="text-center py-16">
     <div class="text-6xl mb-4">🛒</div>
-    <h2 class="text-2xl font-semibold mb-4">Tu carrito está vacío</h2>
+    <h2 class="text-2xl font-semibold mb-4">{{ 'CART.EMPTY_TITLE' | translate }}</h2>
     <p class="text-gray-600 mb-8">
-      Parece que aún no has añadido productos a tu carrito
+      {{ 'CART.EMPTY_TEXT' | translate }}
     </p>
     <button
       (click)="continueShopping()"
       class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg"
     >
-      Continuar comprando
+      {{ 'CART.CONTINUE_SHOPPING' | translate }}
     </button>
   </div>
 
@@ -83,27 +83,27 @@
           (click)="clearCart()"
           class="text-red-500 hover:text-red-700 underline"
         >
-          Vaciar carrito
+          {{ 'CART.CLEAR_CART' | translate }}
         </button>
       </div>
     </div>
 
     <div class="lg:col-span-1">
       <div class="bg-white rounded-lg shadow-md p-6 sticky top-4">
-        <h2 class="text-xl font-bold mb-4">Resumen de la compra</h2>
+        <h2 class="text-xl font-bold mb-4">{{ 'CART.SUMMARY_TITLE' | translate }}</h2>
 
         <div class="space-y-3 mb-4">
           <div class="flex justify-between">
-            <span>Subtotal</span>
+            <span>{{ 'CART.SUBTOTAL' | translate }}</span>
             <span>${{ cartService.cartTotal() | number : "1.2-2" }}</span>
           </div>
           <div class="flex justify-between">
-            <span>Envío</span>
-            <span>Calculado en el checkout</span>
+            <span>{{ 'CART.SHIPPING' | translate }}</span>
+            <span>{{ 'CART.SHIPPING_AT_CHECKOUT' | translate }}</span>
           </div>
           <div class="border-t pt-3 mt-3">
             <div class="flex justify-between font-bold">
-              <span>Total estimado</span>
+              <span>{{ 'CART.ESTIMATED_TOTAL' | translate }}</span>
               <span>${{ cartService.cartTotal() | number : "1.2-2" }}</span>
             </div>
           </div>
@@ -113,14 +113,14 @@
           (click)="proceedToCheckout()"
           class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg mb-4"
         >
-          Proceder al pago
+          {{ 'CART.PROCEED_TO_CHECKOUT' | translate }}
         </button>
 
         <button
           (click)="continueShopping()"
           class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-6 rounded-lg"
         >
-          Seguir comprando
+          {{ 'CART.CONTINUE_SHOPPING' | translate }}
         </button>
       </div>
     </div>

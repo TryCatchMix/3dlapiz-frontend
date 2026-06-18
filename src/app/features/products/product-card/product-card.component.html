@@ -19,7 +19,6 @@
         rounded-full shadow-sm z-10
       "
     >
-      <span>✨ Cute ✨</span>
     </div>
 
     <div
@@ -44,7 +43,7 @@
       <ng-template #noImage>
         <img
           [src]="imgUrl()"
-          alt="Imagen no disponible"
+          [alt]="'PRODUCTS.IMAGE_NOT_AVAILABLE' | translate"
           class="
             h-40 sm:h-64 md:h-72 w-full
             object-contain object-center
@@ -80,17 +79,10 @@
       {{ product.description }}
     </p>
 
-    <p
-      class="
-        text-lg sm:text-xl font-bold
-        text-primaryText
-        flex items-center
-      "
-    >
-      <p class="text-lg sm:text-xl font-bold text-primaryText flex items-center">
-  <span class="mr-1 sm:mr-2 text-sm sm:text-base">💖</span>
-  {{ product.price | priceEur }}
-</p>
+    <p class="text-lg sm:text-xl font-bold text-primaryText flex items-center">
+      <span class="mr-1 sm:mr-2 text-sm sm:text-base">💖</span>
+      {{ product.price | priceEur }}
+    </p>
 
     <div
       class="
@@ -107,7 +99,7 @@
           flex items-center
         "
       >
-        <span class="mr-1">📦</span> Stock: {{ product.stock }}
+        <span class="mr-1">📦</span> {{ 'PRODUCTS.STOCK_LABEL' | translate:{ count: product.stock } }}
       </p>
     </div>
 
@@ -126,7 +118,7 @@
         text-sm sm:text-base
       "
     >
-      <span class="mr-1 sm:mr-2">🛍️</span> Añadir al carrito
+      <span class="mr-1 sm:mr-2">🛍️</span> {{ 'PRODUCTS.ADD_TO_CART' | translate }}
     </button>
   </div>
 

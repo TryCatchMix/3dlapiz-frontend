@@ -4,11 +4,12 @@ import { Order, OrderService } from '../../../core/services/order.service';
 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-order-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule],
   templateUrl: './order-detail.component.html',
   styleUrls: ['./order-detail.component.scss']
 })

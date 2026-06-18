@@ -33,7 +33,7 @@
       <h1
         class="font-serif text-4xl sm:text-5xl font-medium leading-[1] -tracking-[0.025em] text-ink"
       >
-        Bienvenido de <span class="italic text-accentText">vuelta</span>
+        {{ 'AUTH.LOGIN_WELCOME' | translate }} <span class="italic text-accentText"></span>
       </h1>
       <div
         class="h-[2px] w-16 bg-gradient-to-r from-primaryHover to-accentText mx-auto mt-5 rounded-full"
@@ -81,10 +81,10 @@
             class="text-red-500 text-xs mt-1.5 ml-1"
           >
             <span *ngIf="loginForm.get('email')?.errors?.['required']"
-              >El email es obligatorio</span
+              >{{ 'ERROR_EMAIL_REQUIRED' | translate}}</span
             >
             <span *ngIf="loginForm.get('email')?.errors?.['email']"
-              >El formato del email no es válido</span
+              >{{ 'ERROR_EMAIL_INVALID' | translate }}</span
             >
           </div>
         </div>
@@ -95,13 +95,13 @@
             <label
               class="block text-[11px] uppercase tracking-[0.18em] text-inkSoft"
             >
-              Contraseña
+              {{'AUTH.FIELD_PASSWORD' | translate}}
             </label>
             <a
               class="text-xs text-accentText hover:underline cursor-pointer"
               (click)="onForgotPassword()"
             >
-              ¿Olvidaste tu contraseña?
+              {{'AUTH.FORGOT_PASSWORD_LINK' | translate}}
             </a>
           </div>
           <input
@@ -120,7 +120,7 @@
             class="text-red-500 text-xs mt-1.5 ml-1"
           >
             <span *ngIf="loginForm.get('password')?.errors?.['required']"
-              >La contraseña es obligatoria</span
+              >{{ 'AUTH.ERROR_PASSWORD_REQUIRED' | translate}}</span
             >
           </div>
         </div>
@@ -131,7 +131,7 @@
           [disabled]="loginForm.invalid"
           class="w-full mt-2 py-3.5 rounded-full font-medium text-white bg-accentText hover:opacity-90 active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-[0_8px_24px_-8px_rgba(160,122,82,0.5)]"
         >
-          Iniciar sesión
+          {{ 'AUTH.LOGIN_TITLE' | translate }}
         </button>
       </form>
 
@@ -146,12 +146,12 @@
 
       <!-- Registro -->
       <p class="text-sm text-inkSoft text-center">
-        ¿Aún no tienes cuenta?
+        {{'AUTH.LOGIN_NO_ACCOUNT' | translate}}
         <a
           routerLink="/register"
           class="text-accentText hover:underline font-medium ml-1 transition"
         >
-          Crear cuenta
+          {{ 'HEADER.REGISTER' | translate }}
         </a>
       </p>
     </div>

@@ -1,5 +1,4 @@
 <div class="max-w-5xl mx-auto px-4 py-8">
-  <!-- Back Button -->
   <button
     (click)="goBack()"
     class="flex items-center text-gray-600 hover:text-gray-900 mb-6"
@@ -7,49 +6,49 @@
     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
     </svg>
-    Volver a mis pedidos
+    {{ 'ORDERS.DETAIL.BACK_TO_LIST' | translate }}
   </button>
 
-  <!-- Loading State -->
   <div *ngIf="loading" class="flex justify-center items-center py-20">
     <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600"></div>
   </div>
 
-  <!-- Error State -->
   <div *ngIf="error && !loading" class="bg-red-50 border border-red-200 rounded-lg p-4">
     <p class="text-red-800">{{ error }}</p>
   </div>
 
-<div *ngIf="order" class="...">
+  <div *ngIf="order" class="...">
 
-  <!-- ⬇️ Cabecera con order_number -->
-  <div class="bg-white rounded-lg shadow-md p-6 mb-4">
-    <h1 class="text-2xl font-bold mb-1">Pedido #{{ order.order_number }}</h1>
-    <p class="text-sm text-gray-500">Realizado el {{ order.created_at | date:'medium' }}</p>
-  </div>
+    <div class="bg-white rounded-lg shadow-md p-6 mb-4">
+      <h1 class="text-2xl font-bold mb-1">
+        {{ 'ORDERS.ORDER_NUMBER' | translate:{ number: order.order_number } }}
+      </h1>
+      <p class="text-sm text-gray-500">
+        {{ 'ORDERS.DETAIL.PLACED_ON' | translate:{ date: (order.created_at | date:'medium') } }}
+      </p>
+    </div>
 
-  <!-- ⬇️ Tracking si existe -->
-  <div *ngIf="order.tracking_number" class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-    <h3 class="font-semibold mb-1">📦 Pedido enviado</h3>
-    <p class="text-sm">Transportista: <strong>{{ order.shipping_carrier }}</strong></p>
-    <p class="text-sm">Nº de seguimiento: <strong>{{ order.tracking_number }}</strong></p>
-  </div>
+    <div *ngIf="order.tracking_number" class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+      <h3 class="font-semibold mb-1">📦 {{ 'ORDERS.DETAIL.TRACKING_TITLE' | translate }}</h3>
+      <p class="text-sm">
+        {{ 'ORDERS.DETAIL.TRACKING_CARRIER' | translate }}: <strong>{{ order.shipping_carrier }}</strong>
+      </p>
+      <p class="text-sm">
+        {{ 'ORDERS.DETAIL.TRACKING_NUMBER' | translate }}: <strong>{{ order.tracking_number }}</strong>
+      </p>
+    </div>
 
-  <!-- ...resto del template existente... -->
+    </div>
 
-</div>
-
-  <!-- Order Details -->
   <div *ngIf="order && !loading" class="space-y-6">
-    <!-- Order Header -->
     <div class="bg-white rounded-lg shadow-md p-6">
       <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
         <div>
           <h1 class="text-3xl font-bold text-gray-900 mb-2">
-            Pedido #{{ order.id }}
+            {{ 'ORDERS.ORDER_NUMBER' | translate:{ number: order.id } }}
           </h1>
           <p class="text-gray-600">
-            Realizado el {{ order.created_at | date: 'dd/MM/yyyy HH:mm' }}
+            {{ 'ORDERS.DETAIL.PLACED_ON' | translate:{ date: (order.created_at | date: 'dd/MM/yyyy HH:mm') } }}
           </p>
         </div>
         <div class="mt-4 md:mt-0">
@@ -62,20 +61,18 @@
         </div>
       </div>
 
-      <!-- Cancel Button -->
       <div *ngIf="canCancelOrder()" class="mt-4">
         <button
           (click)="openCancelModal()"
           class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg transition"
         >
-          Cancelar pedido
+          {{ 'ORDERS.DETAIL.CANCEL_BUTTON' | translate }}
         </button>
       </div>
+    </div>
 
-
-    <!-- Order Items -->
     <div class="bg-white rounded-lg shadow-md p-6">
-      <h2 class="text-xl font-bold mb-4">Productos</h2>
+      <h2 class="text-xl font-bold mb-4">{{ 'ORDERS.DETAIL.PRODUCTS_TITLE' | translate }}</h2>
       <div class="space-y-4">
         <div
           *ngFor="let item of order.items"
@@ -90,7 +87,7 @@
             <h3 class="font-semibold text-gray-900">{{ item.product?.name || item.product_name }}</h3>
 
             <p class="text-sm text-gray-600 mt-1">
-              Cantidad: {{ item.quantity }} × ${{ item.price | number: '1.2-2' }}
+              {{ 'ORDERS.PRODUCT_LINE' | translate:{ count: item.quantity, price: (item.price | number: '1.2-2') } }}
             </p>
           </div>
           <div class="text-right">
@@ -101,40 +98,37 @@
         </div>
       </div>
 
-      <!-- Order Summary -->
       <div class="mt-6 pt-6 border-t border-gray-200">
         <div class="flex justify-between text-lg mb-2">
-          <span class="text-gray-600">Subtotal:</span>
+          <span class="text-gray-600">{{ 'ORDERS.DETAIL.SUBTOTAL' | translate }}</span>
           <span class="font-semibold">${{ getOrderItemsTotal() | number: '1.2-2' }}</span>
         </div>
         <div class="flex justify-between text-xl font-bold mt-4">
-          <span>Total:</span>
+          <span>{{ 'ORDERS.DETAIL.TOTAL' | translate }}</span>
           <span class="text-blue-600">${{ order.total | number: '1.2-2' }}</span>
         </div>
       </div>
     </div>
 
-    <!-- Shipping Information -->
     <div *ngIf="order.shipping_info" class="bg-white rounded-lg shadow-md p-6">
-      <h2 class="text-xl font-bold mb-4">Información de envío</h2>
+      <h2 class="text-xl font-bold mb-4">{{ 'ORDERS.DETAIL.SHIPPING_INFO_TITLE' | translate }}</h2>
       <div class="text-gray-700">
-        <p class="mb-1"><span class="font-semibold">Nombre:</span> {{ order.shipping_info.fullName }}</p>
-        <p class="mb-1"><span class="font-semibold">Dirección:</span> {{ order.shipping_info.address }}</p>
-        <p class="mb-1"><span class="font-semibold">Ciudad:</span> {{ order.shipping_info.city }}</p>
-        <p class="mb-1"><span class="font-semibold">Código Postal:</span> {{ order.shipping_info.postalCode }}</p>
-        <p class="mb-1"><span class="font-semibold">País:</span> {{ order.shipping_info.country }}</p>
+        <p class="mb-1"><span class="font-semibold">{{ 'ORDERS.DETAIL.SHIPPING_NAME' | translate }}</span> {{ order.shipping_info.fullName }}</p>
+        <p class="mb-1"><span class="font-semibold">{{ 'ORDERS.DETAIL.SHIPPING_ADDRESS' | translate }}</span> {{ order.shipping_info.address }}</p>
+        <p class="mb-1"><span class="font-semibold">{{ 'ORDERS.DETAIL.SHIPPING_CITY' | translate }}</span> {{ order.shipping_info.city }}</p>
+        <p class="mb-1"><span class="font-semibold">{{ 'ORDERS.DETAIL.SHIPPING_POSTAL_CODE' | translate }}</span> {{ order.shipping_info.postalCode }}</p>
+        <p class="mb-1"><span class="font-semibold">{{ 'ORDERS.DETAIL.SHIPPING_COUNTRY' | translate }}</span> {{ order.shipping_info.country }}</p>
         <p *ngIf="order.shipping_info.phone" class="mb-1">
-          <span class="font-semibold">Teléfono:</span> {{ order.shipping_info.phone }}
+          <span class="font-semibold">{{ 'ORDERS.DETAIL.SHIPPING_PHONE' | translate }}</span> {{ order.shipping_info.phone }}
         </p>
       </div>
     </div>
 
-    <!-- Payment Information -->
     <div class="bg-white rounded-lg shadow-md p-6">
-      <h2 class="text-xl font-bold mb-4">Información de pago</h2>
+      <h2 class="text-xl font-bold mb-4">{{ 'ORDERS.DETAIL.PAYMENT_INFO_TITLE' | translate }}</h2>
       <div class="space-y-2">
         <div class="flex justify-between">
-          <span class="text-gray-600">Estado del pago:</span>
+          <span class="text-gray-600">{{ 'ORDERS.DETAIL.PAYMENT_STATUS' | translate }}</span>
           <span
             class="px-3 py-1 rounded-full text-xs font-semibold"
             [ngClass]="{
@@ -143,20 +137,17 @@
               'bg-red-100 text-red-800': order.payment_status === 'failed' || order.payment_status === 'cancelled'
             }"
           >
-            {{ order.payment_status === 'paid' ? 'Pagado' :
-               order.payment_status === 'pending' ? 'Pendiente' :
-               order.payment_status === 'failed' ? 'Fallido' : 'Cancelado' }}
+            {{ 'ORDERS.STATUS.' + (order.payment_status | uppercase) | translate }}
           </span>
         </div>
         <div *ngIf="order.payment_intent" class="flex justify-between">
-          <span class="text-gray-600">ID de transacción:</span>
+          <span class="text-gray-600">{{ 'ORDERS.DETAIL.TRANSACTION_ID' | translate }}</span>
           <span class="text-sm text-gray-500">{{ order.payment_intent }}</span>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Cancel Order Modal -->
   <div
     *ngIf="showCancelModal"
     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4"
@@ -166,21 +157,21 @@
       class="bg-white rounded-lg max-w-md w-full p-6"
       (click)="$event.stopPropagation()"
     >
-      <h3 class="text-xl font-bold mb-4">Cancelar pedido</h3>
+      <h3 class="text-xl font-bold mb-4">{{ 'ORDERS.DETAIL.CANCEL_MODAL_TITLE' | translate }}</h3>
       <p class="text-gray-600 mb-4">
-        ¿Estás seguro de que deseas cancelar este pedido? Esta acción no se puede deshacer.
+        {{ 'ORDERS.DETAIL.CANCEL_MODAL_TEXT' | translate }}
       </p>
 
       <div class="mb-4">
         <label for="cancellation-reason" class="block text-sm font-medium text-gray-700 mb-2">
-          Motivo de cancelación (opcional)
+          {{ 'ORDERS.DETAIL.CANCEL_REASON_LABEL' | translate }}
         </label>
         <textarea
           id="cancellation-reason"
           [(ngModel)]="cancellationReason"
           rows="3"
           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Escribe el motivo..."
+          [placeholder]="'ORDERS.DETAIL.CANCEL_REASON_PLACEHOLDER' | translate"
         ></textarea>
       </div>
 
@@ -190,7 +181,7 @@
           [disabled]="cancelling"
           class="px-4 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg transition disabled:opacity-50"
         >
-          No, mantener pedido
+          {{ 'ORDERS.DETAIL.CANCEL_KEEP' | translate }}
         </button>
         <button
           (click)="confirmCancelOrder()"
@@ -198,7 +189,7 @@
           class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition disabled:opacity-50 flex items-center"
         >
           <span *ngIf="cancelling" class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
-          {{ cancelling ? 'Cancelando...' : 'Sí, cancelar pedido' }}
+          {{ (cancelling ? 'ORDERS.DETAIL.CANCELLING' : 'ORDERS.DETAIL.CANCEL_CONFIRM') | translate }}
         </button>
       </div>
     </div>

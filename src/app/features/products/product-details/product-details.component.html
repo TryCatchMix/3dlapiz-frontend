@@ -1,30 +1,12 @@
 <div *ngIf="product; else loader" class="min-h-screen bg-pageBg text-ink font-sans">
 
-  <!-- Topbar (opcional, quítalo si ya tienes layout global)
-  <header class="border-b border-accentMuted/60 bg-white/80 backdrop-blur">
-    <div class="max-w-[1320px] mx-auto px-8 py-5 flex items-center justify-between">
-      <div class="flex items-baseline gap-2">
-        <span class="font-serif text-[28px] font-semibold text-accentText -tracking-[0.01em]">3dlapiz</span>
-        <span class="text-[10px] uppercase tracking-[0.2em] text-inkSoft">atelier</span>
-      </div>
-      <button #cartBtn
-              class="relative px-4 py-2 rounded-full bg-accentSoft text-accentText font-medium text-sm">
-        Carrito
-        <span *ngIf="added"
-              class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-success animate-pulseDot"></span>
-      </button>
-    </div>
-  </header>
--->
-  <!-- Breadcrumb -->
   <div class="max-w-[1320px] mx-auto px-8 pt-6 pb-4 text-xs uppercase tracking-[0.18em] text-inkSoft">
-    Catálogo / <span class="text-accentText">{{ product.name }}</span>
+    {{ 'PRODUCTS.CATALOG' | translate }} / <span class="text-accentText">{{ product.name }}</span>
   </div>
 
   <main class="max-w-[1320px] mx-auto px-8 pb-20">
     <div class="grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] gap-12">
 
-      <!-- ─── GALERÍA ─────────────────────────────────── -->
       <div>
         <div #mainImg
              (click)="openLightbox(currentImageIndex)"
@@ -32,13 +14,11 @@
              (mouseleave)="onMouseLeave()"
              class="relative cursor-zoom-in rounded-3xl overflow-hidden aspect-square shadow-lg bg-secondaryBg">
 
-          <!-- Imagen normal -->
           <img *ngIf="!isVideoSlot && product.images?.length"
                [src]="imageSrc(product.images[currentImageIndex])"
                [alt]="product.name"
                class="w-full h-full object-cover transition-transform duration-500" />
 
-          <!-- Slot de vídeo (último del carrusel) -->
           <iframe *ngIf="isVideoSlot && safeVideoUrl"
                   [src]="safeVideoUrl"
                   class="absolute inset-0 w-full h-full"
@@ -47,7 +27,6 @@
                   allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowfullscreen></iframe>
 
-          <!-- Lupa zoom (solo sobre imagen) -->
           <div *ngIf="zoomActive && !isVideoSlot"
                class="absolute pointer-events-none rounded-full border-2 border-white/90 shadow-2xl hidden md:block overflow-hidden"
                [style.left]="'calc(' + zoomX + '% - 90px)'"
@@ -60,19 +39,18 @@
                  alt="" />
           </div>
 
-          <!-- Flechas -->
           <button (click)="prevImage(); $event.stopPropagation()"
-                  class="absolute top-1/2 left-4 -translate-y-1/2 w-11 h-11 rounded-full bg-white/95 text-accentText flex items-center justify-center shadow-lg hover:scale-105 transition">‹</button>
+                  class="absolute top-1/2 left-4 -translate-y-1/2 w-11 h-11 rounded-full bg-white/95 text-accentText flex items-center justify-center shadow-lg hover:scale-105 transition"
+                  [attr.aria-label]="'PRODUCTS.PREV_IMAGE' | translate">‹</button>
           <button (click)="nextImage(); $event.stopPropagation()"
-                  class="absolute top-1/2 right-4 -translate-y-1/2 w-11 h-11 rounded-full bg-white/95 text-accentText flex items-center justify-center shadow-lg hover:scale-105 transition">›</button>
+                  class="absolute top-1/2 right-4 -translate-y-1/2 w-11 h-11 rounded-full bg-white/95 text-accentText flex items-center justify-center shadow-lg hover:scale-105 transition"
+                  [attr.aria-label]="'PRODUCTS.NEXT_IMAGE' | translate">›</button>
 
-          <!-- Contador -->
           <div class="absolute top-4 left-4 px-3 py-1.5 rounded-full text-xs font-mono bg-white/95 text-accentText">
             {{ pad(currentImageIndex + 1) }} / {{ pad(totalSlots) }}
           </div>
         </div>
 
-        <!-- Miniaturas (imágenes + slot vídeo) -->
         <div class="mt-4 grid grid-cols-8 gap-2">
           <button *ngFor="let im of product.images; let i = index; trackBy: trackByIndex"
                   (click)="setImageIndex(i)"
@@ -82,7 +60,6 @@
             <img [src]="imageSrc(im)" [alt]="product.name" class="w-full h-full object-cover" />
           </button>
 
-          <!-- thumb del vídeo -->
           <button *ngIf="safeVideoUrl"
                   (click)="setImageIndex(product.images.length)"
                   class="relative aspect-square rounded-xl overflow-hidden bg-black/80 flex items-center justify-center transition"
@@ -91,12 +68,11 @@
             <div class="w-7 h-7 rounded-full bg-white/95 flex items-center justify-center">
               <span class="text-accentText text-xs">▶</span>
             </div>
-            <span class="absolute bottom-1 text-[9px] text-white/80 uppercase tracking-wider">Vídeo</span>
+            <span class="absolute bottom-1 text-[9px] text-white/80 uppercase tracking-wider">{{ 'PRODUCTS.VIDEO' | translate }}</span>
           </button>
         </div>
       </div>
 
-      <!-- ─── INFO ────────────────────────────────────── -->
       <div class="lg:pt-2">
         <div *ngIf="product.brand" class="text-xs uppercase tracking-[0.22em] text-accentText">
           {{ product.brand }}
@@ -108,100 +84,81 @@
 
         <p class="mt-6 text-[15px] leading-relaxed text-inkSoft whitespace-pre-line">{{ product.description }}</p>
 
-        <!-- Precio -->
         <div class="mt-7 flex items-baseline gap-3">
-  <span class="font-serif text-[44px] font-medium text-accentText">
-    {{ currentPrice | priceEur }}
-  </span>
-  <span *ngIf="selectedVariant === 'unpainted' && product.price"
-        class="text-lg line-through text-inkSoft/50">
-    {{ product.price | priceEur }}
-  </span>
-  <span class="text-xs text-inkSoft">IVA incluido</span>
-</div>
+          <span class="font-serif text-[44px] font-medium text-accentText">
+            {{ currentPrice | priceEur }}
+          </span>
+          <span *ngIf="selectedVariant === 'unpainted' && product.price"
+                class="text-lg line-through text-inkSoft/50">
+            {{ product.price | priceEur }}
+          </span>
+          <span class="text-xs text-inkSoft">{{ 'PRODUCTS.TAX_INCLUDED' | translate }}</span>
+        </div>
 
-        <!-- Acabado -->
         <div *ngIf="hasUnpaintedOption" class="mt-7">
-          <label class="block text-[11px] uppercase tracking-[0.18em] mb-2.5 text-inkSoft">Acabado</label>
+          <label class="block text-[11px] uppercase tracking-[0.18em] mb-2.5 text-inkSoft">{{ 'PRODUCTS.FINISH' | translate }}</label>
           <div class="inline-flex rounded-full p-1 bg-white border border-accentMuted">
             <button type="button" (click)="setVariant('painted')"
                     class="px-5 py-2 text-sm rounded-full transition font-medium"
                     [ngClass]="selectedVariant === 'painted'
                       ? 'bg-accentText text-white' : 'bg-transparent text-inkSoft'">
-              Pintada a mano
+              {{ 'PRODUCTS.VARIANT_PAINTED' | translate }}
             </button>
             <button type="button" (click)="setVariant('unpainted')"
                     class="px-5 py-2 text-sm rounded-full transition font-medium"
                     [ngClass]="selectedVariant === 'unpainted'
                       ? 'bg-accentText text-white' : 'bg-transparent text-inkSoft'">
-              Sin pintar
+              {{ 'PRODUCTS.VARIANT_UNPAINTED' | translate }}
             </button>
           </div>
         </div>
 
-        <!-- Stock -->
         <div class="mt-6 flex items-center gap-2 text-sm">
           <ng-container *ngIf="product.stock > 0; else outOfStock">
             <span class="w-2 h-2 rounded-full bg-success"></span>
-            <span>En stock — quedan <strong>{{ product.stock }} unidades</strong></span>
+            <span>{{ 'PRODUCTS.IN_STOCK_REMAINING' | translate:{ count: product.stock } }}</span>
           </ng-container>
           <ng-template #outOfStock>
-            <span class="px-3 py-1 rounded-full bg-red-100 text-red-800 text-xs font-semibold">Agotado</span>
+            <span class="px-3 py-1 rounded-full bg-red-100 text-red-800 text-xs font-semibold">{{ 'PRODUCTS.OUT_OF_STOCK' | translate }}</span>
           </ng-template>
         </div>
 
-        <!-- Cantidad + carrito -->
         <div class="mt-5 flex items-stretch gap-3">
           <div class="inline-flex items-center rounded-full bg-white border border-accentMuted">
             <button (click)="decreaseQuantity()" [disabled]="quantity <= 1"
+                    [attr.aria-label]="'PRODUCTS.DECREASE_QUANTITY' | translate"
                     class="px-4 py-3 text-lg text-accentText disabled:opacity-40">−</button>
             <span class="w-10 text-center text-sm font-medium">{{ quantity }}</span>
             <button (click)="increaseQuantity()" [disabled]="quantity >= product.stock"
+                    [attr.aria-label]="'PRODUCTS.INCREASE_QUANTITY' | translate"
                     class="px-4 py-3 text-lg text-accentText disabled:opacity-40">+</button>
           </div>
           <button (click)="addToCart()" [disabled]="product.stock <= 0"
                   class="flex-1 rounded-full text-sm font-medium bg-primaryBg text-ink hover:bg-primaryHover transition px-6 disabled:opacity-50 disabled:cursor-not-allowed">
-             <ng-container *ngIf="product.stock > 0">
-    Añadir al carrito · {{ currentPrice * quantity | priceEur }}
-  </ng-container>
-            <ng-container *ngIf="product.stock <= 0">Agotado</ng-container>
+            <ng-container *ngIf="product.stock > 0">
+              {{ 'PRODUCTS.ADD_TO_CART_WITH_TOTAL' | translate:{ total: (currentPrice * quantity | priceEur) } }}
+            </ng-container>
+            <ng-container *ngIf="product.stock <= 0">
+              {{ 'PRODUCTS.OUT_OF_STOCK' | translate }}
+            </ng-container>
           </button>
         </div>
 
-        <!-- Servicios
-        <div class="mt-7 grid grid-cols-3 gap-3 text-xs text-inkSoft">
-          <div class="rounded-xl p-3 bg-white border border-accentMuted">
-            <div class="font-medium text-ink">Envío 48h</div>
-            <div class="mt-0.5">España y Portugal</div>
-          </div>
-          <div class="rounded-xl p-3 bg-white border border-accentMuted">
-            <div class="font-medium text-ink">Caja artesanal</div>
-            <div class="mt-0.5">Madera + certificado</div>
-          </div>
-          <div class="rounded-xl p-3 bg-white border border-accentMuted">
-            <div class="font-medium text-ink">Encargos</div>
-            <div class="mt-0.5">Personalización 14 días</div>
-          </div>
-        </div>
--->
-        <!-- Ficha técnica -->
         <div class="mt-8 pt-6 border-t border-accentMuted">
-          <h3 class="text-[11px] uppercase tracking-[0.22em] mb-4 text-accentText">Ficha técnica</h3>
+          <h3 class="text-[11px] uppercase tracking-[0.22em] mb-4 text-accentText">{{ 'PRODUCTS.TECHNICAL_SHEET' | translate }}</h3>
           <dl class="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
             <div *ngIf="product.sku" class="flex justify-between gap-3 border-b border-black/5 pb-2">
-              <dt class="text-inkSoft">SKU</dt><dd class="font-medium">{{ product.sku }}</dd>
+              <dt class="text-inkSoft">{{ 'PRODUCTS.SKU' | translate }}</dt><dd class="font-medium">{{ product.sku }}</dd>
             </div>
             <div *ngIf="product.brand" class="flex justify-between gap-3 border-b border-black/5 pb-2">
-              <dt class="text-inkSoft">Marca</dt><dd class="font-medium">{{ product.brand }}</dd>
+              <dt class="text-inkSoft">{{ 'PRODUCTS.BRAND' | translate }}</dt><dd class="font-medium">{{ product.brand }}</dd>
             </div>
-            <!-- Añade aquí más campos según tu modelo: scale, height, weight, material… -->
           </dl>
         </div>
       </div>
     </div>
   </main>
 
-  <!-- Lightbox -->
   <div *ngIf="lightboxOpen"
        (click)="closeLightbox()"
        class="fixed inset-0 z-50 bg-black/85 flex items-center justify-center">
@@ -213,7 +170,6 @@
     </div>
   </div>
 
-  <!-- Figura volando al carrito -->
   <div *ngIf="flying"
        class="fixed pointer-events-none z-[60] w-24 h-24 rounded-full bg-accentSoft animate-flyToCart"
        [style.left.px]="flying.fromX - 48"
