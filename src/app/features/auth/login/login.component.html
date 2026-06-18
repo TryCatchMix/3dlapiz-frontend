@@ -81,10 +81,10 @@
             class="text-red-500 text-xs mt-1.5 ml-1"
           >
             <span *ngIf="loginForm.get('email')?.errors?.['required']"
-              >{{ 'ERROR_EMAIL_REQUIRED' | translate}}</span
+              >{{ 'AUTH.ERROR_EMAIL_REQUIRED' | translate}}</span
             >
             <span *ngIf="loginForm.get('email')?.errors?.['email']"
-              >{{ 'ERROR_EMAIL_INVALID' | translate }}</span
+              >{{ 'AUTH.ERROR_EMAIL_INVALID' | translate }}</span
             >
           </div>
         </div>

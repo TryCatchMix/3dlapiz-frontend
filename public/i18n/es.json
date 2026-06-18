@@ -31,14 +31,15 @@
     "GREETING": "Hola, {{ name }}"
   },
 
-  "FOOTER": {
+"FOOTER": {
     "ABOUT_TITLE": "Sobre nosotros",
     "ABOUT_TEXT": "Creando tus personajes favoritos en 3D",
     "LINKS_TITLE": "Enlaces",
     "TERMS": "Términos y condiciones",
     "PRIVACY": "Política de privacidad",
     "CONTACT_TITLE": "Contacto",
-    "RIGHTS": "© {{ year }} 3Dlapiz. Todos los derechos reservados."
+    "FOLLOW_US": "¡Contáctanos y síguenos!",
+    "RIGHTS": "✨ 3Dlapiz © {{ year }} - Con amor para todos nuestros clientes ✨"
   },
 
   "HOME": {
