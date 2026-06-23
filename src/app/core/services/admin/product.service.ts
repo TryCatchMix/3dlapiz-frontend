@@ -59,4 +59,8 @@ export class AdminProductService extends BaseHttpService {
   deleteProduct(id: string): Observable<any> {
   return this.http.delete(`${this.apiUrl}/admin/products/${id}`);
 }
+
+manageImages(productId: string, formData: FormData): Observable<any> {
+  return this.http.post(`${this.apiUrl}/admin/products/${productId}/images`, formData);
+}
 }

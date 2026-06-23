@@ -67,7 +67,7 @@
             </button>
           </div>
           <div class="text-right font-semibold">
-            ${{ item.price * item.quantity | number : "1.2-2" }}
+            {{ item.price * item.quantity | priceEur }}
           </div>
           <button
 (click)="removeItem(item)"

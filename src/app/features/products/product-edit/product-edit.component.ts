@@ -4,8 +4,11 @@ import { Router, RouterModule } from '@angular/router';
 
 import { AdminProductService } from '../../../core/services/admin/product.service';
 import { CommonModule } from '@angular/common';
+import { PriceEurPipe } from '../../../shared/pipes/price-eur.pipe';
 import { Product } from '../../../core/models/product.model';
 import { ProductService } from '../../../core/services/product.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { environment } from '../../../../environments/environment.staging';
 
 const YOUTUBE_REGEX =
   /^https:\/\/(?:www\.|m\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)[A-Za-z0-9_-]{11}(?:[?&][\w=\-&%.]*)?$/;
@@ -13,7 +16,7 @@ const YOUTUBE_REGEX =
 @Component({
   selector: 'app-product-edit',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, TranslateModule, PriceEurPipe],
   templateUrl: './product-edit.component.html',
   styleUrls: ['./product-edit.component.scss']
 })
@@ -26,6 +29,9 @@ export class ProductEditComponent implements OnInit {
   products: Product[] = [];
   selectedProduct: Product | null = null;
   deleting = signal(false);
+  newImages: File[] = [];
+uploadingImages = false;
+deletingImageId: string | null = null;
 
   form = this.fb.group({
     name: ['', Validators.required],
@@ -134,6 +140,72 @@ export class ProductEditComponent implements OnInit {
       alert('Error al eliminar el producto');
     },
   });
+}
+
+onImagesSelected(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  if (!input.files) return;
+
+  const files = Array.from(input.files);
+  const tooBig = files.filter(f => f.size > 4 * 1024 * 1024);
+  if (tooBig.length > 0) {
+    alert(`Algunos archivos exceden 4 MB y no se subirán: ${tooBig.map(f => f.name).join(', ')}`);
+  }
+  this.newImages = files.filter(f => f.size <= 4 * 1024 * 1024);
+}
+
+uploadNewImages(): void {
+  if (!this.selectedProduct || this.newImages.length === 0) return;
+
+  this.uploadingImages = true;
+  const formData = new FormData();
+  this.newImages.forEach(f => formData.append('images[]', f));
+
+  this.adminProductService.manageImages(this.selectedProduct.id, formData).subscribe({
+    next: (updated) => {
+      this.uploadingImages = false;
+      this.newImages = [];
+      // Refresca el producto seleccionado con las nuevas imágenes
+      if (this.selectedProduct) {
+        this.selectedProduct.images = updated.images;
+      }
+      this.loadProducts(); // refresca la lista lateral por si la usas
+    },
+    error: (err) => {
+      this.uploadingImages = false;
+      console.error(err);
+      alert('Error al subir las imágenes');
+    },
+  });
+}
+
+deleteImage(imageId: string): void {
+  if (!this.selectedProduct) return;
+  if (!confirm('¿Eliminar esta imagen? Esta acción no se puede deshacer.')) return;
+
+  this.deletingImageId = imageId;
+  const formData = new FormData();
+  formData.append('deleted_images[]', imageId);
+
+  this.adminProductService.manageImages(this.selectedProduct.id, formData).subscribe({
+    next: (updated) => {
+      this.deletingImageId = null;
+      if (this.selectedProduct) {
+        this.selectedProduct.images = updated.images;
+      }
+      this.loadProducts();
+    },
+    error: (err) => {
+      this.deletingImageId = null;
+      console.error(err);
+      alert('Error al eliminar la imagen');
+    },
+  });
+}
+
+imgUrl(path?: string): string {
+  if (!path) return `${environment.STATIC_URL}/images/default-placeholder.jpg`;
+  return `${environment.STATIC_URL}/${path}`;
 }
 
   cancelEdit() {
