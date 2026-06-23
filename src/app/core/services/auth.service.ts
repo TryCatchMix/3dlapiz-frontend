@@ -33,8 +33,8 @@ export class AuthService {
   private loadStoredUser(): void {
     if (this.tokenService.isTokenValid()) {
       //TODO
-      console.log('Token valid, fetching user profile...');
-      console.log('Token:', this.tokenService.getToken());
+      //console.log('Token valid, fetching user profile...');
+      //console.log('Token:', this.tokenService.getToken());
       this.getUserProfile().subscribe({ error: () => /*this.clearSession();*/ null }); //TODO
     }
   }

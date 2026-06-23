@@ -3,15 +3,17 @@
 
   <div *ngIf="cartItems.length === 0" class="text-center py-16">
     <div class="text-6xl mb-4">🛒</div>
-    <h2 class="text-2xl font-semibold mb-4">{{ 'CART.EMPTY_TITLE' | translate }}</h2>
+    <h2 class="text-2xl font-semibold mb-4">
+      {{ "CART.EMPTY_TITLE" | translate }}
+    </h2>
     <p class="text-gray-600 mb-8">
-      {{ 'CART.EMPTY_TEXT' | translate }}
+      {{ "CART.EMPTY_TEXT" | translate }}
     </p>
     <button
       (click)="continueShopping()"
       class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg"
     >
-      {{ 'CART.CONTINUE_SHOPPING' | translate }}
+      {{ "CART.CONTINUE_SHOPPING" | translate }}
     </button>
   </div>
 
@@ -34,14 +36,18 @@
           </div>
           <div class="flex-1">
             <h3 class="font-semibold text-lg">
-  {{ item.name }}
-  <span
-    class="ml-2 text-xs px-2 py-0.5 rounded-full"
-    [ngClass]="item.variant === 'unpainted' ? 'bg-gray-200 text-gray-700' : 'bg-green-100 text-green-700'"
-  >
-    {{ item.variant === 'unpainted' ? 'Sin pintar' : 'Pintada' }}
-  </span>
-</h3>
+              {{ item.name }}
+              <span
+                class="ml-2 text-xs px-2 py-0.5 rounded-full"
+                [ngClass]="
+                  item.variant === 'unpainted'
+                    ? 'bg-gray-200 text-gray-700'
+                    : 'bg-green-100 text-green-700'
+                "
+              >
+                {{ item.variant === "unpainted" ? "Sin pintar" : "Pintada" }}
+              </span>
+            </h3>
             <p class="text-blue-600 font-bold">{{ item.price | priceEur }}</p>
           </div>
           <div class="flex items-center">
@@ -70,7 +76,7 @@
             {{ item.price * item.quantity | priceEur }}
           </div>
           <button
-(click)="removeItem(item)"
+            (click)="removeItem(item)"
             class="text-red-500 hover:text-red-700"
           >
             <span class="text-xl">×</span>
@@ -83,28 +89,30 @@
           (click)="clearCart()"
           class="text-red-500 hover:text-red-700 underline"
         >
-          {{ 'CART.CLEAR_CART' | translate }}
+          {{ "CART.CLEAR_CART" | translate }}
         </button>
       </div>
     </div>
 
     <div class="lg:col-span-1">
       <div class="bg-white rounded-lg shadow-md p-6 sticky top-4">
-        <h2 class="text-xl font-bold mb-4">{{ 'CART.SUMMARY_TITLE' | translate }}</h2>
+        <h2 class="text-xl font-bold mb-4">
+          {{ "CART.SUMMARY_TITLE" | translate }}
+        </h2>
 
         <div class="space-y-3 mb-4">
           <div class="flex justify-between">
-            <span>{{ 'CART.SUBTOTAL' | translate }}</span>
-            <span>${{ cartService.cartTotal() | number : "1.2-2" }}</span>
+            <span>{{ "CART.SUBTOTAL" | translate }}</span>
+            <span>{{ cartService.cartTotal() | priceEur }}</span>
           </div>
           <div class="flex justify-between">
-            <span>{{ 'CART.SHIPPING' | translate }}</span>
-            <span>{{ 'CART.SHIPPING_AT_CHECKOUT' | translate }}</span>
+            <span>{{ "CART.SHIPPING" | translate }}</span>
+            <span>{{ "CART.SHIPPING_AT_CHECKOUT" | translate }}</span>
           </div>
           <div class="border-t pt-3 mt-3">
             <div class="flex justify-between font-bold">
-              <span>{{ 'CART.ESTIMATED_TOTAL' | translate }}</span>
-              <span>${{ cartService.cartTotal() | number : "1.2-2" }}</span>
+              <span>{{ "CART.ESTIMATED_TOTAL" | translate }}</span>
+              <span>{{ cartService.cartTotal() | priceEur }}</span>
             </div>
           </div>
         </div>
@@ -113,14 +121,14 @@
           (click)="proceedToCheckout()"
           class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg mb-4"
         >
-          {{ 'CART.PROCEED_TO_CHECKOUT' | translate }}
+          {{ "CART.PROCEED_TO_CHECKOUT" | translate }}
         </button>
 
         <button
           (click)="continueShopping()"
           class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-6 rounded-lg"
         >
-          {{ 'CART.CONTINUE_SHOPPING' | translate }}
+          {{ "CART.CONTINUE_SHOPPING" | translate }}
         </button>
       </div>
     </div>
