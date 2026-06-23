@@ -3,12 +3,13 @@ import { Order, OrderService } from '../../../core/services/order.service';
 import { Router, RouterModule } from '@angular/router';
 
 import { CommonModule } from '@angular/common';
+import { PriceEurPipe } from '../../../shared/pipes/price-eur.pipe';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-orders-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule],
+  imports: [CommonModule, RouterModule, TranslateModule, PriceEurPipe],
   templateUrl: './orders-list.component.html',
   styleUrls: ['./orders-list.component.scss']
 })

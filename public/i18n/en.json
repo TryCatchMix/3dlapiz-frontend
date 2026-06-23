@@ -127,7 +127,7 @@
   "ERROR_LOADING": "Error loading your orders. Please try again.",
   "RETRY": "Retry",
   "ORDER_NUMBER": "Order #{{ number }}",
-  "PRODUCT_LINE": "Quantity: {{ count }} × ${{ price }}",
+  "PRODUCT_LINE": "Quantity: {{ count }} × {{ price }}",
   "MORE_PRODUCTS": "+ {{ count }} more product(s)",
   "PRODUCTS_COUNT": "{{ count }} product(s)",
   "VIEW_DETAILS": "View details",

@@ -194,7 +194,7 @@
               </div>
             </div>
             <div class="font-semibold">
-              ${{ item.price * item.quantity | number : "1.2-2" }}
+             {{ item.price * item.quantity | priceEur }}
             </div>
           </div>
         </div>

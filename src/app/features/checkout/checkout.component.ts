@@ -11,6 +11,7 @@ import {
 
 import { AuthService } from '../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
+import { PriceEurPipe } from '../../shared/pipes/price-eur.pipe';
 import { ShippingService } from '../../core/services/shipping.service';
 import { StripeService } from '../../core/services/stripe.service';
 import { TranslateModule } from '@ngx-translate/core';
@@ -19,7 +20,7 @@ import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, PriceEurPipe],
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss'],
 })

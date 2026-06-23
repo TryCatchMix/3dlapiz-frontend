@@ -58,7 +58,7 @@
               {{ getStatusLabel(order.status) }}
             </span>
             <span class="text-xl font-bold text-gray-900">
-              ${{ order.total | number: '1.2-2' }}
+              {{ order.total | priceEur }}
             </span>
           </div>
         </div>
@@ -80,11 +80,11 @@
                 {{ item.product?.name || item.product_name }}
               </p>
               <p class="text-sm text-gray-500">
-                {{ 'ORDERS.PRODUCT_LINE' | translate:{ count: item.quantity, price: (item.price | number: '1.2-2') } }}
+              {{ 'ORDERS.PRODUCT_LINE' | translate:{ count: item.quantity, price: (item.price | priceEur) } }}
               </p>
             </div>
             <p class="text-sm font-semibold text-gray-900">
-              ${{ (item.quantity * item.price) | number: '1.2-2' }}
+            {{ item.quantity * item.price | priceEur }}
             </p>
           </div>
 
