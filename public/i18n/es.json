@@ -283,6 +283,40 @@
     "TITLE": "¡Ups, página no encontrada!",
     "MESSAGE": "Parece que te has perdido... pero no te preocupes, siempre puedes volver al inicio.",
     "BUTTON": "Volver al inicio"
+  },
+
+  "PRODUCT_INFO": {
+  "PRODUCT": {
+    "TITLE": "Información del producto",
+    "FINISHES_LABEL": "Acabados",
+    "FINISHES_TEXT": "Disponible en resina base (color blanco/gris para pintar) o pintada a mano. Al ser un proceso artesanal, las piezas pintadas pueden presentar sutiles variaciones o pequeñas imperfecciones.",
+    "ASSEMBLY_LABEL": "Montaje",
+    "ASSEMBLY_TEXT": "La resina es un material delicado de uso decorativo. Para garantizar un transporte seguro, algunas piezas se envían separadas; se requiere pegamento de cianoacrilato (superglue) para su ensamblaje."
+  },
+  "SHIPPING": {
+    "TITLE": "Envíos y aduanas",
+    "USA_LABEL": "Pedidos desde EE.UU.",
+    "USA_TEXT": "Las autoridades aduaneras o la empresa de transporte pueden requerir el pago de una tasa aproximada del 15 % del valor del producto, además de posibles cargos adicionales.",
+    "TRACKING_LABEL": "Seguimiento",
+    "TRACKING_TEXT": "Es responsabilidad del comprador revisar el correo y el teléfono tras el envío. No nos hacemos responsables de la pérdida o destrucción del paquete si no se abonan las tasas aduaneras a tiempo.",
+    "RETURNS_LABEL": "Devoluciones",
+    "RETURNS_TEXT": "En caso de daños durante el transporte, es imprescindible grabar un vídeo del unboxing (abriendo el paquete por primera vez) para poder tramitar cualquier reclamación o reemplazo."
+  },
+  "SAFETY": {
+    "TITLE": "Seguridad y mantenimiento",
+    "INGEST_LABEL": "No ingerir",
+    "INGEST_TEXT": "Mantener fuera del alcance de niños pequeños y mascotas.",
+    "HANDLING_LABEL": "Manipulación",
+    "HANDLING_TEXT": "Evitar golpes o caídas para prevenir roturas.",
+    "CLEANING_LABEL": "Limpieza",
+    "CLEANING_TEXT": "Realizar exclusivamente lavado en seco (limpiar el polvo con un plumón o paño suave sin agua ni productos químicos) para proteger el material y la pintura.",
+    "AGE_LABEL": "Edad recomendada",
+    "AGE_TEXT": "No apto para menores de 14 años (contiene piezas pequeñas o delicadas).",
+    "HEAT_LABEL": "Calor",
+    "HEAT_TEXT": "No exponer a altas temperaturas ni utilizar silicona caliente, ya que deforma la resina.",
+    "GLUE_LABEL": "Pegado",
+    "GLUE_TEXT": "Usar únicamente pegamento de cianoacrilato."
   }
+}
 
 }

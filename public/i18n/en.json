@@ -298,5 +298,38 @@
     "TITLE": "Oops, page not found!",
     "MESSAGE": "Looks like you got lost... but don't worry, you can always go back home.",
     "BUTTON": "Back to home"
+  },
+  "PRODUCT_INFO": {
+  "PRODUCT": {
+    "TITLE": "Product information",
+    "FINISHES_LABEL": "Finishes",
+    "FINISHES_TEXT": "Available in base resin (white/gray for painting) or hand-painted. As this is a handcrafted process, painted pieces may show subtle variations or minor imperfections.",
+    "ASSEMBLY_LABEL": "Assembly",
+    "ASSEMBLY_TEXT": "Resin is a delicate material for decorative use. To ensure safe shipping, some pieces are sent separately; cyanoacrylate glue (superglue) is required for assembly."
+  },
+  "SHIPPING": {
+    "TITLE": "Shipping & customs",
+    "USA_LABEL": "Orders from the U.S.",
+    "USA_TEXT": "Customs authorities or the shipping carrier may require payment of a fee of approximately 15% of the product value, plus possible additional charges.",
+    "TRACKING_LABEL": "Tracking",
+    "TRACKING_TEXT": "It is the buyer's responsibility to check email and phone after shipment. We are not liable for loss or destruction of the package if customs fees are not paid on time.",
+    "RETURNS_LABEL": "Returns",
+    "RETURNS_TEXT": "In case of damage during shipping, it is essential to record an unboxing video (opening the package for the first time) to process any claim or replacement."
+  },
+  "SAFETY": {
+    "TITLE": "Safety & maintenance",
+    "INGEST_LABEL": "Do not ingest",
+    "INGEST_TEXT": "Keep out of reach of small children and pets.",
+    "HANDLING_LABEL": "Handling",
+    "HANDLING_TEXT": "Avoid bumps or drops to prevent breakage.",
+    "CLEANING_LABEL": "Cleaning",
+    "CLEANING_TEXT": "Dry cleaning only (dust with a soft brush or cloth, no water or chemicals) to protect the material and paint.",
+    "AGE_LABEL": "Recommended age",
+    "AGE_TEXT": "Not suitable for children under 14 (contains small or delicate parts).",
+    "HEAT_LABEL": "Heat",
+    "HEAT_TEXT": "Do not expose to high temperatures or use hot glue; resin will deform.",
+    "GLUE_LABEL": "Gluing",
+    "GLUE_TEXT": "Use cyanoacrylate glue only."
   }
+}
 }
