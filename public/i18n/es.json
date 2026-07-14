@@ -1,4 +1,7 @@
 {
+
+
+
   "COMMON": {
     "LANGUAGE": "Idioma",
     "LOADING": "Cargando...",
@@ -116,7 +119,14 @@
     "SHIPPING_CALCULATING": "Calculando…",
     "STRIPE_NOTICE": "Al continuar, serás redirigido a la plataforma segura de Stripe para completar tu pago.",
     "SUBMIT": "Continuar con el pago",
-    "SUBMITTING": "Procesando…"
+    "SUBMITTING": "Procesando…",
+    "DISCOUNT_QUESTION": "¿Tienes un código de descuento?",
+    "DISCOUNT_PLACEHOLDER": "EJEMPLO2026",
+    "DISCOUNT_APPLY": "Aplicar",
+    "DISCOUNT_VALIDATING": "Validando…",
+    "DISCOUNT_REMOVE": "Quitar",
+    "DISCOUNT_APPLIED": "Código {{ code }} aplicado: {{ percentage }}% de descuento",
+    "DISCOUNT_LINE": "Descuento ({{ code }})"
   },
 
   "ORDERS": {
@@ -277,4 +287,5 @@
     "MESSAGE": "Parece que te has perdido... pero no te preocupes, siempre puedes volver al inicio.",
     "BUTTON": "Volver al inicio"
   }
+
 }

@@ -1,4 +1,5 @@
 {
+
   "COMMON": {
     "LANGUAGE": "Language",
     "LOADING": "Loading...",
@@ -116,7 +117,14 @@
   "SHIPPING_CALCULATING": "Calculating…",
   "STRIPE_NOTICE": "By continuing, you will be redirected to Stripe's secure platform to complete your payment.",
   "SUBMIT": "Continue to payment",
-  "SUBMITTING": "Processing…"
+  "SUBMITTING": "Processing…",
+  "DISCOUNT_QUESTION": "Have a discount code?",
+  "DISCOUNT_PLACEHOLDER": "EXAMPLE2026",
+  "DISCOUNT_APPLY": "Apply",
+  "DISCOUNT_VALIDATING": "Validating…",
+  "DISCOUNT_REMOVE": "Remove",
+  "DISCOUNT_APPLIED": "Code {{ code }} applied: {{ percentage }}% off",
+  "DISCOUNT_LINE": "Discount ({{ code }})"
 },
 
  "ORDERS": {
