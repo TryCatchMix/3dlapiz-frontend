@@ -21,7 +21,6 @@ export class ProductCardComponent {
 
   addToCart(product: Product): void {
     this.cartService.addToCart(product);
-    alert(`${product.name} añadido al carrito`);
   }
 
   goToProductDetails() {
