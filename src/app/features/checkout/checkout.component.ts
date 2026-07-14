@@ -1,37 +1,59 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { CartItem, CartService } from '../../core/services/cart.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CountryOption, getCountryOptions } from '../../shared/utils/countries.util';
 import {
   FormBuilder,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 
 import { AuthService } from '../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { PriceEurPipe } from '../../shared/pipes/price-eur.pipe';
 import { ShippingService } from '../../core/services/shipping.service';
 import { StripeService } from '../../core/services/stripe.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { environment } from '../../../environments/environment';
 
+interface AppliedDiscount {
+  code: string;
+  percentage: number;
+  discount_amount: number;
+}
+
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule, PriceEurPipe],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    TranslateModule,
+    PriceEurPipe,
+  ],
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss'],
 })
 export class CheckoutComponent implements OnInit {
+  private http = inject(HttpClient);
+
   countries: CountryOption[] = getCountryOptions();
-shippingPrice = 0;
-isLoadingShipping = false;
+  shippingPrice = 0;
+  isLoadingShipping = false;
   cartItems: CartItem[] = [];
   shippingForm!: FormGroup;
   currentStep = 1;
   isSubmitting = false;
+
+  // Descuento
+  discountCode = '';
+  appliedDiscount: AppliedDiscount | null = null;
+  validatingDiscount = false;
+  discountError = '';
 
   selectedShippingMethod = {
     id: 1,
@@ -55,15 +77,15 @@ isLoadingShipping = false;
     },
   ];
 
- constructor(
-  public cartService: CartService,
-  private authService: AuthService,
-  private stripeService: StripeService,
-  private shippingService: ShippingService,
-  private fb: FormBuilder,
-  private router: Router,
-  private route: ActivatedRoute
-) {}
+  constructor(
+    public cartService: CartService,
+    private authService: AuthService,
+    private stripeService: StripeService,
+    private shippingService: ShippingService,
+    private fb: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {}
 
   ngOnInit(): void {
     if (!this.authService.isLoggedIn()) {
@@ -90,42 +112,91 @@ isLoadingShipping = false;
   }
 
   private initShippingForm(): void {
-  const user = this.authService.currentUser();
+    const user = this.authService.currentUser();
 
-  this.shippingForm = this.fb.group({
-    fullName: [user ? `${user.first_name} ${user.last_name}` : '', Validators.required],
-    email: [user?.email || '', [Validators.required, Validators.email]],
-    address: [user?.street || '', Validators.required],
-    city: [user?.city || '', Validators.required],
-    postalCode: [user?.postal_code || '', Validators.required],
-    country_code: [user?.country_code?.toUpperCase() || 'ES', [Validators.required, Validators.pattern(/^[A-Z]{2}$/)]],
-    phone: [user?.phone_number || '', [Validators.required, Validators.pattern(/^\d{9}$/)]],
-  });
+    this.shippingForm = this.fb.group({
+      fullName: [
+        user ? `${user.first_name} ${user.last_name}` : '',
+        Validators.required,
+      ],
+      email: [user?.email || '', [Validators.required, Validators.email]],
+      address: [user?.street || '', Validators.required],
+      city: [user?.city || '', Validators.required],
+      postalCode: [user?.postal_code || '', Validators.required],
+      country_code: [
+        user?.country_code?.toUpperCase() || 'ES',
+        [Validators.required, Validators.pattern(/^[A-Z]{2}$/)],
+      ],
+      phone: [
+        user?.phone_number || '',
+        [Validators.required, Validators.pattern(/^\d{9}$/)],
+      ],
+    });
 
-  // Calcular precio inicial y al cambiar país
-  this.recalcShipping(this.shippingForm.value.country_code);
-  this.shippingForm.get('country_code')!.valueChanges.subscribe((code) => {
-    this.recalcShipping(code);
-  });
-}
+    // Calcular precio inicial y al cambiar país
+    this.recalcShipping(this.shippingForm.value.country_code);
+    this.shippingForm.get('country_code')!.valueChanges.subscribe((code) => {
+      this.recalcShipping(code);
+    });
+  }
 
-private recalcShipping(code: string | null): void {
-  if (!code) { this.shippingPrice = 0; return; }
-  this.isLoadingShipping = true;
-  this.shippingService.calculate(code).subscribe((quote) => {
-    this.shippingPrice = quote.price;
-    this.isLoadingShipping = false;
-  });
-}
+  private recalcShipping(code: string | null): void {
+    if (!code) {
+      this.shippingPrice = 0;
+      return;
+    }
+    this.isLoadingShipping = true;
+    this.shippingService.calculate(code).subscribe((quote) => {
+      this.shippingPrice = quote.price;
+      this.isLoadingShipping = false;
+    });
+  }
 
-getTotal(): number {
-  return this.cartService.cartTotal() + this.shippingPrice;
-}
+  // ---- Descuento ----
+
+  applyDiscount(): void {
+    const code = this.discountCode.trim().toUpperCase();
+    if (!code) return;
+
+    this.validatingDiscount = true;
+    this.discountError = '';
+
+    this.http
+      .post<AppliedDiscount>(`${environment.API_URL}/discounts/validate`, {
+        code,
+        subtotal: this.cartService.cartTotal(),
+      })
+      .subscribe({
+        next: (res) => {
+          this.appliedDiscount = res;
+          this.validatingDiscount = false;
+        },
+        error: (err) => {
+          this.discountError = err.error?.message ?? 'Código no válido';
+          this.validatingDiscount = false;
+        },
+      });
+  }
+
+  removeDiscount(): void {
+    this.appliedDiscount = null;
+    this.discountCode = '';
+    this.discountError = '';
+  }
+
+  // ---- Totales ----
+
+  getTotal(): number {
+    const subtotal = this.cartService.cartTotal();
+    const discount = this.appliedDiscount?.discount_amount ?? 0;
+    return Math.max(0, subtotal - discount + this.shippingPrice);
+  }
+
+  // ---- Métodos existentes ----
 
   selectShippingMethod(method: any): void {
     this.selectedShippingMethod = method;
   }
-
 
   nextStep(): void {
     if (this.shippingForm.valid) {
@@ -136,31 +207,35 @@ getTotal(): number {
   }
 
   proceedToStripeCheckout(): void {
-  this.isSubmitting = true;
+    this.isSubmitting = true;
 
-  const orderData = {
-    shipping_info: this.shippingForm.value, // contiene country_code
-    items: this.cartItems.map((item) => ({
-      product_id: item.id,
-      quantity: item.quantity,
-      variant: item.variant,
-    })),
-  };
+    const orderData = {
+      shipping_info: this.shippingForm.value,
+      items: this.cartItems.map((item) => ({
+        product_id: item.id,
+        quantity: item.quantity,
+        variant: item.variant,
+      })),
+      discount_code: this.appliedDiscount?.code ?? null,
+    };
 
-  this.stripeService.createPaymentSession(orderData).subscribe({
-    next: async (response) => {
-      this.isSubmitting = false;
-      if (response?.session_id) {
-        const result = await this.stripeService.redirectToCheckout(response.session_id);
-        if (result?.error) console.error('Error al redirigir a Stripe:', result.error);
-      }
-    },
-    error: (err) => {
-      this.isSubmitting = false;
-      console.error('Error al crear la sesión de pago', err);
-    },
-  });
-}
+    this.stripeService.createPaymentSession(orderData).subscribe({
+      next: async (response) => {
+        this.isSubmitting = false;
+        if (response?.session_id) {
+          const result = await this.stripeService.redirectToCheckout(
+            response.session_id,
+          );
+          if (result?.error) console.error('Error al redirigir a Stripe:', result.error);
+        }
+      },
+      error: (err) => {
+        this.isSubmitting = false;
+        console.error('Error al crear la sesión de pago', err);
+      },
+    });
+  }
+
   private confirmPayment(sessionId: string): void {
     this.isSubmitting = true;
 
@@ -188,7 +263,7 @@ getTotal(): number {
   }
 
   imgUrl(path?: string): string {
-  if (!path) return `${environment.STATIC_URL}/images/default-placeholder.jpg`;
-  return `${environment.STATIC_URL}/${path}`;
-}
+    if (!path) return `${environment.STATIC_URL}/images/default-placeholder.jpg`;
+    return `${environment.STATIC_URL}/${path}`;
+  }
 }

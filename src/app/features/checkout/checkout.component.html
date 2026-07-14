@@ -1,31 +1,52 @@
 <div class="max-w-7xl mx-auto px-4 py-8">
-  <h1 class="text-3xl font-bold mb-8 text-blue-600">{{ 'CHECKOUT.TITLE' | translate }}</h1>
+  <h1 class="text-3xl font-bold mb-8 text-blue-600">
+    {{ "CHECKOUT.TITLE" | translate }}
+  </h1>
+
   <div class="flex justify-between mb-8">
     <div class="flex flex-col items-center">
-      <div class="w-10 h-10 flex items-center justify-center rounded-full bg-blue-600 text-white">
+      <div
+        class="w-10 h-10 flex items-center justify-center rounded-full bg-blue-600 text-white"
+      >
         1
       </div>
-      <span class="mt-2 text-sm">{{ 'CHECKOUT.STEP_SHIPPING' | translate }}</span>
+      <span class="mt-2 text-sm">{{
+        "CHECKOUT.STEP_SHIPPING" | translate
+      }}</span>
     </div>
     <div class="flex-1 border-t border-gray-300 self-center mx-4"></div>
     <div class="flex flex-col items-center">
-      <div class="w-10 h-10 flex items-center justify-center rounded-full bg-blue-100 text-blue-600">
+      <div
+        class="w-10 h-10 flex items-center justify-center rounded-full bg-blue-100 text-blue-600"
+      >
         2
       </div>
-      <span class="mt-2 text-sm">{{ 'CHECKOUT.STEP_PAYMENT' | translate }}</span>
+      <span class="mt-2 text-sm">{{
+        "CHECKOUT.STEP_PAYMENT" | translate
+      }}</span>
     </div>
   </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- FORMULARIO DE ENVÍO (sin cambios) -->
     <div class="lg:col-span-2">
       <div class="bg-white rounded-lg shadow-md p-6">
-        <h2 class="text-xl font-bold mb-4">{{ 'CHECKOUT.SHIPPING_TITLE' | translate }}</h2>
+        <h2 class="text-xl font-bold mb-4">
+          {{ "CHECKOUT.SHIPPING_TITLE" | translate }}
+        </h2>
 
-        <form [formGroup]="shippingForm" (ngSubmit)="nextStep()" class="space-y-4">
+        <form
+          [formGroup]="shippingForm"
+          (ngSubmit)="nextStep()"
+          class="space-y-4"
+        >
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label for="fullName" class="block text-sm font-medium text-gray-700 mb-1">
-                {{ 'CHECKOUT.FIELD_FULL_NAME' | translate }}
+              <label
+                for="fullName"
+                class="block text-sm font-medium text-gray-700 mb-1"
+              >
+                {{ "CHECKOUT.FIELD_FULL_NAME" | translate }}
               </label>
               <input
                 type="text"
@@ -34,16 +55,22 @@
                 class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <div
-                *ngIf="shippingForm.get('fullName')?.invalid && shippingForm.get('fullName')?.touched"
+                *ngIf="
+                  shippingForm.get('fullName')?.invalid &&
+                  shippingForm.get('fullName')?.touched
+                "
                 class="text-red-500 text-sm mt-1"
               >
-                {{ 'CHECKOUT.ERROR_FULL_NAME_REQUIRED' | translate }}
+                {{ "CHECKOUT.ERROR_FULL_NAME_REQUIRED" | translate }}
               </div>
             </div>
 
             <div>
-              <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
-                {{ 'CHECKOUT.FIELD_EMAIL' | translate }}
+              <label
+                for="email"
+                class="block text-sm font-medium text-gray-700 mb-1"
+              >
+                {{ "CHECKOUT.FIELD_EMAIL" | translate }}
               </label>
               <input
                 type="email"
@@ -52,17 +79,23 @@
                 class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <div
-                *ngIf="shippingForm.get('email')?.invalid && shippingForm.get('email')?.touched"
+                *ngIf="
+                  shippingForm.get('email')?.invalid &&
+                  shippingForm.get('email')?.touched
+                "
                 class="text-red-500 text-sm mt-1"
               >
-                {{ 'CHECKOUT.ERROR_EMAIL_REQUIRED' | translate }}
+                {{ "CHECKOUT.ERROR_EMAIL_REQUIRED" | translate }}
               </div>
             </div>
           </div>
 
           <div>
-            <label for="address" class="block text-sm font-medium text-gray-700 mb-1">
-              {{ 'CHECKOUT.FIELD_ADDRESS' | translate }}
+            <label
+              for="address"
+              class="block text-sm font-medium text-gray-700 mb-1"
+            >
+              {{ "CHECKOUT.FIELD_ADDRESS" | translate }}
             </label>
             <input
               type="text"
@@ -71,17 +104,23 @@
               class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <div
-              *ngIf="shippingForm.get('address')?.invalid && shippingForm.get('address')?.touched"
+              *ngIf="
+                shippingForm.get('address')?.invalid &&
+                shippingForm.get('address')?.touched
+              "
               class="text-red-500 text-sm mt-1"
             >
-              {{ 'CHECKOUT.ERROR_ADDRESS_REQUIRED' | translate }}
+              {{ "CHECKOUT.ERROR_ADDRESS_REQUIRED" | translate }}
             </div>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label for="city" class="block text-sm font-medium text-gray-700 mb-1">
-                {{ 'CHECKOUT.FIELD_CITY' | translate }}
+              <label
+                for="city"
+                class="block text-sm font-medium text-gray-700 mb-1"
+              >
+                {{ "CHECKOUT.FIELD_CITY" | translate }}
               </label>
               <input
                 type="text"
@@ -90,16 +129,22 @@
                 class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <div
-                *ngIf="shippingForm.get('city')?.invalid && shippingForm.get('city')?.touched"
+                *ngIf="
+                  shippingForm.get('city')?.invalid &&
+                  shippingForm.get('city')?.touched
+                "
                 class="text-red-500 text-sm mt-1"
               >
-                {{ 'CHECKOUT.ERROR_CITY_REQUIRED' | translate }}
+                {{ "CHECKOUT.ERROR_CITY_REQUIRED" | translate }}
               </div>
             </div>
 
             <div>
-              <label for="postalCode" class="block text-sm font-medium text-gray-700 mb-1">
-                {{ 'CHECKOUT.FIELD_POSTAL_CODE' | translate }}
+              <label
+                for="postalCode"
+                class="block text-sm font-medium text-gray-700 mb-1"
+              >
+                {{ "CHECKOUT.FIELD_POSTAL_CODE" | translate }}
               </label>
               <input
                 type="text"
@@ -108,36 +153,50 @@
                 class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <div
-                *ngIf="shippingForm.get('postalCode')?.invalid && shippingForm.get('postalCode')?.touched"
+                *ngIf="
+                  shippingForm.get('postalCode')?.invalid &&
+                  shippingForm.get('postalCode')?.touched
+                "
                 class="text-red-500 text-sm mt-1"
               >
-                {{ 'CHECKOUT.ERROR_POSTAL_CODE_REQUIRED' | translate }}
+                {{ "CHECKOUT.ERROR_POSTAL_CODE_REQUIRED" | translate }}
               </div>
             </div>
 
             <div>
-              <label for="country_code" class="block text-sm font-medium text-gray-700 mb-1">
-                {{ 'CHECKOUT.FIELD_COUNTRY' | translate }}
+              <label
+                for="country_code"
+                class="block text-sm font-medium text-gray-700 mb-1"
+              >
+                {{ "CHECKOUT.FIELD_COUNTRY" | translate }}
               </label>
               <select
                 id="country_code"
                 formControlName="country_code"
                 class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option *ngFor="let c of countries" [value]="c.code">{{ c.name }}</option>
+                <option *ngFor="let c of countries" [value]="c.code">
+                  {{ c.name }}
+                </option>
               </select>
               <div
-                *ngIf="shippingForm.get('country_code')?.invalid && shippingForm.get('country_code')?.touched"
+                *ngIf="
+                  shippingForm.get('country_code')?.invalid &&
+                  shippingForm.get('country_code')?.touched
+                "
                 class="text-red-500 text-sm mt-1"
               >
-                {{ 'CHECKOUT.ERROR_COUNTRY_REQUIRED' | translate }}
+                {{ "CHECKOUT.ERROR_COUNTRY_REQUIRED" | translate }}
               </div>
             </div>
           </div>
 
           <div>
-            <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">
-              {{ 'CHECKOUT.FIELD_PHONE' | translate }}
+            <label
+              for="phone"
+              class="block text-sm font-medium text-gray-700 mb-1"
+            >
+              {{ "CHECKOUT.FIELD_PHONE" | translate }}
             </label>
             <input
               type="tel"
@@ -146,10 +205,13 @@
               class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <div
-              *ngIf="shippingForm.get('phone')?.invalid && shippingForm.get('phone')?.touched"
+              *ngIf="
+                shippingForm.get('phone')?.invalid &&
+                shippingForm.get('phone')?.touched
+              "
               class="text-red-500 text-sm mt-1"
             >
-              {{ 'CHECKOUT.ERROR_PHONE_REQUIRED' | translate }}
+              {{ "CHECKOUT.ERROR_PHONE_REQUIRED" | translate }}
             </div>
           </div>
 
@@ -166,59 +228,158 @@
                   fill="none"
                   viewBox="0 0 24 24"
                 >
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
                 </svg>
-                {{ 'CHECKOUT.SUBMITTING' | translate }}
+                {{ "CHECKOUT.SUBMITTING" | translate }}
               </span>
-              <span *ngIf="!isSubmitting">{{ 'CHECKOUT.SUBMIT' | translate }}</span>
+              <span *ngIf="!isSubmitting">{{
+                "CHECKOUT.SUBMIT" | translate
+              }}</span>
             </button>
           </div>
         </form>
       </div>
     </div>
 
+    <!-- RESUMEN DEL PEDIDO -->
     <div class="lg:col-span-1">
       <div class="bg-white rounded-lg shadow-md p-6 sticky top-4">
-        <h2 class="text-xl font-bold mb-4">{{ 'CHECKOUT.ORDER_SUMMARY' | translate }}</h2>
+        <h2 class="text-xl font-bold mb-4">
+          {{ "CHECKOUT.ORDER_SUMMARY" | translate }}
+        </h2>
 
+        <!-- Items del carrito -->
         <div class="max-h-64 overflow-y-auto mb-4">
-          <div *ngFor="let item of cartItems" class="flex items-center py-3 border-b">
+          <div
+            *ngFor="let item of cartItems"
+            class="flex items-center py-3 border-b"
+          >
             <div class="w-16 h-16 mr-4">
-              <img [src]="imgUrl(item.image_url)" [alt]="item.name" class="w-full h-full object-cover rounded" />
+              <img
+                [src]="imgUrl(item.image_url)"
+                [alt]="item.name"
+                class="w-full h-full object-cover rounded"
+              />
             </div>
             <div class="flex-1">
               <h4 class="font-medium">{{ item.name }}</h4>
               <div class="text-sm text-gray-600">
-                {{ 'CHECKOUT.QUANTITY_SHORT' | translate:{ count: item.quantity } }}
+                {{
+                  "CHECKOUT.QUANTITY_SHORT"
+                    | translate: { count: item.quantity }
+                }}
               </div>
             </div>
             <div class="font-semibold">
-             {{ item.price * item.quantity | priceEur }}
+              {{ item.price * item.quantity | priceEur }}
             </div>
           </div>
         </div>
 
+        <!-- ✅ CÓDIGO DE DESCUENTO -->
+        <div class="mb-4 p-3 bg-gray-50 rounded-lg">
+          <label class="block text-sm font-medium mb-2">
+            {{ "CHECKOUT.DISCOUNT_QUESTION" | translate }}
+          </label>
+          <div class="flex gap-2">
+            <input
+              type="text"
+              [(ngModel)]="discountCode"
+              [placeholder]="'CHECKOUT.DISCOUNT_PLACEHOLDER' | translate"
+              class="flex-1 border rounded p-2 uppercase text-sm"
+              [disabled]="!!appliedDiscount"
+            />
+            <button
+              *ngIf="!appliedDiscount"
+              type="button"
+              (click)="applyDiscount()"
+              [disabled]="validatingDiscount || !discountCode"
+              class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm disabled:opacity-50"
+            >
+              {{
+                validatingDiscount
+                  ? ("CHECKOUT.DISCOUNT_VALIDATING" | translate)
+                  : ("CHECKOUT.DISCOUNT_APPLY" | translate)
+              }}
+            </button>
+            <button
+              *ngIf="appliedDiscount"
+              type="button"
+              (click)="removeDiscount()"
+              class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded text-sm"
+            >
+              {{ "CHECKOUT.DISCOUNT_REMOVE" | translate }}
+            </button>
+          </div>
+
+          <p *ngIf="discountError" class="text-red-600 text-xs mt-2">
+            {{ discountError }}
+          </p>
+
+          <p *ngIf="appliedDiscount" class="text-green-700 text-xs mt-2">
+            ✅
+            {{
+              "CHECKOUT.DISCOUNT_APPLIED"
+                | translate
+                  : {
+                      code: appliedDiscount.code,
+                      percentage: appliedDiscount.percentage,
+                    }
+            }}
+          </p>
+        </div>
+
+        <!-- Totales -->
         <div class="space-y-3 mb-4">
           <div class="flex justify-between">
-            <span>{{ 'CHECKOUT.SUBTOTAL' | translate }}</span>
-            <span>${{ cartService.cartTotal() | number : "1.2-2" }}</span>
+            <span>{{ "CHECKOUT.SUBTOTAL" | translate }}</span>
+            <span>{{ cartService.cartTotal() | priceEur }}</span>
           </div>
+
+          <!-- ⬇️ NUEVO: línea del descuento -->
+          <div
+            *ngIf="appliedDiscount"
+            class="flex justify-between text-green-700"
+          >
+            <span>{{
+              "CHECKOUT.DISCOUNT_LINE"
+                | translate: { code: appliedDiscount.code }
+            }}</span>
+            <span>−{{ appliedDiscount.discount_amount | priceEur }}</span>
+          </div>
+
           <div class="flex justify-between">
-            <span>{{ 'CHECKOUT.SHIPPING' | translate }}</span>
-            <span *ngIf="!isLoadingShipping">€{{ shippingPrice | number:'1.2-2' }}</span>
-            <span *ngIf="isLoadingShipping" class="text-gray-400">{{ 'CHECKOUT.SHIPPING_CALCULATING' | translate }}</span>
+            <span>{{ "CHECKOUT.SHIPPING" | translate }}</span>
+            <span *ngIf="!isLoadingShipping">{{
+              shippingPrice | priceEur
+            }}</span>
+            <span *ngIf="isLoadingShipping" class="text-gray-400">
+              {{ "CHECKOUT.SHIPPING_CALCULATING" | translate }}
+            </span>
           </div>
+
           <div class="border-t pt-3 mt-3">
             <div class="flex justify-between font-bold">
-              <span>{{ 'CHECKOUT.TOTAL' | translate }}</span>
-              <span>${{ getTotal() | number : "1.2-2" }}</span>
+              <span>{{ "CHECKOUT.TOTAL" | translate }}</span>
+              <span>{{ getTotal() | priceEur }}</span>
             </div>
           </div>
         </div>
 
         <div class="text-sm text-gray-600 mt-4 p-3 bg-gray-50 rounded-lg">
-          <p>{{ 'CHECKOUT.STRIPE_NOTICE' | translate }}</p>
+          <p>{{ "CHECKOUT.STRIPE_NOTICE" | translate }}</p>
         </div>
       </div>
     </div>

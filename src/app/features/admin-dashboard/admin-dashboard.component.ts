@@ -30,7 +30,12 @@ export class AdminDashboardComponent {
       icon: '✏️',
       route: '/admin/product-edit',
     },
-      { title: 'Delete Product',  description: 'Remove products from catalog',       icon: '🗑️',  route: '/admin/product-delete' },
+    {
+      title: 'Delete Product',
+      description: 'Remove products from catalog',
+      icon: '🗑️',
+      route: '/admin/product-delete',
+    },
     {
       title: 'Precios de envío',
       description: 'Configura el precio del envío por país',
@@ -42,6 +47,12 @@ export class AdminDashboardComponent {
       description: 'Ver pedidos y gestionar envíos',
       icon: '📦',
       route: '/admin/orders',
+    },
+    {
+      title: 'Códigos de descuento',
+      description: 'Crea y gestiona cupones para tus clientes',
+      icon: '🎟️',
+      route: '/admin/discounts',
     },
   ];
 }

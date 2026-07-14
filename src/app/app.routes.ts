@@ -159,6 +159,13 @@ export const routes: Routes = [
             (m) => m.AdminShippingRatesComponent,
           ),
       },
+      {
+        path: 'discounts',
+        loadComponent: () =>
+          import('./features/admin-discounts/admin-discounts.component').then(
+            (m) => m.AdminDiscountsComponent,
+          ),
+      },
     ],
   },
   {
