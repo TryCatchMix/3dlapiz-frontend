@@ -8,7 +8,7 @@ import { PriceEurPipe } from '../../../shared/pipes/price-eur.pipe';
 import { Product } from '../../../core/models/product.model';
 import { ProductService } from '../../../core/services/product.service';
 import { TranslateModule } from '@ngx-translate/core';
-import { environment } from '../../../../environments/environment.staging';
+import { environment } from '../../../../environments/environment';
 
 const YOUTUBE_REGEX =
   /^https:\/\/(?:www\.|m\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)[A-Za-z0-9_-]{11}(?:[?&][\w=\-&%.]*)?$/;
