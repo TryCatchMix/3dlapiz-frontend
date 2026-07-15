@@ -312,7 +312,7 @@
     "USA_LABEL": "Orders from the U.S.",
     "USA_TEXT": "Customs authorities or the shipping carrier may require payment of a fee of approximately 15% of the product value, plus possible additional charges.",
     "TRACKING_LABEL": "Tracking",
-    "TRACKING_TEXT": "It is the buyer's responsibility to check email and phone after shipment. We are not liable for loss or destruction of the package if customs fees are not paid on time.",
+   "TRACKING_TEXT": "It is the buyer's responsibility to check their email and phone after shipping. We are not responsible for the loss or destruction of the package if customs fees are not paid on time. Orders take 5 to 7 weeks to be made, and shipping takes 2 to 7 days to arrive.",
     "RETURNS_LABEL": "Returns",
     "RETURNS_TEXT": "In case of damage during shipping, it is essential to record an unboxing video (opening the package for the first time) to process any claim or replacement."
   },
