@@ -1,7 +1,10 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { CartItem, CartService } from '../../core/services/cart.service';
 import { Component, OnInit, inject } from '@angular/core';
-import { CountryOption, getCountryOptions } from '../../shared/utils/countries.util';
+import {
+  CountryOption,
+  getCountryOptions,
+} from '../../shared/utils/countries.util';
 import {
   FormBuilder,
   FormGroup,
@@ -129,7 +132,7 @@ export class CheckoutComponent implements OnInit {
       ],
       phone: [
         user?.phone_number || '',
-        [Validators.required, Validators.pattern(/^\d{9}$/)],
+        [Validators.required, Validators.pattern(/^\+?[\d\s\-().]{7,20}$/)],
       ],
     });
 
@@ -226,7 +229,8 @@ export class CheckoutComponent implements OnInit {
           const result = await this.stripeService.redirectToCheckout(
             response.session_id,
           );
-          if (result?.error) console.error('Error al redirigir a Stripe:', result.error);
+          if (result?.error)
+            console.error('Error al redirigir a Stripe:', result.error);
         }
       },
       error: (err) => {
@@ -263,7 +267,8 @@ export class CheckoutComponent implements OnInit {
   }
 
   imgUrl(path?: string): string {
-    if (!path) return `${environment.STATIC_URL}/images/default-placeholder.jpg`;
+    if (!path)
+      return `${environment.STATIC_URL}/images/default-placeholder.jpg`;
     return `${environment.STATIC_URL}/${path}`;
   }
 }
