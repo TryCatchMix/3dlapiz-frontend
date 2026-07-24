@@ -14,13 +14,14 @@ export class AdminOrdersService {
       page?: number;
       per_page?: number;
       status?: string;
+      variant?: string;
       search?: string;
-    } = {},
+    } = {}
   ): Observable<any> {
     let httpParams = new HttpParams();
-    Object.entries(params).forEach(([k, v]) => {
-      if (v !== undefined && v !== null && v !== '') {
-        httpParams = httpParams.set(k, String(v));
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== '') {
+        httpParams = httpParams.set(key, String(value));
       }
     });
     return this.http.get(`${this.apiUrl}/admin/orders`, { params: httpParams });
@@ -29,7 +30,7 @@ export class AdminOrdersService {
   setTracking(
     id: string,
     tracking_number: string,
-    shipping_carrier: string,
+    shipping_carrier: string
   ): Observable<any> {
     return this.http.patch(`${this.apiUrl}/admin/orders/${id}/tracking`, {
       tracking_number,

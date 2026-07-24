@@ -38,6 +38,16 @@ import { Router } from '@angular/router';
         </select>
 
         <select
+          [(ngModel)]="variant"
+          (ngModelChange)="applyFilters()"
+          class="border rounded p-2"
+        >
+          <option value="">Cualquier acabado</option>
+          <option value="unpainted">Con figuras sin pintar</option>
+          <option value="painted">Con figuras pintadas</option>
+        </select>
+
+        <select
           [ngModel]="perPage"
           (ngModelChange)="changePageSize($event)"
           class="border rounded p-2"
@@ -57,6 +67,7 @@ import { Router } from '@angular/router';
               <th class="p-3">Nº</th>
               <th class="p-3">Cliente</th>
               <th class="p-3">Total</th>
+              <th class="p-3">Acabado</th>
               <th class="p-3">Estado</th>
               <th class="p-3">Tracking</th>
               <th class="p-3">Acciones</th>
@@ -76,6 +87,23 @@ import { Router } from '@angular/router';
                 </div>
               </td>
               <td class="p-3">{{ o.total }} €</td>
+              <td class="p-3">
+                <div class="flex flex-wrap gap-1">
+                  <span
+                    *ngFor="let f of finishes(o)"
+                    class="px-2 py-0.5 rounded text-xs whitespace-nowrap"
+                    [ngClass]="f.cls"
+                    [title]="f.title"
+                  >
+                    {{ f.label }}<span *ngIf="f.count > 1"> ×{{ f.count }}</span>
+                  </span>
+                  <span
+                    *ngIf="finishes(o).length === 0"
+                    class="text-gray-400 text-xs"
+                    >—</span
+                  >
+                </div>
+              </td>
               <td class="p-3">
                 <span
                   class="px-2 py-1 rounded text-xs"
@@ -110,7 +138,7 @@ import { Router } from '@angular/router';
           </tbody>
         </table>
 
-        <!-- Estados vacíos / carga -->
+        <!-- Estados de carga / vacío -->
         <div *ngIf="loading" class="p-4 text-center text-gray-500">Cargando…</div>
         <div
           *ngIf="!loading && orders.length === 0"
@@ -204,6 +232,7 @@ export class AdminOrdersComponent implements OnInit, OnDestroy {
 
   // filtros
   status = '';
+  variant = '';
   search = '';
   private searchTimer: any;
 
@@ -227,6 +256,7 @@ export class AdminOrdersComponent implements OnInit, OnDestroy {
         page: this.page,
         per_page: this.perPage,
         status: this.status || undefined,
+        variant: this.variant || undefined,
         search: this.search.trim() || undefined,
       })
       .subscribe({
@@ -267,6 +297,62 @@ export class AdminOrdersComponent implements OnInit, OnDestroy {
 
   trackById(_: number, o: any) {
     return o.id;
+  }
+
+  /**
+   * Agrupa las líneas del pedido por acabado para el resumen del listado.
+   * "Sin pintar" va primero porque es lo que cambia la preparación en taller.
+   * Cualquier variante que no sea painted/unpainted se marca en rojo: es un
+   * dato corrupto y no debe pasar desapercibido.
+   */
+  finishes(o: any): { label: string; count: number; cls: string; title: string }[] {
+    const items: any[] = o?.items ?? [];
+    const out: { label: string; count: number; cls: string; title: string }[] = [];
+
+    const sum = (variant: string) =>
+      items
+        .filter((i) => i.variant === variant)
+        .reduce((s, i) => s + Number(i.quantity ?? 0), 0);
+
+    const names = (variant: string) =>
+      items
+        .filter((i) => i.variant === variant)
+        .map((i) => `${i.quantity}× ${i.product_name}`)
+        .join('\n');
+
+    const unpainted = sum('unpainted');
+    const painted = sum('painted');
+
+    if (unpainted > 0) {
+      out.push({
+        label: 'Sin pintar',
+        count: unpainted,
+        cls: 'bg-amber-100 text-amber-900 font-semibold',
+        title: names('unpainted'),
+      });
+    }
+    if (painted > 0) {
+      out.push({
+        label: 'Pintada',
+        count: painted,
+        cls: 'bg-green-100 text-green-800',
+        title: names('painted'),
+      });
+    }
+
+    const raros = items.filter(
+      (i) => i.variant !== 'painted' && i.variant !== 'unpainted'
+    );
+    if (raros.length > 0) {
+      out.push({
+        label: '⚠ Variante desconocida',
+        count: raros.length,
+        cls: 'bg-red-100 text-red-800 font-semibold',
+        title: raros.map((i) => `${i.product_name}: "${i.variant}"`).join('\n'),
+      });
+    }
+
+    return out;
   }
 
   openTracking(o: any) {
