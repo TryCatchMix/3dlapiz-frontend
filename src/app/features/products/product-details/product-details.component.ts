@@ -153,7 +153,7 @@ export class ProductDetailsComponent implements OnInit {
     }
 
     for (let i = 0; i < this.quantity; i++) {
-      this.cartService.addToCart(this.product, this.selectedVariant);
+      this.cartService.addToCart(this.product, this.selectedVariant, this.quantity);
     }
     this.added = true;
     setTimeout(() => (this.added = false), 1800);

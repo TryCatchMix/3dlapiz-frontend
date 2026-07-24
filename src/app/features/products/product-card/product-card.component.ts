@@ -19,16 +19,38 @@ export class ProductCardComponent {
 
   constructor(private router: Router, private cartService: CartService) {}
 
-  addToCart(product: Product): void {
-    this.cartService.addToCart(product);
+  /** El producto se ofrece también sin pintar → hay que elegir acabado. */
+  get hasUnpaintedOption(): boolean {
+    return (
+      this.product?.unpainted_price != null &&
+      String(this.product.unpainted_price).trim() !== ''
+    );
   }
 
-  goToProductDetails() {
+  get isOutOfStock(): boolean {
+    return !this.product || this.product.stock <= 0;
+  }
+
+  onCtaClick(event: Event): void {
+    event.stopPropagation();
+
+    if (this.isOutOfStock) return;
+
+    // Si hay dos acabados, la elección es del cliente, no nuestra.
+    if (this.hasUnpaintedOption) {
+      this.goToProductDetails();
+      return;
+    }
+
+    this.cartService.addToCart(this.product, 'painted', 1);
+  }
+
+  goToProductDetails(): void {
     this.router.navigate(['/product', this.product.id]);
   }
 
   imgUrl(path?: string): string {
-  if (!path) return `${environment.STATIC_URL}/images/default-placeholder.jpg`;
-  return `${environment.STATIC_URL}/${path}`;
-}
+    if (!path) return `${environment.STATIC_URL}/images/default-placeholder.jpg`;
+    return `${environment.STATIC_URL}/${path}`;
+  }
 }

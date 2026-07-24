@@ -48,6 +48,7 @@
   },
 
   "PRODUCTS": {
+    "CHOOSE_FINISH": "Elegir acabado",
     "DESCRIPTION": "Descubre nuestras adorables figuras 3D, hechas con amor especialmente para ti",
     "LIST_TITLE": "Nuestros Productos",
     "LIST_SUBTITLE": "Descubre nuestras adorables figuras 3D, hechas con amor especialmente para ti",
@@ -318,5 +319,4 @@
     "GLUE_TEXT": "Usar únicamente pegamento de cianoacrilato."
   }
 }
-
 }

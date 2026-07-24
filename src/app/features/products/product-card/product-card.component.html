@@ -103,23 +103,30 @@
       </p>
     </div>
 
-    <button
-      (click)="addToCart(product); $event.stopPropagation()"
-      class="
-        mt-3 sm:mt-4 w-full
-        bg-primaryBg
-        hover:bg-primaryHover
-        text-black
-        font-bold
-        py-2 sm:py-3 px-4 sm:px-6
-        rounded-full shadow-md
-        transition-all duration-200
-        flex items-center justify-center
-        text-sm sm:text-base
-      "
-    >
-      <span class="mr-1 sm:mr-2">🛍️</span> {{ 'PRODUCTS.ADD_TO_CART' | translate }}
-    </button>
+  <button
+  (click)="onCtaClick($event)"
+  [disabled]="isOutOfStock"
+  class="
+    mt-3 sm:mt-4 w-full
+    bg-primaryBg
+    hover:bg-primaryHover
+    text-black
+    font-bold
+    py-2 sm:py-3 px-4 sm:px-6
+    rounded-full shadow-md
+    transition-all duration-200
+    flex items-center justify-center
+    text-sm sm:text-base
+    disabled:opacity-50 disabled:cursor-not-allowed
+  "
+>
+  <span class="mr-1 sm:mr-2">{{ hasUnpaintedOption ? '🎨' : '🛍️' }}</span>
+  {{ (isOutOfStock
+        ? 'PRODUCTS.OUT_OF_STOCK'
+        : hasUnpaintedOption
+          ? 'PRODUCTS.CHOOSE_FINISH'
+          : 'PRODUCTS.ADD_TO_CART') | translate }}
+</button>
   </div>
 
   <div
