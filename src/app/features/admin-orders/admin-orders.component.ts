@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 
 import { AdminOrdersService } from '../../core/services/admin/admin-orders.service';
 import { CommonModule } from '@angular/common';
@@ -12,6 +12,43 @@ import { Router } from '@angular/router';
   template: `
     <div class="max-w-6xl mx-auto p-4">
       <h1 class="text-2xl font-bold mb-6">Pedidos</h1>
+
+      <!-- Filtros -->
+      <div class="flex flex-wrap gap-3 items-center mb-4">
+        <input
+          [(ngModel)]="search"
+          (ngModelChange)="onSearchChange()"
+          placeholder="Buscar por nº de pedido…"
+          class="border rounded p-2 flex-1 min-w-[220px]"
+        />
+
+        <select
+          [(ngModel)]="status"
+          (ngModelChange)="applyFilters()"
+          class="border rounded p-2"
+        >
+          <option value="">Todos los estados</option>
+          <option value="pending">Pendiente</option>
+          <option value="processing">En proceso</option>
+          <option value="paid">Pagado</option>
+          <option value="shipped">Enviado</option>
+          <option value="delivered">Entregado</option>
+          <option value="cancelled">Cancelado</option>
+          <option value="failed">Fallido</option>
+        </select>
+
+        <select
+          [ngModel]="perPage"
+          (ngModelChange)="changePageSize($event)"
+          class="border rounded p-2"
+        >
+          <option *ngFor="let s of pageSizes" [ngValue]="s">
+            {{ s }} por página
+          </option>
+        </select>
+
+        <span class="text-sm text-gray-500">{{ total }} pedidos</span>
+      </div>
 
       <div class="bg-white rounded shadow overflow-x-auto">
         <table class="w-full text-left">
@@ -27,7 +64,7 @@ import { Router } from '@angular/router';
           </thead>
           <tbody>
             <tr
-              *ngFor="let o of orders"
+              *ngFor="let o of orders; trackBy: trackById"
               class="border-t cursor-pointer hover:bg-gray-50 transition"
               (click)="viewOrder(o)"
             >
@@ -44,10 +81,12 @@ import { Router } from '@angular/router';
                   class="px-2 py-1 rounded text-xs"
                   [ngClass]="{
                     'bg-yellow-100 text-yellow-800': o.status === 'pending',
+                    'bg-indigo-100 text-indigo-800': o.status === 'processing',
                     'bg-green-100 text-green-800': o.status === 'paid',
                     'bg-blue-100 text-blue-800': o.status === 'shipped',
                     'bg-gray-200 text-gray-800': o.status === 'delivered',
                     'bg-red-100 text-red-800': o.status === 'cancelled',
+                    'bg-red-200 text-red-900': o.status === 'failed',
                   }"
                   >{{ o.status }}</span
                 >
@@ -70,6 +109,39 @@ import { Router } from '@angular/router';
             </tr>
           </tbody>
         </table>
+
+        <!-- Estados vacíos / carga -->
+        <div *ngIf="loading" class="p-4 text-center text-gray-500">Cargando…</div>
+        <div
+          *ngIf="!loading && orders.length === 0"
+          class="p-6 text-center text-gray-500"
+        >
+          No hay pedidos con esos filtros.
+        </div>
+
+        <!-- Paginador -->
+        <div
+          *ngIf="lastPage > 1"
+          class="flex items-center justify-between p-3 border-t text-sm"
+        >
+          <button
+            (click)="goToPage(page - 1)"
+            [disabled]="page === 1 || loading"
+            class="px-3 py-1 border rounded disabled:opacity-40"
+          >
+            ← Anterior
+          </button>
+
+          <span>Página {{ page }} de {{ lastPage }}</span>
+
+          <button
+            (click)="goToPage(page + 1)"
+            [disabled]="page === lastPage || loading"
+            class="px-3 py-1 border rounded disabled:opacity-40"
+          >
+            Siguiente →
+          </button>
+        </div>
       </div>
 
       <!-- Modal tracking -->
@@ -116,24 +188,85 @@ import { Router } from '@angular/router';
     </div>
   `,
 })
-export class AdminOrdersComponent implements OnInit {
+export class AdminOrdersComponent implements OnInit, OnDestroy {
   private api = inject(AdminOrdersService);
+  private router = inject(Router);
 
   orders: any[] = [];
+  loading = false;
+
+  // paginación
+  page = 1;
+  perPage = 50;
+  lastPage = 1;
+  total = 0;
+  readonly pageSizes = [25, 50, 100, 200];
+
+  // filtros
+  status = '';
+  search = '';
+  private searchTimer: any;
+
   trackingFor: any = null;
   carrier = '';
   trackingNumber = '';
   saving = false;
-  private router = inject(Router);
 
   ngOnInit() {
     this.load();
   }
 
+  ngOnDestroy() {
+    clearTimeout(this.searchTimer);
+  }
+
   load() {
-    this.api.list().subscribe((res: any) => {
-      this.orders = res.data ?? res;
-    });
+    this.loading = true;
+    this.api
+      .list({
+        page: this.page,
+        per_page: this.perPage,
+        status: this.status || undefined,
+        search: this.search.trim() || undefined,
+      })
+      .subscribe({
+        next: (res: any) => {
+          this.orders = res.data ?? [];
+          this.page = res.current_page ?? 1;
+          this.lastPage = res.last_page ?? 1;
+          this.total = res.total ?? this.orders.length;
+          this.loading = false;
+        },
+        error: () => {
+          this.loading = false;
+        },
+      });
+  }
+
+  goToPage(p: number) {
+    if (p < 1 || p > this.lastPage || p === this.page || this.loading) return;
+    this.page = p;
+    this.load();
+  }
+
+  changePageSize(size: number) {
+    this.perPage = Number(size);
+    this.page = 1;
+    this.load();
+  }
+
+  applyFilters() {
+    this.page = 1;
+    this.load();
+  }
+
+  onSearchChange() {
+    clearTimeout(this.searchTimer);
+    this.searchTimer = setTimeout(() => this.applyFilters(), 350);
+  }
+
+  trackById(_: number, o: any) {
+    return o.id;
   }
 
   openTracking(o: any) {
