@@ -39,7 +39,8 @@
     "PRIVACY": "Privacy Policy",
     "CONTACT_TITLE": "Contact",
     "FOLLOW_US": "Contact and follow us!",
-    "RIGHTS": "✨ 3Dlapiz © {{ year }} - Made with love for all our customers ✨"
+    "RIGHTS": "3Dlapiz © {{ year }} - Made with love for all our customers ✨",
+    "CRAFTED_BY": "Website crafted by"
   },
 
   "HOME": {
